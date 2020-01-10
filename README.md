@@ -1,3 +1,8 @@
+<!--header.html-->
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/jejugothic.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+
 # **Smart Group 업무기록**
 
 --------------------------------------------
