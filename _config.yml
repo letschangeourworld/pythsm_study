@@ -3,3 +3,6 @@ title: Smart Group 업무기록
 description: Biz History Written
 subtitle: "Version 1.0"
 name: "biz report"
+
+header:
+  teaser: /assets/images/note.jpg
