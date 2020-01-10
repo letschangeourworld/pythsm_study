@@ -2,3 +2,8 @@ theme: jekyll-theme-tactile
 title: Smart Group 업무기록
 description: Biz History Written
 google_fonts: "Nanum+Gothic:400,700"
+
+<!--header.html-->
+<link rel="stylesheet" href="{{ site.baseurl }}/css/font-awesome.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/jejugothic.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/nanumgothic.css">
