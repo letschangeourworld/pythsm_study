@@ -1,4 +1,4 @@
-![]({{ site.url }}/assets/images/office.jpg)
+![header]({{ site.url }}/assets/images/office.jpg)
 
 # **Smart Group 업무기록**
 
