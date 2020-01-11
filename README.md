@@ -1,7 +1,7 @@
 
-![]({{ site.url }}{{ site.baseurl }}/assets/images/office.jpg    )
+![]({{ site.url }}{{ site.baseurl }}/blob/master//assets/images/office.jpg    )
 
-![](https://github.com/Phil-Bang/bz_report/blob/master//assets/images/note.jpg)
+![](https://github.com/Phil-Bang/bz_report/blob/master/assets/images/note.jpg)
 
 # **Smart Group 업무기록**
 
