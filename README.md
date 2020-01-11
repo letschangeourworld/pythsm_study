@@ -1,5 +1,5 @@
 
-![]({{ site.url }}{{ site.baseurl }}/blob/master/assets/images/office.jpg    )
+![]({{ site.url }}/blob/master/assets/images/office.jpg    )
 
 ![](https://github.com/Phil-Bang/bz_report/blob/master/assets/images/office.jpg)
 
