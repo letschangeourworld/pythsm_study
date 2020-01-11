@@ -1,5 +1,3 @@
-![](https://github.com/Phil-Bang/bz_report/blob/master/assets/images/note.jpg)
-
 # **업무기록**
 
 ## ◈ '20.1.6(목) ~ 1.12(일)
