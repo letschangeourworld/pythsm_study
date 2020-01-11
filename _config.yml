@@ -3,3 +3,7 @@ title: Smart Group Page
 description: Smart Biz History
 name: biz report
 teaser: /assets/images/office.jpg
+
+# Disqus
+disqus: True
+disqus_shortname: phil
