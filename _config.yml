@@ -1,10 +1,11 @@
-$ bundle exec jekyll serve
+
 
 ---
+$ bundle exec jekyll serve
 layout: post
 title: Smart Group Page
 description: Smart Biz History
-google_fonts:'Nanum+Gothic:400,700'
+url: https://phil-bang.github.io/bz_report/
 ---
 
 theme: jekyll-theme-modernist
