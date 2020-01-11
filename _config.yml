@@ -2,7 +2,7 @@ theme: jekyll-theme-modernist
 title: Smart Group Page
 description: Smart Biz History
 name: biz report
-cover: /assets/images/office.jpg
+image: '/assets/images/office.jpg'
 # blog home에 표시될 blog cover image.
 url: https://phil-bang.github.io/bz_report/
 languages: ['ko', 'en']
