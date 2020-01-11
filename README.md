@@ -1,3 +1,5 @@
+<{{ site.url }}{{ site.baseurl }}/blog/start-blog/>
+
 # **Smart Group 업무기록**
 
 ## ◈ '20.1.6(목) ~ 1.12(일)
