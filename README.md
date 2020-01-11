@@ -1,4 +1,4 @@
-<{{ site.url }}/blog/start-blog/>
+<{{ site.url }}>
 
 ![]({{ site.url }}{{ site.baseurl }}/assets/images/office.jpg)
 
