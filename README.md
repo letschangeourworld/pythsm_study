@@ -33,7 +33,7 @@
  - 파이썬 프로그래밍 실습교육 자료 준비<br>
  - 교육기간 : 2/6~3/6기간내 48시간 교육 예정<br>
 
-![eddate](https://user-images.githubusercontent.com/50024239/71602929-d4e72780-2b9d-11ea-8e11-5e1ad249208f.png)
+![schedule](https://user-images.githubusercontent.com/50024239/72203104-cdcbed80-34aa-11ea-8c4d-62e2f5165c72.png)
 
 ※ 연차 : 배준식CM : 1/10(금) <br>
 
