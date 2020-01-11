@@ -5,7 +5,7 @@ $ bundle exec jekyll serve
 layout: post
 title: Smart Group Page
 description: Smart Biz History
-url: https://phil-bang.github.io/bz_report/
+teaser: '/assets/images/office.jpg'
 ---
 
 theme: jekyll-theme-modernist
@@ -16,9 +16,3 @@ image: '/assets/images/office.jpg'
 # blog home에 표시될 blog cover image.
 url: https://phil-bang.github.io/bz_report/
 languages: ['ko', 'en']
-defaults:
-  -
-    scope:
-      path: "" # an empty string here means all files in the project
-    values:
-      layout: "default"
