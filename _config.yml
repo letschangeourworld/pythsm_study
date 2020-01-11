@@ -1,7 +1,6 @@
 
 
 ---
-$ bundle exec jekyll serve
 layout: post
 title: Smart Group Page
 description: Smart Biz History
