@@ -4,4 +4,5 @@ description: Smart Biz History
 name: biz report
 cover: /assets/images/office.jpg
 # blog home에 표시될 blog cover image.
-
+url: https://phil-bang.github.io/bz_report/
+languages: ['ko', 'en']
