@@ -2,8 +2,6 @@ theme: jekyll-theme-modernist
 title: Smart Group Page
 description: Smart Biz History
 name: biz report
-teaser: /assets/images/office.jpg
+cover: /assets/images/office.jpg
+# blog home에 표시될 blog cover image.
 
-# Disqus
-disqus: True
-disqus_shortname: phil
