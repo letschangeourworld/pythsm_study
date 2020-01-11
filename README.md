@@ -1,10 +1,4 @@
-<!--header.html-->
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/jejugothic.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/nanumgothic.css">
-
 # **Smart Group 업무기록**
-
 
 ## ◈ 2020년 1월 6일(목) ~ 1월 12일(일)
 
