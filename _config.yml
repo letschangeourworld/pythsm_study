@@ -2,8 +2,8 @@
 layout: post
 title: Smart Group Page
 description: Smart Biz History
-url: "https://github.com/Phil-Bang/"
-teaser: "biz_report/blob/master/assets/images/office.jpg"
+url: "https://phil-bang.github.io/bz_report/"
+teaser: "/blob/master/assets/images/office.jpg"
 ---
 
 theme: jekyll-theme-modernist
