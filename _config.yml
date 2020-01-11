@@ -1,8 +1,7 @@
 theme: jekyll-theme-modernist
 title: Smart Group 업무기록
-description: Biz History Written
-subtitle: "Version 1.0"
-name: "biz report"
+description: Smart Biz History
+name: biz report
 teaser: /assets/images/office.jpg
 header:
   teaser: /assets/images/note.jpg
