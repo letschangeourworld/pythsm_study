@@ -4,7 +4,8 @@
 layout: post
 title: Smart Group Page
 description: Smart Biz History
-url: https://phil-bang.github.io/bz_report/
+url: 'https://phil-bang.github.io'
+baseurl:'/bz_report'
 teaser: '/assets/images/office.jpg'
 ---
 
