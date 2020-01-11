@@ -1,4 +1,3 @@
-<{{ site.url }}{{ site.baseurl }}/blog/start-blog/>
 
 # **Smart Group 업무기록**
 
