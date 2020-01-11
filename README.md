@@ -1,3 +1,4 @@
+<{{ site.url }}{{ site.baseurl }}/blog/start-blog/>
 ![]({{ site.url }}{{ site.baseurl }}/assets/images/office.jpg)
 
 # **Smart Group 업무기록**
