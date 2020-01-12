@@ -21,8 +21,8 @@
 **★ 센터장님 스마트 토론회 예정(HIFMS 시연회): 1/22(수)**
 
 ### 2. Rapid Miner 분석대응
-- Rapid Miner 테마 선정 필요<br> 
-- Rapid Miner 테마 선정후 업체 송부<br>
+- Rapid Miner 테마 선정 아이디어 모임<br> 
+- Rapid Miner 테마 선정후 업체 송부 예정<br>
    ※ Rapid Miner(래피드마이너) : 데이터 분석 및 예측값 도출 소프트웨어<br>   
 
 ### 3. 협업 TFT 임시조직 구성
