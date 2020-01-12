@@ -10,7 +10,7 @@
 * **진행중 65건 + 완료 15건 = 총 80건**<br> 
    └ 로봇관련 : 12건, 로봇관련 외 : 68건<br> 	
 
-* **금주 대응 내용 상세**<br>
+* **금주 대응 내용**<br>
     
 ![simple1](https://user-images.githubusercontent.com/50024239/72126788-ca543b80-33b0-11ea-995f-2b06bd445ea7.png)<br>
     ※ HIFMS 개발계 → 운영계로 전환되었음<br>
