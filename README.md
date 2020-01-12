@@ -11,7 +11,7 @@
    └ 로봇관련 : 12건, 로봇관련 외 : 68건<br> 	
 
 * **금주 대응 내용 상세**<br>
- - HIFMS 개발계 → 운영계로 전환됨
+ - HIFMS 개발계 → 운영계로 전환됨<br>
 ![simple1](https://user-images.githubusercontent.com/50024239/72126788-ca543b80-33b0-11ea-995f-2b06bd445ea7.png)
 
 * **색차 로봇 데이터 DB (Data Base) 처리 관련 테스트 진행중(보전협의)**<br>
