@@ -74,13 +74,9 @@
 ### Master List
 
 ![master1](https://user-images.githubusercontent.com/50024239/72236924-00e1be80-361c-11ea-825b-f3f9546e8346.png)
-
 ![master2](https://user-images.githubusercontent.com/50024239/72237026-63d35580-361c-11ea-8ccb-7f5fcc0df2c0.png)
-
 ![master3](https://user-images.githubusercontent.com/50024239/72237122-c593bf80-361c-11ea-964e-ab0385ac5ddc.png)
-
 ![master4](https://user-images.githubusercontent.com/50024239/72237142-d80df900-361c-11ea-98df-ac417454dd72.png)
-
 ![master5](https://user-images.githubusercontent.com/50024239/72237159-e52ae800-361c-11ea-81ee-b910e0400b00.png)
 
 
