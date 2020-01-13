@@ -5,7 +5,7 @@
 ### 1. HIFMS 진행 현황 정리
     
 **① 진행내용 주기적 보고 및 팀내 현황판 게시 준비**<br>
-**② HIFMS 운영 개선점 개선 대응(152건)**
+**② HIFMS 운영 개선점 개선 대응**
 
 * **금주 대응 내용**<br>
     
@@ -73,7 +73,7 @@
 * **진행중 120건 + 완료 32건 = 총 152건**<br> 
    └ 진행중 120건 : 로봇 관련(19건), 로봇 외(101건)<br>
 
-### Master List
+### Master List  `20.1.13 현재
 
 ![master1](https://user-images.githubusercontent.com/50024239/72236924-00e1be80-361c-11ea-825b-f3f9546e8346.png)
 ![master2](https://user-images.githubusercontent.com/50024239/72237026-63d35580-361c-11ea-8ccb-7f5fcc0df2c0.png)
