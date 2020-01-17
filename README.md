@@ -88,12 +88,13 @@
 
 ### HIFMS 개선요청 리스트  
 ※ `20.1.17 현재 <br>
-※ 보라색 음영 : 완료<br>
+※ 엷은글씨 : 완료<br>
 
-![master1](https://user-images.githubusercontent.com/50024239/72236924-00e1be80-361c-11ea-825b-f3f9546e8346.png)
-![master2](https://user-images.githubusercontent.com/50024239/72237026-63d35580-361c-11ea-8ccb-7f5fcc0df2c0.png)
-![master3](https://user-images.githubusercontent.com/50024239/72237122-c593bf80-361c-11ea-964e-ab0385ac5ddc.png)
-![master4](https://user-images.githubusercontent.com/50024239/72237142-d80df900-361c-11ea-98df-ac417454dd72.png)
-![master5](https://user-images.githubusercontent.com/50024239/72237159-e52ae800-361c-11ea-81ee-b910e0400b00.png)
+![master7](https://user-images.githubusercontent.com/50024239/72580903-dbf19200-3920-11ea-9cdf-0547edcf5e39.png)
+![master8](https://user-images.githubusercontent.com/50024239/72580924-edd33500-3920-11ea-968c-9b3f19394a9f.png)
+![master9](https://user-images.githubusercontent.com/50024239/72580934-f75c9d00-3920-11ea-9d9f-8d3484661ada.png)
+![master10](https://user-images.githubusercontent.com/50024239/72580949-03485f00-3921-11ea-995e-0bfa32570193.png)
+![master11](https://user-images.githubusercontent.com/50024239/72580957-0ba09a00-3921-11ea-8e3a-5dd620028453.png)
+![master12](https://user-images.githubusercontent.com/50024239/72580973-14916b80-3921-11ea-9c29-5d31d5e4bc75.png)
 
 
