@@ -90,20 +90,11 @@
 ### ★ 센터장님 스마트 토론회(HIFMS 시연회) : 1/31(금)
  
 -----------------------------------------------------
-### HIFMS 개선점 대응(162건)
+### HIFMS 개선점 대응(183건)
 
-* **진행중 67건(41%) + 완료 95건(59%) = 총 162건**<br>
-※ `20.1.23 현재 <br>
+* **진행중 58건(32%) + 완료 125건(68%) = 총 183건**<br>
+※ `20.2.12 현재 <br>
 
 ### HIFMS 개선요청 리스트  
-※ `20.1.17 현재 <br>
-※ 엷은글씨 : 완료<br>
-
-![master7](https://user-images.githubusercontent.com/50024239/72580903-dbf19200-3920-11ea-9cdf-0547edcf5e39.png)
-![master8](https://user-images.githubusercontent.com/50024239/72580924-edd33500-3920-11ea-968c-9b3f19394a9f.png)
-![master9](https://user-images.githubusercontent.com/50024239/72580934-f75c9d00-3920-11ea-9d9f-8d3484661ada.png)
-![master10](https://user-images.githubusercontent.com/50024239/72580949-03485f00-3921-11ea-995e-0bfa32570193.png)
-![master11](https://user-images.githubusercontent.com/50024239/72580957-0ba09a00-3921-11ea-8e3a-5dd620028453.png)
-![master12](https://user-images.githubusercontent.com/50024239/72580973-14916b80-3921-11ea-9c29-5d31d5e4bc75.png)
 
 
