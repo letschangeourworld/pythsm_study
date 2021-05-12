@@ -1,5 +1,5 @@
 # theme: jekyll-theme-minimal
-minimal_mistakes_skin    : "contrast"
+minimal_mistakes_skin    : "dark"
 locale                   : "en-US"
 title                    : "Vision and Machine learning"
 title_separator          : "-"
