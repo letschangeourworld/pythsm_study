@@ -10,6 +10,7 @@
 <code>
 img = cv2.imread('aaa.jpg', 1)
 </code>
+</pre>
 사진을 불러오는데 1은 칼라로, 0은 흑백으로 불러오기
 
 <pre>
