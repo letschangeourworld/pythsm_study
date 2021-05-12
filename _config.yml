@@ -2,16 +2,5 @@
 minimal_mistakes_skin : "air"
 encoding : UTF-8
 title          : "Vision and Machine learning"
-subtitle       : # site tagline that appears below site title in masthead
 name           : "비전개발 실전코딩"
 description    : "Study History"
-url            : "https://github.com/Phil-Bang/bz_report"
-search         : true
-baseurl        : # thepwo subpath of your site, e.g. "/blog"
-repository     : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser         : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo           : "![5BD7B69C-97D9-4F54-86A9-2D65BB62553C](https://user-images.githubusercontent.com/50024239/117901879-3e855300-b307-11eb-8ffc-441acc48d15c.jpeg)"
-masthead_title : # overrides the website title displayed in the masthead, use " " for no title
-author:
-avatar : "![5BD7B69C-97D9-4F54-86A9-2D65BB62553C](https://user-images.githubusercontent.com/50024239/117901879-3e855300-b307-11eb-8ffc-441acc48d15c.jpeg)"
-location : "Seoul, Korea"
