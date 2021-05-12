@@ -16,11 +16,11 @@ img = cv2.imread('aaa.jpg', 1)
  cv2.destroyAllWindows()
 </code>
 
-
 <code>
 cv2.imwrite('daria_gray.jpg', img)
 </code>
 
+<pre>
 <code>
 capture = cv2.VideoCapture('swan.mp4')
 
@@ -30,6 +30,7 @@ while capture.isOpened():
         break
     cv2.imshow('Video Window’, frame)
     cv2.waitKey(25)
- capture.release()
- cv2.destroyAllWindows()
+capture.release()
+cv2.destroyAllWindows()
 </code>
+</pre>
