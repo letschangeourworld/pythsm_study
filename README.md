@@ -6,9 +6,10 @@
   pip install opencv-contrib-python
 * cv2 모듈내 함수기능
 
+<pre>
 <code>
 img = cv2.imread('aaa.jpg', 1)
-</code><br>
+</code>
 사진을 불러오는데 1은 칼라로, 0은 흑백으로 불러오기
 
 <pre>
