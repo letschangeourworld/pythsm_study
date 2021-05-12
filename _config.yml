@@ -1,6 +1,6 @@
 # theme: jekyll-theme-minimal
 minimal_mistakes_skin    : "dark"
-locale                   : "en-US"
+# locale                   : "en-US"
 title                    : "Vision and Machine learning"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
