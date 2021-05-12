@@ -31,30 +31,31 @@ imwrite로 사진을 저장
 
 <pre>
 <code>
-capture = cv2.VideoCapture('video.mp4')
+import cv2
+cap = cv2.VideoCapture(0)
+if cap.isOpen():
+	print('width: {}, height : {}'.format(cap.get(3), cap.get(4))
 
-while capture.isOpened():
-    ret, frame = capture.read()
-    if not ret:
-        break
-    cv2.imshow('Video Window’, frame)
-    cv2.waitKey(25)
-capture.release()
+while True:
+	ret, fram = cap.read()
+	if ret:
+		gray = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
+		cv2.imshow('video', gray)
+		k == cv2.waitKey(1) & 0xFF
+		if k == 27:
+			break
+	else:
+		print('error')
+cap.release()
 cv2.destroyAllWindows()
+
 </code>
 </pre>
-
-VideoCapture로 동영상 불러오는데, 현 폴더 안의 동영상을 보려면
-동영상 이름을 적고, PC웹캠 실시간 동영상을 보려면 숫자 0을 넣는다
-숫자 0은 현재 컴퓨터에 내장된 기본 카메라를 의미하고 또다른 카메라가
-있으면 1을 넣게 된다.<br><br>
-
-VideoCapture는 카메라를 찾는 것이고 capure.isOpened는 가동이
-되는지 확인을 하는 것이다. while문은 무한루프 반복문으로 카메라가
-이미지를 계속적으로 캡쳐를 반복하는 것은 영상을 불러온다는 의미가 된다.
-카메라가 가동되면 캡쳐된 이미지를 read()로 읽어내는데 이 함수는 2가지
-데이터를 이미지로부터 읽어낸다. 하나는 캡쳐된 이미지가 있는지 없는지
-판단하는 true와 false 데이터, 다른 하나는 캡쳐된 이미지 화면을 배열로
-변환하여 나타낸 데이터이다. 전자는 ret변수에 넣고, 후자는 frame변수에
-들어가 저장되게 된다. 당연히 if문으로 ret에 데이터가 들어왔는지 확인해야
-하고 없으면 break로 멈추게 된다. 
+cv2.VideoCapture()를 사용해 비디오 캡쳐 객체를 생성할 수 있다. 안의 숫자는 장치 인덱스(어떤 카메라를 사용할 것인가)이다. 
+1개만 부착되어 있으면 0, 2개 이상이면 첫 웹캠은 0, 두번째 웹캠은 1으로 지정한다.
+cap.isOpen() : 비디오 캡쳐 객체가 정상적으로 Open되었는지 확인한다.
+while True: 특정 키를 누를때까지 무한 반복을 위해 사용했다.
+ret, fram = cap.read() : 비디오의 한 프레임씩 읽는다. 제대로 프레임을 읽으면 ret값이 True, 실패하면 False가 나타난다. 
+fram에 읽은 프레임이 나온다.
+cv2.cvtColor() : frame을 흑백으로 변환한다.
+cap.release() : 오픈한 캡쳐 객체를 해제한다.
