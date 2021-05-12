@@ -3,7 +3,7 @@
 - pycharm 설치 (구글검색하여 무료다운로드)
 - 실습코드 가상환경 프로젝트 폴더로 이동
 - 파이참 하단 터미널에서 openCV 모듈 설치 <br>
-  : pip install opencv-contrib-python
+  pip install opencv-contrib-python
 
 <pre>
 <code>
