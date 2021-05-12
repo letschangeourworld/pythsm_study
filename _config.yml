@@ -1,6 +1,8 @@
 #theme: jekyll-theme-minimal
-minimal_mistakes_skin : "air"
+minimal_mistakes_skin : "default" # "air"
 encoding : UTF-8
 title          : "Vision and Machine learning"
-name           : "비전개발 실전코딩"
-description    : "Study History"
+subtitle : "천천히 오솔길 내듯이"
+name           : "Real Coding for vision development"
+description    : "openCV Study"
+masthead_title : "Vision Coding"
