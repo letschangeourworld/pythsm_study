@@ -24,13 +24,12 @@ cv2.imwrite('daria_gray.jpg', img)
 <code>
 capture = cv2.VideoCapture('swan.mp4')
 
-# display the read video file
- while capture.isOpened():
-     ret, frame = capture.read()
-     if not ret:
-         break
-     cv2.imshow('Video Window’, frame)
-     cv2.waitKey(25)
+while capture.isOpened():
+    ret, frame = capture.read()
+    if not ret:
+        break
+    cv2.imshow('Video Window’, frame)
+    cv2.waitKey(25)
  capture.release()
  cv2.destroyAllWindows()
 </code>
