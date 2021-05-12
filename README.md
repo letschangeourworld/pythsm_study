@@ -8,16 +8,17 @@
 
 <code>
 img = cv2.imread('aaa.jpg', 1)
-</code>
+</code><br>
 사진을 불러오는데 1은 칼라로, 0은 흑백으로 불러오기
 
+<pre>
 <code>
  cv2.imshow('aaa Window', img)
  cv2.waitKey(0)
  cv2.destroyAllWindows()
 </code>
-불러온 사진을 창을 띄워서 보여주고 
-창이름은 'aaa Window'로 한다. 
+</pre>
+불러온 사진을 창을 띄워서 보여주고 창이름은 'aaa Window'로 한다. 
 
 <code>
 cv2.imwrite('aaa.jpg', img)
