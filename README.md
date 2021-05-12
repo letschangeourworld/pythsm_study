@@ -6,6 +6,8 @@
   pip install opencv-contrib-python
 * cv2 모듈내 함수기능
 
-''' python
+<pre>
+<code>
 img = cv2.imread('daria.jpg', 1) 
-'''
+</code>
+</pre>
