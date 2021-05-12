@@ -1,9 +1,8 @@
 # theme: jekyll-theme-minimal
-minimal_mistakes_skin : "aqua"
-title: Vision and Machine learning
-description: Study History
-email : 'ndbb2046@naver.com'
-
+minimal_mistakes_skin : "contrast"
+title       : Vision and Machine learning
+description : Study History
+logo        : 
 author:
   name  : "비전개발 실전코딩"
   email : 
