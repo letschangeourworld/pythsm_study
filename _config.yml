@@ -1,5 +1,5 @@
-theme: jekyll-theme-minimal
-#minimal_mistakes_skin : "air"
+#theme: jekyll-theme-minimal
+minimal_mistakes_skin : "air"
 encoding : UTF-8
 title          : "Vision and Machine learning"
 name           : "비전개발 실전코딩"
