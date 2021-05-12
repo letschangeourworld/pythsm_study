@@ -1,3 +1,11 @@
 theme: jekyll-theme-minimal
 title: Vision and Machine learning
 description: Study History
+
+author:
+  name  : "비전개발 실전코딩"
+  email : 
+  links:
+    - label : "Email"
+      icon  : "fas fa-fw fa-envelope-square"
+      url   : mailto:ndbb2046@naver.com 
