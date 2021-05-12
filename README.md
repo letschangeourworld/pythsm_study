@@ -7,22 +7,25 @@
 * cv2 모듈내 함수기능
 
 <code>
-img = cv2.imread('aaa.jpg', 1) 
+img = cv2.imread('aaa.jpg', 1)
 </code>
+사진을 불러오는데 1은 칼라로, 0은 흑백으로 불러오기
 
 <code>
  cv2.imshow('aaa Window', img)
  cv2.waitKey(0)
  cv2.destroyAllWindows()
 </code>
+불러온 사진을 창을 띄워서 보여주고 
+창이름은 'aaa Window'로 한다. 
 
 <code>
-cv2.imwrite('daria_gray.jpg', img)
+cv2.imwrite('aaa.jpg', img)
 </code>
 
 <pre>
 <code>
-capture = cv2.VideoCapture('swan.mp4')
+capture = cv2.VideoCapture('video.mp4')
 
 while capture.isOpened():
     ret, frame = capture.read()
