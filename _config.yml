@@ -1,12 +1,14 @@
 # theme: jekyll-theme-minimal
 minimal_mistakes_skin : "contrast"
-title       : Vision and Machine learning
-description : Study History
-logo        : 
-author:
-  name  : "비전개발 실전코딩"
-  email : 
-  links:
-    - label : "Email"
-      icon  : "fas fa-fw fa-envelope-square"
-      url   : mailto:ndbb2046@naver.com 
+locale                   : "en-US"
+title                    : "Vision and Machine learning"
+title_separator          : "-"
+subtitle                 : # site tagline that appears below site title in masthead
+name                     : "비전개발 실전코딩"
+description              : "Study History"
+url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+baseurl                  : # the subpath of your site, e.g. "/blog"
+repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
+masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
