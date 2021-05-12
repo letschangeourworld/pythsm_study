@@ -6,8 +6,6 @@
   pip install opencv-contrib-python
 * cv2 모듈내 함수기능
 
-<pre>
 <code>
-img = cv2.imread('daria.jpg', 1) 
+img = cv2.imread('aaa.jpg', 1) 
 </code>
-</pre>
