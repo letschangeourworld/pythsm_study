@@ -1,8 +1,8 @@
 ### Day1 :'21.5.12
 - 실습코드 다운로드 (단톡방 공유)
-- pycharm(파이참)설치
+- pycharm 설치 (구글검색하여 무료다운로드)
 - 실습코드 가상환경 프로젝트 폴더로 이동
-- 파이참내 하단 터미널에서 openCV 모듈 설치 <br>
+- 파이참 하단 터미널에서 openCV 모듈 설치 <br>
   : pip install opencv-contrib-python
 
 <pre>
@@ -59,3 +59,4 @@ ret, fram = cap.read() : 비디오의 한 프레임씩 읽는다. 제대로 프�
 fram에 읽은 프레임이 나온다.
 cv2.cvtColor() : frame을 흑백으로 변환한다.
 cap.release() : 오픈한 캡쳐 객체를 해제한다.
+<br>
