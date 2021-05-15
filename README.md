@@ -59,10 +59,10 @@ cv2.destroyAllWindows()
 * cap.isOpen() : 비디오 캡쳐 객체가 정상적으로 Open되었는지 확인
 * while True   : 특정 키를 누를 때까지 무한 반복
 * ret, frame = cap.read() : 비디오의 한 프레임씩 읽음
-  프레임은 영상의 한 컷을 의미 
-  프레임을 제대로 읽으면 ret 변수에 True 입력됨 
-  프레임을 읽지 못하면 ret 변수에 False 입력됨 
-  프레임을 읽으면 읽은 프레임 스크린 데이터를 frame변수에 array값으로 입력됨
+  프레임은 영상의 한 컷을 의미 <br>
+  프레임을 제대로 읽으면 ret 변수에 True 입력됨 <br>
+  프레임을 읽지 못하면 ret 변수에 False 입력됨 <br>
+  프레임을 읽으면 읽은 프레임 스크린 데이터를 frame변수에 array값으로 입력됨 <br>
 * cv2.cvtColor() : frame을 흑백으로 변환한다.
 * cap.release()  : 오픈한 캡쳐 객체를 해제한다.
 <br>
