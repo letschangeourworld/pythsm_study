@@ -33,8 +33,8 @@ img = cv2.imread('aaa.jpg', 1)
      - 0 : 창을 띄운 상태로 멈춤 <br>
      - 1 : 창을 띄우고 바로 다음 코드 실행 <br>
 * <b>destroyAllWondows :</b> 창을 닫음 <br>
-     - 1을 입력하면 이미지 창이 띄워졌다가 바로 닫힘 <br>
-       그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느낌 <br>
+* waitKey(1)을 입력하면 이미지 창이 띄워졌다가 바로 닫힘 <br>
+  그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느껴짐<br>
 <pre>
 <code>
 cv2.imwrite('aaa.jpg', img)
@@ -83,20 +83,20 @@ cv2.destroyAllWindows()
      - 우측 인수 : array 프레임값을 칼라 또는 흑백 array값으로 변환
         - cv2.COLOR_BGR2GRAY : 원본 이미지 색상(COLOR_BGR)을 바꾸고자 하는 색상 공간(GRAY)으로 변환 <br>
         - 인수형태 <br>
-              - BGR    : Blue, Green, Red 채널 <br>
-              - BGRA   : Blue, Green, Red, Alpha 채널 <br>
-              - RGB    : Red, Green, Blue 채널 <br>
-              - RGBA   : Red, Green, Blue, Alpha 채널 <br>
-              - GRAY   : 단일 채널 → 그레이스케일 <br>
-              - BGR565 : Blue, Green, Red 채널 → 16 비트 이미지 <br>
-              - XYZ    : X, Y, Z 채널 → CIE 1931 색공간 <br>
-              - YCrCb  : Y, Cr, Cb 채널	→ YCC (크로마) <br>
-              - HSV    : Hue, Saturation, Value 채널 → 색상, 채도, 명도 <br>
-              - Lab    : L, a, b 채널 → 반사율, 색도1, 색도2 <br>
-              - Luv    : L, u, v 채널 → CIE Luv <br>
-              - HLS    : Hue, Lightness, Saturation 채널 → 색상, 밝기, 채도 <br>
-              - YUV    : Y, U, V 채널 → 밝기, 색상1, 색상2 <br>
-              - BG, GB, RG :	디모자이킹 → 단일 색상 공간으로 변경 <br>
+              - BGR    : Blue,Green,Red 채널 <br>
+              - BGRA   : Blue,Green,Red,Alpha 채널 <br>
+              - RGB    : Red,Green,Blue 채널 <br>
+              - RGBA   : Red,Green,Blue,Alpha 채널 <br>
+              - GRAY   : 단일 채널 → 그레이 스케일 <br>
+              - BGR565 : Blue,Green,Red 채널 → 16비트 이미지 <br>
+              - XYZ    : X,Y,Z 채널 → CIE 1931 색공간 <br>
+              - YCrCb  : Y,Cr,Cb 채널 → YCC(크로마) <br>
+              - HSV    : Hue,Saturation,Value 채널 → 색상,채도,명도 <br>
+              - Lab    : L,a,b 채널 → 반사율,색도1,색도2 <br>
+              - Luv    : L,u,v 채널 → CIE Luv <br>
+              - HLS    : Hue,Lightness,Saturation 채널 → 색상,밝기,채도 <br>
+              - YUV    : Y,U,V 채널 → 밝기,색상1,색상2 <br>
+              - BG,GB,RG : 디모자이킹 → 단일 색상 공간으로 변경 <br>
               - _EA    : 디모자이킹 → 가장자리 인식 <br>
               - _VNG   : 디모자이킹 → 그라데이션 사용 <br>
 
