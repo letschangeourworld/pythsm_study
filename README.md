@@ -12,8 +12,8 @@ img = cv2.imread('aaa.jpg', 1)
 </code>
 </pre>
 
-* <b>imread :</b> 사진 불러오기 <br>
-     - 좌측 인수 : 사진파일 경로입력 <br>
+* <b>imread :</b> 이미지 불러오기 <br>
+     - 좌측 인수 : 이미지 파일 경로입력 <br>
      - 우측 인수 <br>
         - 1 : 칼라 <br>
         - 0 : 흑백 <br>
@@ -26,20 +26,24 @@ img = cv2.imread('aaa.jpg', 1)
 </code>
 </pre>
 
-* <b>imshow :</b> 사진을 창을 띄워서 보여 줌 <br>
-     - 인수 왼쪽 : 창 이름 <br>
-     - 인수 오른쪽 : 사진 변수 이름 <br>
+* <b>imshow :</b> 이미지를 창을 띄워 보여 줌 <br>
+     - 좌측 인수 : 띄워지는 창 이름 <br>
+     - 우측 인수 : 이미지가 들어 있는 변수 이름 입력 <br>
 * <b>waitkey :</b> 창을 띄우고 기다리는지 그냥 가는지 판단 <br>
      - 0 : 창을 띄운 상태로 멈춤 <br>
      - 1 : 창을 띄우고 바로 다음 코드 실행 <br>
 * <b>destroyAllWondows :</b> 창을 닫음 <br>
-     - 1을 입력하면 사진창이 띄워졌다가 바로 닫힘 <br>
+     - 1을 입력하면 이미지 창이 띄워졌다가 바로 닫힘 <br>
        그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느낌 <br>
-
+<pre>
 <code>
 cv2.imwrite('aaa.jpg', img)
-</code> <br><br>
-imwrite로 사진을 저장
+</code>
+</pre>
+
+* <b>imwrite :</b> 이미지를 내 컴퓨터에 저장
+     - 좌측 인수 : 저장할 이미지 이름 입력
+     - 우측 인수 : 이미지가 들어 있는 변수 이름 입력
 
 <pre>
 <code>
@@ -55,14 +59,14 @@ while True:
 		cv2.imshow('video', gray)
 		k == cv2.waitKey(1) & 0xFF
 		if k == 27:
-			break
+			reak
 	else:
 		print('error')
 cap.release()
 cv2.destroyAllWindows()
-
 </code>
 </pre>
+
 * <b>cv2.VideoCapture() :</b> 비디오 캡쳐 객체 생성 <br>
      - 입력 숫자 : 장치 인덱스로 어떤 카메라를 사용할 것인가를 뜻함 <br> 
      - 장치에 카메라 1개만 부착되어 있을 경우 : 0 (보통 기본 내장 카메라) <br>
