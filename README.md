@@ -81,8 +81,8 @@ cv2.destroyAllWindows()
 * <b>cvtColor() :</b> 색상 공간 변환 함수
      - 좌측 인수 : 프레임값이 들어 있는 변수 입력
      - 우측 인수 : array 프레임값을 칼라 또는 흑백 array값으로 변환
-        - cv2.COLOR_BGR2GRAY : 원본 이미지 색상(COLOR_BGR)을 바꾸고자 하는 색상 공간(GRAY)으로 변환
-        - 인수형태
+        - cv2.COLOR_BGR2GRAY : 원본 이미지 색상(COLOR_BGR)을 바꾸고자 하는 색상 공간(GRAY)으로 변환 <br>
+        - 인수형태 <br>
               - BGR    : Blue, Green, Red 채널 <br>
               - BGRA   : Blue, Green, Red, Alpha 채널 <br>
               - RGB    : Red, Green, Blue 채널 <br>
