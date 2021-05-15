@@ -37,9 +37,9 @@ if cap.isOpen():
 	print('width: {}, height : {}'.format(cap.get(3), cap.get(4))
 
 while True:
-	ret, fram = cap.read()
+	ret, frame = cap.read()
 	if ret:
-		gray = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
+		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		cv2.imshow('video', gray)
 		k == cv2.waitKey(1) & 0xFF
 		if k == 27:
@@ -51,14 +51,18 @@ cv2.destroyAllWindows()
 
 </code>
 </pre>
-cv2.VideoCapture()를 사용해 비디오 캡쳐 객체를 생성할 수 있다. 
-안의 숫자는 장치 인덱스(어떤 카메라를 사용할 것인가)이다. 
-1개만 부착되어 있으면 0, 2개 이상이면 첫 웹캠은 0, 두번째 웹캠은 1으로 지정한다.
+* cv2.VideoCapture() : 비디오 캡쳐 객체 생성 <br>
+입력 숫자 : 장치 인덱스로 어떤 카메라를 사용할 것인가를 뜻함 <br> 
+장치에 카메라 1개만 부착되어 있을 경우 : 0 (보통 기본 내장 카메라) <br>
+장치에 카메라가 2개 이상 부탁되어 있을 경우 : 0 (첫번째 웹캠), 1 (두번째 웹캠) <br>
 
-cap.isOpen() : 비디오 캡쳐 객체가 정상적으로 Open되었는지 확인한다.
-while True   : 특정 키를 누를때까지 무한 반복을 위해 사용했다.
-ret, fram = cap.read() : 비디오의 한 프레임씩 읽는다. 
-제대로 프레임을 읽으면 ret값이 True, 실패하면 False가 나타난다. fram에 읽은 프레임이 나온다.
-cv2.cvtColor() : frame을 흑백으로 변환한다.
-cap.release()  : 오픈한 캡쳐 객체를 해제한다.
+* cap.isOpen() : 비디오 캡쳐 객체가 정상적으로 Open되었는지 확인
+* while True   : 특정 키를 누를 때까지 무한 반복
+* ret, frame = cap.read() : 비디오의 한 프레임씩 읽음
+  프레임은 영상의 한 컷을 의미 
+  프레임을 제대로 읽으면 ret 변수에 True 입력됨 
+  프레임을 읽지 못하면 ret 변수에 False 입력됨 
+  프레임을 읽으면 읽은 프레임 스크린 데이터를 frame변수에 array값으로 입력됨
+* cv2.cvtColor() : frame을 흑백으로 변환한다.
+* cap.release()  : 오픈한 캡쳐 객체를 해제한다.
 <br>
