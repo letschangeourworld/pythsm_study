@@ -1,16 +1,22 @@
 ### Day1 :'21.5.12
-- 실습코드 다운로드 (단톡방 공유)
-- pycharm 설치 (구글검색하여 무료다운로드)
-- 실습코드 가상환경 프로젝트 폴더로 이동
-- 파이참 하단 터미널에서 openCV 모듈 설치 <br>
-  pip install opencv-contrib-python
+
+* 실습코드 다운로드 (파이썬더 단톡방 공유) <br>
+* pycharm 설치 (pycharm사이트에 가서 community용 무료 다운로드 설치) <br>
+* 실습코드 파일을 가상환경 프로젝트 폴더로 이동 <br>
+* 파이참(pycharm) 하단 터미널을 클릭 → 터미널 창에서 openCV 모듈 설치 <br>
+     입력/실행 → pip install opencv-contrib-python <br>
 
 <pre>
 <code>
 img = cv2.imread('aaa.jpg', 1)
 </code>
 </pre>
-imread로 사진을 불러오고, 1은 칼라, 0은 흑백으로 불러옴을 의미
+
+* imread : 사진 불러오기 <br>
+     좌측 인수 : 사진파일 경로입력 <br>
+     우측 인수 <br>
+        1 : 칼라 <br>
+        0 : 흑백 <br>
 
 <pre>
 <code>
@@ -19,8 +25,10 @@ imread로 사진을 불러오고, 1은 칼라, 0은 흑백으로 불러옴을 �
  cv2.destroyAllWindows()
 </code>
 </pre>
+
 * <b>imshow :</b> 사진을 창을 띄워서 보여 줌 <br>
-     인수 왼쪽은 창의 이름을, 오른쪽은 사진 변수이름을 적는다.<br>
+     인수 왼쪽 : 창 이름 <br>
+     인수 오른쪽 : 사진 변수 이름 <br>
 * <b>waitkey :</b> 창을 띄우고 기다리는지 그냥 가는지 판단 <br>
      0 : 창을 띄운 상태로 멈춤 <br>
      1 : 창을 띄우고 바로 다음 코드 실행 <br>
