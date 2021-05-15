@@ -19,12 +19,12 @@ imread로 사진을 불러오고, 1은 칼라, 0은 흑백으로 불러옴을 �
  cv2.destroyAllWindows()
 </code>
 </pre>
-* imshow : 사진을 창을 띄워서 보여 줌
+* imshow : 사진을 창을 띄워서 보여 줌 <br>
      인수 왼쪽은 창의 이름을, 오른쪽은 사진 변수이름을 적는다.<br>
-* waitkey : 창을 띄우고 기다리는지 그냥 가는지 판단
+* waitkey : 창을 띄우고 기다리는지 그냥 가는지 판단 <br>
      0 : 창을 띄운 상태로 멈춤 <br>
      1 : 창을 띄우고 바로 다음 코드 실행 <br>
-* destroyAllWondows : 창을 닫음
+* destroyAllWondows : 창을 닫음 <br>
      1을 입력하면 사진창이 띄워졌다가 바로 닫힘 <br>
      그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느낌 <br>
 
