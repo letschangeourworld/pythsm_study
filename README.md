@@ -29,7 +29,7 @@ img = cv2.imread('aaa.jpg', 1)
 * <b>imshow :</b> 이미지를 창을 띄워 보여 줌 <br>
      - 좌측 인수 : 띄워지는 창 이름 <br>
      - 우측 인수 : 이미지가 들어 있는 변수 이름 입력 <br>
-* <b>waitkey :</b> 창을 띄우고 기다리는지 그냥 가는지 판단 <br>
+* <b>waitKey :</b> 창을 띄우고 기다리는지 그냥 가는지 판단 <br>
      - 0 : 창을 띄운 상태로 멈춤 <br>
      - 1 : 창을 띄우고 바로 다음 코드 실행 <br>
 * <b>destroyAllWondows :</b> 창을 닫음 <br>
@@ -67,17 +67,37 @@ cv2.destroyAllWindows()
 </code>
 </pre>
 
-* <b>cv2.VideoCapture() :</b> 비디오 캡쳐 객체 생성 <br>
+* <b>VideoCapture() :</b> 비디오 캡쳐 객체 생성 <br>
      - 입력 숫자 : 장치 인덱스로 어떤 카메라를 사용할 것인가를 뜻함 <br> 
      - 장치에 카메라 1개만 부착되어 있을 경우 : 0 (보통 기본 내장 카메라) <br>
      - 장치에 카메라가 2개 이상 부탁되어 있을 경우 : 0 (첫번째 웹캠), 1 (두번째 웹캠) <br>
-* <b>cap.isOpen() :</b> 비디오 캡쳐 객체가 정상적으로 Open되었는지 확인
+* <b>isOpen() :</b> 비디오 캡쳐 객체가 정상적으로 Open되었는지 확인
 * <b>while True   :</b> 특정 키를 누를 때까지 무한 반복
 * <b>ret, frame = cap.read() :</b> 비디오의 한 프레임씩 읽음
      - 프레임은 영상의 한 컷을 의미 <br>
      - 프레임을 제대로 읽으면 ret 변수에 True 입력됨 <br>
      - 프레임을 읽지 못하면 ret 변수에 False 입력됨 <br>
      - 프레임을 읽으면 읽은 프레임 스크린 데이터를 frame변수에 array값으로 입력됨 <br>
-* <b>cv2.cvtColor() :</b> frame을 흑백으로 변환한다.
+* <b>cvtColor() :</b> 색상 공간 변환 함수
+     - 좌측 인수 : 프레임값이 들어 있는 변수 입력
+     - 우측 인수 : array 프레임값을 칼라 또는 흑백 array값으로 변환
+        - cv2.COLOR_BGR2GRAY : 원본 이미지 색상(COLOR_BGR)을 바꾸고자 하는 색상 공간(GRAY)으로 변환
+        - 속성	의미	비고
+	- BGR	Blue, Green, Red 채널	-
+	- BGRA	Blue, Green, Red, Alpha 채널	-
+	- RGB	Red, Green, Blue 채널	-
+	- RGBA	Red, Green, Blue, Alpha 채널	-
+	- GRAY	단일 채널	그레이스케일
+	BGR565	Blue, Green, Red 채널	16 비트 이미지
+	XYZ	X, Y, Z 채널	CIE 1931 색 공간
+	YCrCb	Y, Cr, Cb 채널	YCC (크로마)
+	HSV	Hue, Saturation, Value 채널	색상, 채도, 명도
+	Lab	L, a, b 채널	반사율, 색도1, 색도2
+	Luv	L, u, v 채널	CIE Luv
+	HLS	Hue, Lightness, Saturation 채널	색상, 밝기, 채도
+	YUV	Y, U, V 채널	밝기, 색상1, 색상2
+	BG, GB, RG	디모자이킹	단일 색상 공간으로 변경
+	_EA	디모자이킹	가장자리 인식
+	_VNG	디모자이킹	그라데이션 사용
 * <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.
 <br>
