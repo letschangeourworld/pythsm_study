@@ -15,8 +15,8 @@ img = cv2.imread('aaa.jpg', 1)
 * imread : 사진 불러오기 <br>
      좌측 인수 : 사진파일 경로입력 <br>
      우측 인수 <br>
-        1 : 칼라 <br>
-        0 : 흑백 <br>
+        - 1 : 칼라 <br>
+        - 0 : 흑백 <br>
 
 <pre>
 <code>
