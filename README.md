@@ -59,7 +59,7 @@ while True:
 		cv2.imshow('video', gray)
 		k == cv2.waitKey(1) & 0xFF
 		if k == 27:
-			reak
+			break
 	else:
 		print('error')
 cap.release()
