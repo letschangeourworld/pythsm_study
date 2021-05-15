@@ -33,8 +33,7 @@ img = cv2.imread('aaa.jpg', 1)
      - 0 : 창을 띄운 상태로 멈춤 <br>
      - 1 : 창을 띄우고 바로 다음 코드 실행 <br>
 * <b>destroyAllWondows :</b> 창을 닫음 <br>
-* waitKey(1)을 입력하면 이미지 창이 띄워졌다가 바로 닫힘 <br>
-  그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느껴짐<br>
+* waitKey(1)을 입력하면 이미지 창이 띄워졌다가 바로 닫힘. 그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느껴짐<br>
 <pre>
 <code>
 cv2.imwrite('aaa.jpg', img)
