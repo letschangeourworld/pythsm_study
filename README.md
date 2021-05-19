@@ -101,3 +101,47 @@ cv2.destroyAllWindows()
 
 * <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.
 <br>
+
+
+### ◈ Day2 : '21.5.18(화)
+
+<pre>
+<code>
+import cv2 as cv
+cap = cv.VideoCapture(0)
+if cap.isOpened() == False:
+    print("눈꺼풀이 안 열림")
+    exit(1)
+ret,img_frame = cap.read() # 눈이 정보를 읽는다
+if ret == False:
+    print("눈꺼풀 안에 눈이 정보를 못 읽음")
+    exit(1)
+
+# 영상을 저장할 때 해당 영상에 대한 코덱이 필요함
+codec = cv.VideoWriter_fourcc(*'MJPG') # avi확장자에 맞는 코덱: MJPG
+fps = 30.0   # fps : frame per second (초당 프레임수, 보통 30이 적당)
+h,w = img_frame.shape[:2] # 인식한 프레임 정보 중 사이즈(높이,폭)를 가져온다
+writer = cv.VideoWriter("output.avi",codec,fps,(w,h))
+if writer.isOpened() == False: 
+    print("녹화 준비가 안 됨")
+    exit(1)
+
+# 창을 띄워서 영상 플레이 시작 (무한루프문)
+while(True):
+    ret,img_frame = cap.read() # 눈꺼풀은 이미 열려 있으니까 정보를 읽는다
+    if ret == False:
+        print("눈이 정보를 못 읽음")
+        break
+    writer.write(img_frame) # 영상 녹화,저장
+    cv.imshow('Color',img_frame) # 눈으로 본 것 창 띄워 보여주기
+    # ESC키(아스키코드:27)누르면 무한루프문 빠져나가기
+    key = cv.waitKey(1)
+    if key == 27:
+        break
+cap.release() # 눈이 정보 읽는 것을 쉬게 하기
+writer.release() # 영상 녹화/저장 준비하는 것을 쉬게 하기
+cv.destroyAllWindows() # 창을 닫기
+
+</code>
+</pre>
+
