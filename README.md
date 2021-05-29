@@ -152,7 +152,7 @@ cv.destroyAllWindows() # 창을 닫기
 http://www.fourcc.org/codecs.php
 
 
-# 주피터노트북에서 코딩을 위한 vision이라는 이름으로 아나콘다 가상환경 만들기
+## 주피터노트북에서 코딩을 위한 vision이라는 이름으로 아나콘다 가상환경 만들기
 1. prompt창 띄우기 : 시작 → Anaconda검색 → Anaconda prompt 실행
 2. prompt창에 입력 (가상환경생성) : conda create -n vision python=3.6 라고 입력한 후 enter, 그리고 Y 입력
 3. 가상환경 활성화 : activate vision
