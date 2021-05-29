@@ -150,3 +150,14 @@ cv.destroyAllWindows() # 창을 닫기
 내 컴퓨터에 저장된 흑백영상을 플레이 했을 때 정상적으로 플레이 돼야 한다.<br><br>
 코덱은 아래 사이트 참고하기
 http://www.fourcc.org/codecs.php
+
+
+# 주피터노트북에서 코딩을 위한 vision이라는 이름으로 아나콘다 가상환경 만들기
+1. prompt창 띄우기 : 시작 → Anaconda검색 → Anaconda prompt 실행
+2. prompt창에 입력 (가상환경생성) : conda create -n vision python=3.6 라고 입력한 후 enter, 그리고 Y 입력
+3. 가상환경 활성화 : activate vision
+4. 넘파이 설치     : pip install numpy
+5. openCV 설치    : pip install oepncv-python
+6. 주피터 설치     : pip install jupyter
+7. 텐서플로우 설치 : pip install tensorflow==1.5.1
+8. 
