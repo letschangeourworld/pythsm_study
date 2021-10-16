@@ -62,7 +62,6 @@ cap.release()
 cv2.destroyAllWindows()
 </code>
 </pre>
-
 * <b>VideoCapture() :</b> 비디오 캡쳐 객체 생성 <br>
      - 입력 숫자 : 장치 인덱스로 어떤 카메라를 사용할 것인가를 뜻함 <br> 
      - 장치에 카메라 1개만 부착되어 있을 경우 : 0 (보통 기본 내장 카메라) <br>
@@ -96,8 +95,7 @@ cv2.destroyAllWindows()
               - _EA    : 디모자이킹 → 가장자리 인식 <br>
               - _VNG   : 디모자이킹 → 그라데이션 사용 <br>
 
-* <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.
-<br>
+* <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.<br>
 
 ### ◈ '21.5.18(화)
 <pre>
@@ -133,18 +131,18 @@ while(True):
     key = cv.waitKey(1)
     if key == 27:
         break
+
 cap.release() # 눈이 정보 읽는 것을 쉬게 하기
 writer.release() # 영상 녹화/저장 준비하는 것을 쉬게 하기
 cv.destroyAllWindows() # 창을 닫기
 </code>
 </pre>
-
 * <b>추가 응용실습 문제</b> <br>
 위에서 영상을 칼라영상으로 내 컴퓨터에 저장을 했는데, 흑백영상으로 저장해보자.<br>
-내 컴퓨터에 저장된 흑백영상을 플레이 했을 때 정상적으로 플레이 돼야 한다.<br><br>
-코덱은 아래 사이트 참고하기
-http://www.fourcc.org/codecs.php
+내 컴퓨터에 저장된 흑백영상을 플레이 했을 때 정상적으로 플레이 돼야 한다.<br>
 
+코덱은 아래 사이트 참고하기<br>
+http://www.fourcc.org/codecs.php <br>
 
 ### ◈ 주피터노트북에서 코딩을 위한 vision이라는 이름으로 아나콘다 가상환경 만들기
 1. prompt창 띄우기 : 시작 → Anaconda검색 → Anaconda prompt 실행
@@ -161,7 +159,7 @@ http://www.fourcc.org/codecs.php
 - Mac북에서 라이브러리 설치시 : pip3로 입력
 
 ### ◈ '21.10.16(금) SW Coding Excercises
-<b>1. 사물인식 최소면적 산출 프로그램 만들기</b><br>
+<b> 1. 사물인식 최소면적 산출 프로그램 만들기</b><br>
 
 당신은 직장에서 레이더 기술을 활용해 차량 주변의 장애물과 사물을 인식하는 프로그램을 만드는 업무를 담당하고 있다. <br>
 당신은 다양한 입력 값들로 인식된 사물에 대해 최소 면적을 계산해보는 테스트를 하는 중이다. 이번 테스트의 조건은 다음과 같다. <br>
@@ -198,13 +196,11 @@ http://www.fourcc.org/codecs.php
 적어도 하나씩 포함하는 사물(직사각형)중 넓이가 가장 작은 것을 찾아서 그 넓이를 정수 형태로 출력한다. <br>
 
 <b> 1. 데이터 입력 (N, M) </b><br>
-<pre>
 <code>
 N, K = map(int, input().split())
 data = [list(map(int, input().split())) for _ in range(N)]
 print(data)
 </code>
-</pre>
 <출력>
 <pre>
 <code>
