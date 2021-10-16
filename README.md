@@ -168,7 +168,7 @@ http://www.fourcc.org/codecs.php
 - Mac북에서 라이브러리 설치시 : pip3로 입력
 
 ### <2021년 SW coding practice>
-사물인식 최소면적 산출 프로그램 만들기 <br>
+<b>사물인식 최소면적 산출 프로그램 만들기</b><br>
 
 당신은 직장에서 레이더 기술을 활용해 차량 주변의 장애물과 사물을 인식하는 프로그램을 만드는 업무를 담당하고 있다. <br>
 당신은 다양한 입력 값들로 인식된 사물에 대해 최소 면적을 계산해보는 테스트를 하는 중이다. 이번 테스트의 조건은 다음과 같다. <br>
@@ -205,16 +205,17 @@ http://www.fourcc.org/codecs.php
 적어도 하나씩 포함하는 사물(직사각형)중 넓이가 가장 작은 것을 찾아서 그 넓이를 정수 형태로 출력한다. <br>
 
 <b> 1. 데이터 입력 (N, M) </b><br>
-<code>
 <pre>
+<code>
 N, K = map(int, input().split())
 data = [list(map(int, input().split())) for _ in range(N)]
 print(data)
 </code>
 </pre>
 
-<code>
+<출력>
 <pre>
+<code>
 5 3
 3 7 1
 5 8 1
@@ -222,12 +223,12 @@ print(data)
 7 1 3
 9 3 3
 [[3, 7, 1], [5, 8, 1], [6, 5, 2], [7, 1, 3], [9, 3, 3]]
-
 </code>
 </pre>
+
 <b> 2. 원데이터에서 색깔 분류 </b><br>
-<code>
 <pre>
+<code>
 arr = []
 for i in range(K):
     arr.append([])
