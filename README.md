@@ -196,11 +196,13 @@ http://www.fourcc.org/codecs.php <br>
 적어도 하나씩 포함하는 사물(직사각형)중 넓이가 가장 작은 것을 찾아서 그 넓이를 정수 형태로 출력한다. <br>
 
 <b> 1. 데이터 입력 (N, M) </b><br>
+<pre>
 <code>
 N, K = map(int, input().split())
 data = [list(map(int, input().split())) for _ in range(N)]
 print(data)
 </code>
+</pre>
 <출력>
 <pre>
 <code>
