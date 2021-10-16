@@ -1,4 +1,4 @@
-### ◈ Day1 : '21.5.12 (수)
+### ◈ '21.5.12 (수)
 
 * 실습코드 다운로드 (Pythsm 단톡방 공유) <br>
 * pycharm 설치 (pycharm사이트에 가서 community용 무료 다운로드 설치) <br>
@@ -12,13 +12,11 @@
 img = cv2.imread('aaa.jpg', 1)
 </code>
 </pre>
-
 * <b>imread :</b> 이미지 불러오기 <br>
      - 좌측 인수 : 이미지 파일 경로입력 <br>
      - 우측 인수 <br>
         - 1 : 칼라 <br>
         - 0 : 흑백 <br>
-
 <pre>
 <code>
  cv2.imshow('aaa Window', img)
@@ -40,11 +38,9 @@ img = cv2.imread('aaa.jpg', 1)
 cv2.imwrite('aaa.jpg', img)
 </code>
 </pre>
-
 * <b>imwrite :</b> 이미지를 내 컴퓨터에 저장
      - 좌측 인수 : 저장할 이미지 이름 입력
      - 우측 인수 : 이미지가 들어 있는 변수 이름 입력
-
 <pre>
 <code>
 import cv2
@@ -103,9 +99,7 @@ cv2.destroyAllWindows()
 * <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.
 <br>
 
-
-### ◈ Day2 : '21.5.18(화)
-
+### ◈ '21.5.18(화)
 <pre>
 <code>
 import cv2 as cv
@@ -142,7 +136,6 @@ while(True):
 cap.release() # 눈이 정보 읽는 것을 쉬게 하기
 writer.release() # 영상 녹화/저장 준비하는 것을 쉬게 하기
 cv.destroyAllWindows() # 창을 닫기
-
 </code>
 </pre>
 
@@ -153,7 +146,7 @@ cv.destroyAllWindows() # 창을 닫기
 http://www.fourcc.org/codecs.php
 
 
-### 주피터노트북에서 코딩을 위한 vision이라는 이름으로 아나콘다 가상환경 만들기
+### ◈ 주피터노트북에서 코딩을 위한 vision이라는 이름으로 아나콘다 가상환경 만들기
 1. prompt창 띄우기 : 시작 → Anaconda검색 → Anaconda prompt 실행
 2. prompt창에 입력 (가상환경생성) : conda create -n vision python=3.6 라고 입력한 후 enter, 그리고 Y 입력
 3. 가상환경 활성화 : activate vision
@@ -167,8 +160,8 @@ http://www.fourcc.org/codecs.php
 - Mac북에서 가상환경 활성화시에는 이렇게 입력 : $ source activate vision
 - Mac북에서 라이브러리 설치시 : pip3로 입력
 
-### <2021년 SW coding practice>
-<b>사물인식 최소면적 산출 프로그램 만들기</b><br>
+### ◈ '21.10.16(금) SW Coding Excercises
+<b>1. 사물인식 최소면적 산출 프로그램 만들기</b><br>
 
 당신은 직장에서 레이더 기술을 활용해 차량 주변의 장애물과 사물을 인식하는 프로그램을 만드는 업무를 담당하고 있다. <br>
 당신은 다양한 입력 값들로 인식된 사물에 대해 최소 면적을 계산해보는 테스트를 하는 중이다. 이번 테스트의 조건은 다음과 같다. <br>
@@ -212,7 +205,6 @@ data = [list(map(int, input().split())) for _ in range(N)]
 print(data)
 </code>
 </pre>
-
 <출력>
 <pre>
 <code>
@@ -225,7 +217,6 @@ print(data)
 [[3, 7, 1], [5, 8, 1], [6, 5, 2], [7, 1, 3], [9, 3, 3]]
 </code>
 </pre>
-
 <b> 2. 원데이터에서 색깔 분류 </b><br>
 <pre>
 <code>
