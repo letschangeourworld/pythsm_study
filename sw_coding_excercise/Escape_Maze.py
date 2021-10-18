@@ -77,9 +77,10 @@ def move(x, y):
       
       # 미로맵 위의 값 1을 만나는 경우 카운트
       if maze_copy[nx][ny] == 1:
-        maze_copy[nx][ny] = maze_copy[x][y] + 1  # 현(x,y)좌표 해당값에 1을 더해서 (nx,ny)주변좌표 해당값에 덮어쓰기함  
-        queue.append((nx, ny))
-  return maze_copy[n-1][m-1]
+        maze_copy[nx][ny] = maze_copy[x][y] + 1  # 현(x,y)좌표 해당값에 카운트값 1을 추가로 더해서 (nx,ny)주변좌표 해당값에 덮어쓰기함  
+        queue.append((nx, ny))                   # queue 튜플 리스트에 nx,ny 값을 덮어쓰기하여 맨 위로 다시 반복수행
+  
+  return maze_copy[n-1][m-1]     # 미로맵의 맨 오른쪽 끝단 (n-1,m-1)좌표 해당 입력값을 반환
 
 print(move(0,0))
 maze_copy
@@ -93,10 +94,4 @@ maze_copy
  [0, 0, 0, 0, 0, 8],
  [14, 13, 12, 11, 10, 9],
  [15, 14, 13, 12, 11, 10]]
-'''    
-      
-    
-
-
-
-
+'''
