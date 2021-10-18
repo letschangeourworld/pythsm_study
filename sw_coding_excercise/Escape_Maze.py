@@ -56,6 +56,7 @@ print(maze)
 dx = [0,0,-1,1]
 dy = [-1,1,0,0]
 maze_copy = maze.copy()
+
 # 미로맵에서 움직인 좌표 숫자 카운트
 def move(x, y):
   queue = deque()             # 빈 deque 리스트 생성
@@ -82,7 +83,7 @@ def move(x, y):
   
   return maze_copy[n-1][m-1]     # 미로맵의 맨 오른쪽 끝단 (n-1,m-1)좌표 해당 입력값을 반환
 
-print(move(0,0))
+print(move(0,0))                 # (x,y)좌표 (0,0)에서 시작
 maze_copy
 
 '''
