@@ -74,3 +74,6 @@ while flag:
         y += 1
 for i in lst:
     print(' '.join(map(str, i)))
+
+
+
