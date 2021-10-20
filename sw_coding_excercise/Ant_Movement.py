@@ -78,6 +78,8 @@ for i in lst:
 
 
 # 방법2
+import copy
+
 n, m = 10, 10   # 미로맵 사이즈 입력
 maze_map = [list(map(int, input())) for _ in range(n)]   # 미로맵 리스트 생성
 maze = copy.deepcopy(copy.deepcopy(maze_map))            # 미로맵 리스트 카피 (원본데이터 보존)
@@ -95,10 +97,10 @@ def maze_move(x, y):
             maze[x][y+1] = 9          # 현 좌표의 오른쪽 한 칸의 좌표값이 0이면 9입력
             c = [x,y+1]               # 그 좌표로 c에 입력
         elif maze[x+1][y] == 0:
-            maze[x+1][y] = 9
-            c = [x+1,y]
+            maze[x+1][y] = 9          # 현 좌표의 아래쪽 한 칸의 좌표값이 0이면 9입력
+            c = [x+1,y]               # 그 좌표로 c에 입력
         elif maze[x+1][y] == 2:
-            maze[x+1][y] = 9
+            maze[x+1][y] = 9          # 현 좌표의 아래쪽 한 칸의 좌표값이 0이면 9입력
             c = [x+1,y]
             break
         else:
