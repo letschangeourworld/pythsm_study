@@ -49,6 +49,7 @@
 1 1 1 1 1 1 1 1 1 1
 '''
 
+# 방법1
 lst = []
 for i in range(10):
     lst.append([])
@@ -76,4 +77,32 @@ for i in lst:
     print(' '.join(map(str, i)))
 
 
+# 방법2
+n, m = 10, 10   # 미로맵 사이즈 입력
+maze_map = [list(map(int, input())) for _ in range(n)]   # 미로맵 리스트 생성
+maze = copy.deepcopy(copy.deepcopy(maze_map))            # 미로맵 리스트 카피 (원본데이터 보존)
+
+def maze_move(x, y):
+    c = [x, y]                        # 미로맵 한 개의 좌표 리스트 생성
+    while c:
+        x = c[0]                      # x좌표
+        y = c[1]                      # y좌표
+        if x == n and y == m:         # 미로맵에서 벗어나면 탈출
+            break
+        elif maze[x][y] == 0:
+            maze[x][y] = 9            # 현 좌표값이 0이면 9입력
+        elif maze[x][y+1] == 0:
+            maze[x][y+1] = 9          # 현 좌표의 오른쪽 한 칸의 좌표값이 0이면 9입력
+            c = [x,y+1]               # 그 좌표로 c에 입력
+        elif maze[x+1][y] == 0:
+            maze[x+1][y] = 9
+            c = [x+1,y]
+        elif maze[x+1][y] == 2:
+            maze[x+1][y] = 9
+            c = [x+1,y]
+            break
+        else:
+            break
+    return maze
+maze_move(1, 1)
 
