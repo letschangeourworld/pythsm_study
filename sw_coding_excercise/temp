@@ -40,8 +40,8 @@ def point_input(N):
         temp = [list(map(int, input().split()))]
 	for j in range(len(temp)):
 	    if temp[j][0] >= -1000 and temp[j][0] <= 1000:
-		if temp[j][1] < -1000 and temp[j][1] > 1000:
-		     if temp[j][2] < 1 and temp[j][2] > K:
+		if temp[j][1] >= -1000 and temp[j][1] <= 1000:
+		     if temp[j][2] >= 1 and temp[j][2] <= K:
 			data.append(temp)
 		     else:
 			 return None
