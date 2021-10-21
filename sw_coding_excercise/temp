@@ -49,7 +49,7 @@ def point_input(N):
 		    return None
 	    else:
 		return None
-    return data
+     return data
 
 data_input()
 point_input(N)
