@@ -1,0 +1,36 @@
+def input_data():
+    global H, W
+    H, W = map(int, input().split())
+    if H >= 5 and H <= 25:
+        if W >= 5 and W <= 25:
+            return H, W
+        else:
+            raise ValueError('W 범위이탈')
+    else:
+        raise ValueError('H 범위이탈')
+    
+input_data()
+path_map = [list(input().split()) for i in range(H)]
+res = []
+for i in range(H):
+    res.append(list(path_map[i][0]))
+res
+
+def search(x,y):
+    h = [-1,1,0,0]
+    w = [0,0,-1,1]
+    for i in range(H):
+        for j in range(W):
+            if res[i][j] == '#':
+                c = 0
+                for k in range(4):
+                    x = i + h[k]
+                    y = j + w[k]
+                    if x < 0 or y < 0:
+                        continue
+                    else:
+                        if res[x][y] == '#':
+                            c += 1
+                if c == 1:
+                    print((x+1,y))
+search(0,0)
