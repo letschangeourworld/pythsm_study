@@ -34,3 +34,83 @@ def search(x,y):
                 if c == 1:
                     print((x+1,y))
 search(0,0)
+
+
+from collections import deque
+
+def robot_map():
+    global H, W
+    
+    H, W = map(int, input().split())
+    
+    if H < 5 and H > 25:
+        if W < 5 and W > 25:
+            raise ValueError('H,W value deviation')
+    
+    path_map = []
+    for i in range(H):
+        path_map.append(list(input().split()))
+    
+    total = 0
+    for i in range(H):
+        lst = list(path_map[i][0])
+        total += lst.count('#')
+
+    if total < 3:
+        raise ValueError('# value deviation')
+    
+    global map_lst
+    map_lst = []
+    for i in range(H):
+        map_lst.append(list(path_map[i][0]))
+
+#    상,하,좌,우
+dx = [0,0,-1,1]
+dy = [-1,1,0,0]
+dic = {'^':0, 'V':1, '<':2, '>':3}
+
+def move(x,y):
+    queue = deque()
+    queue.append((x,y))
+
+    pos = []
+    path_cnt = 0
+    move_chr =''
+    while queue:
+        x, y = queue.popleft()
+        cnt = 0
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            
+            if nx < 0 or x >= H or ny < 0 or y >= W:
+                continue
+            if map_lst[nx][ny] == '.':
+                continue
+            if map_lst[nx][ny] == '#':
+                cnt += 1
+                pos.append(i)
+                queue.append((nx,ny))
+        
+        if cnt == 1:
+            for i, j in dic.items():
+                if len(pos) == 1:
+                    if pos[0] == j:
+                        print(i)
+                if len(pos) == 2:
+                    continue
+        
+        if map_lst[x][y] == '#':
+            path_cnt += 1
+            if path_cnt % 2 == 0:
+                path_cnt = 0
+                move_chr += 'A' * (path_cnt // 2)
+            else:
+                path_cnt = 1
+                for i, j in dic.items():
+                    if pos[-1] == 0:
+                        move_chr += 'L'
+                    if pos[-1] == 1:
+                        move_chr += 'R'
+robot_map()
+move(0,0)
