@@ -102,7 +102,7 @@ if ret == False:
     print("눈꺼풀 안에 눈이 정보를 못 읽음")
     exit(1)
 ~~~
-# 영상을 저장할 때 해당 영상에 대한 코덱이 필요함
+### 영상을 저장할 때 해당 영상에 대한 코덱이 필요함
 codec = cv.VideoWriter_fourcc(*'MJPG') # avi확장자에 맞는 코덱: MJPG
 fps = 30.0   # fps : frame per second (초당 프레임수, 보통 30이 적당)
 h,w = img_frame.shape[:2] # 인식한 프레임 정보 중 사이즈(높이,폭)를 가져온다
@@ -111,7 +111,7 @@ if writer.isOpened() == False:
     print("녹화 준비가 안 됨")
     exit(1)
 
-# 창을 띄워서 영상 플레이 시작 (무한루프문)
+### 창을 띄워서 영상 플레이 시작 (무한루프문)
 ~~~python
 while(True):
     ret,img_frame = cap.read() # 눈꺼풀은 이미 열려 있으니까 정보를 읽는다
