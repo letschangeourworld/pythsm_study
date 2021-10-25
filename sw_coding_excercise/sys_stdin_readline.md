@@ -3,14 +3,13 @@
 input()으로 입력 받으면 시간초과가 발생할 수 있다.
 
 
-~~~
+~~~python
 import sys
 
 T = int(input())   # Test case
 for i in range(T):
     a,b = map(int, sys.stdin.readline().split())
     print(a+b)
-
 ~~~
 
 맨 첫 줄 Test case를 입력받을 때는 input()을 사용해도 무방하다.
