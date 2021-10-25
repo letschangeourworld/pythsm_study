@@ -15,7 +15,7 @@ Diamond-Square-Algorithm이라는 것을 찾게 되었다.
 정사각형의 중심에 점을 하나 추가한다.
 
 *---------*  <br>
-|         |  <br>
+|&nbsp;&nbsp;&nbsp;         |  <br>
 |         |  <br>
 |         |  <br>
 *---------*  <br>
