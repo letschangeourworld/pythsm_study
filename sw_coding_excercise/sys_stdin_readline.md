@@ -2,8 +2,8 @@
 반복문으로 여러 줄을 입력 받아야 할 때,
 input()으로 입력 받으면 시간초과가 발생할 수 있다.
 
-'''
 
+~~~
 import sys
 
 T = int(input())   # Test case
@@ -11,7 +11,7 @@ for i in range(T):
     a,b = map(int, sys.stdin.readline().split())
     print(a+b)
 
-'''
+~~~
 
 맨 첫 줄 Test case를 입력받을 때는 input()을 사용해도 무방하다.
 그러나 반복문으로 여러줄 입력받는 상황에서는 반드시 
