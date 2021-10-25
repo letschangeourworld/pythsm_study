@@ -13,7 +13,7 @@ Diamond-Square-Algorithm이라는 것을 찾게 되었다.
 
 정사각형의 각 변의 중앙에 점을 하나 추가한다.   <br>
 정사각형의 중심에 점을 하나 추가한다.
-
+~~~
 *---------*  <br>
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  <br>
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  <br>
@@ -26,6 +26,7 @@ start - 4 points <br>
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;         |  <br>
 *----*----*  <br>
 1 iteration - 9 points
+~~~
 
 [그림]은 0단계(start)에서 2단계(2 iterations)까지 수행한 결과이다. 
 각 단계(N)가 계속해서 커져갈수록 점의 수가 커져간다
