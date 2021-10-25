@@ -7,23 +7,19 @@
      입력/실행 → <b>pip install opencv-contrib-python</b> <br>
 * 주피터노트북을 사용해도 됨 <br>
 
-<pre>
-<code>
+~~~python
 img = cv2.imread('aaa.jpg', 1)
-</code>
-</pre>
+~~~
 * <b>imread :</b> 이미지 불러오기 <br>
      - 좌측 인수 : 이미지 파일 경로입력 <br>
      - 우측 인수 <br>
         - 1 : 칼라 <br>
         - 0 : 흑백 <br>
-<pre>
-<code>
+~~~python
  cv2.imshow('aaa Window', img)
  cv2.waitKey(0)
  cv2.destroyAllWindows()
-</code>
-</pre>
+~~~
 
 * <b>imshow :</b> 이미지를 창을 띄워 보여 줌 <br>
      - 좌측 인수 : 띄워지는 창 이름 <br>
@@ -33,20 +29,17 @@ img = cv2.imread('aaa.jpg', 1)
      - 1 : 창을 띄우고 바로 다음 코드 실행 <br>
 * <b>destroyAllWondows :</b> 창을 닫음 <br>
 * waitKey(1)을 입력하면 이미지 창이 띄워졌다가 바로 닫힘. 그러나 실행이 매우 빠르므로 창이 안 열린 것으로 느껴짐<br>
-<pre>
-<code>
+~~~python
 cv2.imwrite('aaa.jpg', img)
-</code>
-</pre>
+~~~
 * <b>imwrite :</b> 이미지를 내 컴퓨터에 저장
      - 좌측 인수 : 저장할 이미지 이름 입력
      - 우측 인수 : 이미지가 들어 있는 변수 이름 입력
-<pre>
-<code>
+~~~python
 import cv2
 cap = cv2.VideoCapture(0)
 if cap.isOpen():
-	print('width: {}, height : {}'.format(cap.get(3), cap.get(4))
+    print('width: {}, height : {}'.format(cap.get(3), cap.get(4))
 
 while True:
 	ret, frame = cap.read()
@@ -60,8 +53,7 @@ while True:
 		print('error')
 cap.release()
 cv2.destroyAllWindows()
-</code>
-</pre>
+~~~
 * <b>VideoCapture() :</b> 비디오 캡쳐 객체 생성 <br>
      - 입력 숫자 : 장치 인덱스로 어떤 카메라를 사용할 것인가를 뜻함 <br> 
      - 장치에 카메라 1개만 부착되어 있을 경우 : 0 (보통 기본 내장 카메라) <br>
@@ -98,8 +90,8 @@ cv2.destroyAllWindows()
 * <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.<br>
 
 ### ◈ '21.5.18(화)
-<pre>
-<code>
+
+~~~python
 import cv2 as cv
 cap = cv.VideoCapture(0)
 if cap.isOpened() == False:
@@ -109,7 +101,7 @@ ret,img_frame = cap.read() # 눈이 정보를 읽는다
 if ret == False:
     print("눈꺼풀 안에 눈이 정보를 못 읽음")
     exit(1)
-
+~~~
 # 영상을 저장할 때 해당 영상에 대한 코덱이 필요함
 codec = cv.VideoWriter_fourcc(*'MJPG') # avi확장자에 맞는 코덱: MJPG
 fps = 30.0   # fps : frame per second (초당 프레임수, 보통 30이 적당)
@@ -120,6 +112,7 @@ if writer.isOpened() == False:
     exit(1)
 
 # 창을 띄워서 영상 플레이 시작 (무한루프문)
+~~~python
 while(True):
     ret,img_frame = cap.read() # 눈꺼풀은 이미 열려 있으니까 정보를 읽는다
     if ret == False:
@@ -135,8 +128,7 @@ while(True):
 cap.release() # 눈이 정보 읽는 것을 쉬게 하기
 writer.release() # 영상 녹화/저장 준비하는 것을 쉬게 하기
 cv.destroyAllWindows() # 창을 닫기
-</code>
-</pre>
+~~~
 * <b>추가 응용실습 문제</b> <br>
 위에서 영상을 칼라영상으로 내 컴퓨터에 저장을 했는데, 흑백영상으로 저장해보자.<br>
 내 컴퓨터에 저장된 흑백영상을 플레이 했을 때 정상적으로 플레이 돼야 한다.<br>
