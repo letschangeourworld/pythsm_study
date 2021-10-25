@@ -56,7 +56,7 @@ H개의 줄에 W개의 문자가 주어지는데,
 
 출력예제1-1<br>
 1 1<br>
-><br>
+ > <br>
 AAA
 
 입력예제1-2<br>
@@ -69,7 +69,7 @@ AAA
 
 출력예제1-2<br>
 1 7<br>
-<<br>
+<  <br>
 AAA
 
 입력예제2-1<br>
@@ -86,7 +86,7 @@ AAA
 
 출력예제2-1<br>
 3 6<br>
-<<br>
+<  <br>
 AALAALALARAARARALALAAAALAALARALARALA
 
 입력예제2-2<br>
@@ -103,7 +103,7 @@ AALAALALARAARARALALAAAALAALARALARALA
 
 출력예제2-2<br>
 1 8<br>
-><br>
+ >  <br>
 ARALARALARAARAAAARARALALAALARARAARAA
 
 
