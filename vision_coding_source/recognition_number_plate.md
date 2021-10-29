@@ -1,12 +1,15 @@
+번호판 인식 프로그램 수정
+
 ~~~python
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-import pytesseract                                  # 라이브러리 추가 설치
-pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'  # pytesseract 다운로드/설치후, 파일위치 입력
+import pytesseract                                 # 라이브러리 추가 설치
+pytesseract.pytesseract.tesseract_cmd =\
+'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'  # pytesseract 다운로드/설치후, 파일위치 입력
 
 plt.style.use('dark_background')
-img_ori = cv2.imread('car_number_plate3.png')       # 대상 이미지 불러오기
+img_ori = cv2.imread('car_number_plate3.png')      # 대상 이미지 불러오기
 height, width, channel = img_ori.shape
 gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
 plt.figure(figsize=(12, 10))
