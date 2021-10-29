@@ -23,7 +23,7 @@ plt.show()
 일반적으로 dilation(팽창), erosion(침식) 2개가 있고, 이를 조합하는 opening/closing이 있다.<BR>
 
 ~~~python
-◇ cv2.getStructuringElement(shape, ksize[, anchor]) # 원하는 구조로 된 커널 생성
+cv2.getStructuringElement(shape, ksize[, anchor]) # 원하는 구조로 된 커널 생성
 ~~~
   1. shape : 구조화 요소 커널의 모양 
       * cv2.MORPH_CROSS : 십자가형
