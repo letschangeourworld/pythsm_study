@@ -23,14 +23,16 @@ plt.show()
 일반적으로 dilation(팽창), erosion(침식) 2개가 있고, 이를 조합하는 opening/closing이 있다.<BR>
 
 #### cv2.getStructuringElement(shape, ksize[, anchor]) : 원하는 구조로 된 커널 생성
+  
   1. shape : 구조화 요소 커널의 모양 
-      - cv2.MORPH_CROSS : 십자가형
-      - cv2.MORPH_ELLIPSE : 타원형
-      - cv2.MORPH_RECT : 직사각형
+      * cv2.MORPH_CROSS : 십자가형
+      * cv2.MORPH_ELLIPSE : 타원형
+      * cv2.MORPH_RECT : 직사각형
   2. ksize : 구조화 요소 커널의 크기
   3. anchor : 구조화 요소 커널 기준점. default값 (-1,-1)은 기준점을 중심으로 잡음.
 
 #### cv2.erode(src, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : 침식 처리
+  
   생성한 커널에 0이 하나라도 있으면 픽셀을 제거하는 방법 → 검은색 영역(0)이 흰색영역(1)을 침식해 들어감<BR>
   이미지 내 작은 물체(object)가 있으면 제거할 수 있음<BR>
   1. src : 입력이미지 (채널수 상관없음, 사용이미지종류 → CV_8U,CV_16U,CV_16S,CV_32F,CV_64F)
@@ -39,19 +41,21 @@ plt.show()
   4. iterations : 침식 반복 횟수
 
 #### cv2.dilate(src, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : 팽창 처리
+  
   생성한 커널에 1이 하나라도 있으면 픽셀을 제거하는 방법 → 흰색 영역(1)이 더 넓어짐<BR>
   경계가 조금 부드러워지고 구멍이 메꿔지는 효과가 있음<BR>
   
 #### cv2.morphologyEx(src, op, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : Opening & Closing
+  
   Opening : 침식적용후 팽창적용, 영역이 점점 둥글어 짐, 점잡음,작은물체,돌기 제거용<BR>
   Closing : 팽창적용후 침식적용, 영역과 영역이 서로 붙음, 이미지 전체 윤곽 파악용<BR>
   1. src : 입력이미지
   2. op : 형태학적 연산
-     - cv2.MORPH_OPEN     : 침식후 팽창
-     - cv2.MORPH_CLOSE    : 팽창후 침식
-     - cv2.MORPH_GRADIENT : 팽창에서 침식을 빼 줌
-     - cv2.MORPH_TOPHAT   : src에서 OPENING을 빼 줌
-     - cv2.MORPH_BLACKHAT : CLOSING에서 src를 빼 줌
+     * cv2.MORPH_OPEN     : 침식후 팽창
+     * cv2.MORPH_CLOSE    : 팽창후 침식
+     * cv2.MORPH_GRADIENT : 팽창에서 침식을 빼 줌
+     * cv2.MORPH_TOPHAT   : src에서 OPENING을 빼 줌
+     * cv2.MORPH_BLACKHAT : CLOSING에서 src를 빼 줌
   3. kernel : 구조화된 커널
   4. andchor : 기준점
   5. iterations : 반복 횟수
