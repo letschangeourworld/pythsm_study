@@ -33,8 +33,8 @@ plt.show()
 
 #### ◇ cv2.erode(src, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : 침식 처리
   
-  생성한 커널에 0이 하나라도 있으면 픽셀을 제거하는 방법 → 검은색 영역(0)이 흰색영역(1)을 침식해 들어감<BR>
-  이미지 내 작은 물체(object)가 있으면 제거할 수 있음<BR>
+&nbsp;&nbsp;&nbsp;  생성한 커널에 0이 하나라도 있으면 픽셀을 제거하는 방법 → 검은색 영역(0)이 흰색영역(1)을 침식해 들어감<BR>
+&nbsp;&nbsp;&nbsp;  이미지 내 작은 물체(object)가 있으면 제거할 수 있음<BR>
   1. src : 입력이미지 (채널수 상관없음, 사용이미지종류 → CV_8U,CV_16U,CV_16S,CV_32F,CV_64F)
   2. kernel : 구조화 요소커널 → cv2.getStructuringElement로 생성
   3. anchor : 기준점
@@ -42,13 +42,13 @@ plt.show()
 
 #### ◇ cv2.dilate(src, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : 팽창 처리
   
-  생성한 커널에 1이 하나라도 있으면 픽셀을 제거하는 방법 → 흰색 영역(1)이 더 넓어짐<BR>
-  경계가 조금 부드러워지고 구멍이 메꿔지는 효과가 있음<BR>
+&nbsp;&nbsp;&nbsp;  생성한 커널에 1이 하나라도 있으면 픽셀을 제거하는 방법 → 흰색 영역(1)이 더 넓어짐<BR>
+&nbsp;&nbsp;&nbsp;  경계가 조금 부드러워지고 구멍이 메꿔지는 효과가 있음<BR>
   
 #### ◇ cv2.morphologyEx(src, op, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : Opening & Closing
   
-  Opening : 침식적용후 팽창적용, 영역이 점점 둥글어 짐, 점잡음,작은물체,돌기 제거용<BR>
-  Closing : 팽창적용후 침식적용, 영역과 영역이 서로 붙음, 이미지 전체 윤곽 파악용<BR>
+&nbsp;&nbsp;&nbsp;  Opening : 침식적용후 팽창적용, 영역이 점점 둥글어 짐, 점잡음,작은물체,돌기 제거용<BR>
+&nbsp;&nbsp;&nbsp;  Closing : 팽창적용후 침식적용, 영역과 영역이 서로 붙음, 이미지 전체 윤곽 파악용<BR>
   1. src : 입력이미지
   2. op : 형태학적 연산
      * cv2.MORPH_OPEN     : 침식후 팽창
