@@ -68,19 +68,24 @@ cv2.morphologyEx(src, op, kernel [,dst[,anchor[,iterations[,borderType[,borderVa
 ~~~python
 cv2.add(src1, src2 [,dst[,dtype]]])  # 두 개의 이미지 합성
 ~~~
-&nbsp;&nbsp;&nbsp; 두 개 이미지 덧셈 결과가 255보다 크면 픽셀값을 255로 설정하는 saturate 기능
-  1. src1  : 이미지 파일
-  2. src2  : 이미지 파일
-  3. dst   : 결과 파일
+&nbsp;&nbsp;&nbsp; 두 개 이미지 덧셈 결과가 255보다 크면 픽셀값을 255로 설정
+  1. src1  : 첫 번째 이미지/영상
+  2. src2  : 두 번째 이미지/영상
+  3. dst   : 덧셈 연산 결과 이미지/영상
   4. mask  : 영역 지정
-  5. dtype : output depth
- 
+  5. dtype : 출력 결과(dst) 타입 (cv2.CV_8U, cv2.CV_32F 등)
+
+~~~python
+cv2.substract(src1, src2, dst=None, mask=None, dtype=None)   # 두 개의 이미지 뺄셈 연산, 파라미터는 덧셈과 같음
+~~~
+&nbsp;&nbsp;&nbsp; 영상간 뺄셈 결과가 0보다 작으면 픽셀값을 0으로 설정
+
 ~~~python
 structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))         # 원하는 형태 구조로 된 커널 생성
 imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)       # 원본 이미지에서 잡티를 제거해 줌
 imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)   # 이미지 전체 윤곽을 얻고 거기에서 원본 이미지를 제거
-imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                              # 두 개의 이미지 합성
-gray = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                       # 
+imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                              # 두 개의 이미지 합성 (원본이미지와 잡티제거이미지 합성)
+gray = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                       # 윤곽선 외의 이미지는 0(검정색)으로 변경
 plt.figure(figsize=(12, 10))
 plt.imshow(gray, cmap='gray')
 plt.show()
