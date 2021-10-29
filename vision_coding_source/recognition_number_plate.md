@@ -66,15 +66,27 @@ cv2.morphologyEx(src, op, kernel [,dst[,anchor[,iterations[,borderType[,borderVa
   5. iterations : 반복 횟수
 
 ~~~python
-structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)
-imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)
-imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)
-gray = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)
+cv2.add(src1, src2 [,dst[,dtype]]])  # 두 개의 이미지 합성
+~~~
+&nbsp;&nbsp;&nbsp; 두 개 이미지 덧셈 결과가 255보다 크면 픽셀값을 255로 설정하는 saturate 기능
+  1. src1  : 이미지 파일
+  2. src2  : 이미지 파일
+  3. dst   : 결과 파일
+  4. mask  : 영역 지정
+  5. dtype : output depth
+ 
+~~~python
+structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))         # 원하는 형태 구조로 된 커널 생성
+imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)       # 원본 이미지에서 잡티를 제거해 줌
+imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)   # 이미지 전체 윤곽을 얻고 거기에서 원본 이미지를 제거
+imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                              # 두 개의 이미지 합성
+gray = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                       # 
 plt.figure(figsize=(12, 10))
 plt.imshow(gray, cmap='gray')
 plt.show()
+~~~
 
+~~~python
 # 노이즈 줄이기 위해
 # 이미지 구별하기 쉽게 (0, 255)
 
@@ -120,7 +132,7 @@ for contour in contours:
 
 contours_dict
 
-#어떤게 번호판처럼 생겼는지?
+# 어떤게 번호판처럼 생겼는지?
 MIN_AREA = 80
 MIN_WIDTH, MIN_HEIGHT = 2, 8
 MIN_RATIO, MAX_RATIO  = 0.25, 1.0
@@ -232,7 +244,7 @@ for r in matched_result:
                       color = (255, 255, 255),
                       thickness = 2)
 
-#똑바로 돌리기
+# 똑바로 돌리기
 PLATE_WIDTH_PADDING = 1.3   # 1.3
 PLATE_HEIGHT_PADDING = 1.5  # 1.5
 MIN_PLATE_RATIO = 3
