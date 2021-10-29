@@ -8,11 +8,18 @@ import pytesseract                                 # 라이브러리 추가 설�
 pytesseract.pytesseract.tesseract_cmd =\
 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'  # pytesseract 다운로드/설치후, 파일위치 입력
 
-plt.style.use('dark_background')
-img_ori = cv2.imread('car_number_plate3.png')      # 대상 이미지 불러오기
-height, width, channel = img_ori.shape
-gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
-plt.figure(figsize=(12, 10))
+img_bgr = cv2.imread('K5_car_number_plate.png')   # 대상 이미지 불러오기
+img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+
+fig = plt.figure(figsize=(15,6))
+ax1 = fig.add_subplot(1,3,1)
+plt.imshow(img_bgr)
+
+ax2 = fig.add_subplot(1,3,2)
+plt.imshow(img_rgb)
+
+ax3 = fig.add_subplot(1,3,3)
 plt.imshow(gray, cmap='gray')
 plt.show()
 ~~~
@@ -85,9 +92,24 @@ structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))         #
 imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)       # 원본 이미지에서 잡티를 제거해 줌
 imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)   # 이미지 전체 윤곽을 얻고 거기에서 원본 이미지를 제거
 imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                              # 두 개의 이미지 합성 (원본이미지와 잡티제거이미지 합성)
-gray = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                       # 윤곽선 외의 이미지는 0(검정색)으로 변경
-plt.figure(figsize=(12, 10))
-plt.imshow(gray, cmap='gray')
+gray1 = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                       # 윤곽선 외의 이미지는 0(검정색)으로 변경
+
+fig = plt.figure(figsize = (15,12))
+ax1 = fig.add_subplot(2,2,1)
+plt.title('TopHat')
+plt.imshow(imgTopHat, cmap='gray')
+
+ax2 = fig.add_subplot(2,2,2)
+plt.title('BlackHat')
+plt.imshow(imgBlackHat, cmap='gray')
+
+ax3 = fig.add_subplot(2,2,3)
+plt.title('GrayScale + TopHat')
+plt.imshow(imgGrayscalePlusTopHat, cmap='gray')
+
+ax4 = fig.add_subplot(2,2,4)
+plt.title('GrayScale + TopHat - BlackHat')
+plt.imshow(gray1, cmap='gray')
 plt.show()
 ~~~
 
