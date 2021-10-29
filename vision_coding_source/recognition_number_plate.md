@@ -1,4 +1,4 @@
-번호판 인식 프로그램 수정
+## 번호판 인식 프로그램 수정
 
 ~~~python
 import cv2
@@ -15,7 +15,21 @@ gray = cv2.cvtColor(img_ori, cv2.COLOR_BGR2GRAY)
 plt.figure(figsize=(12, 10))
 plt.imshow(gray, cmap='gray')
 plt.show()
+~~~
+### 이미지 형태학적 변환 (Morphological Transformation)
+형태학 변환하는 이미지 프로세싱은 이미지를 분할하여 단순화, 제거, 보정을 통해 형태 파악에 목적이 있다.
+이는 binary 또는 grayscale 이미지 상태에서 원본 이미지와 이미지에 가해지는 변형을 결정하는 2개의 입력값을 갖는다.
+일반적으로 dilation(팽창), erosion(침식) 2개가 있고, 이를 조합하는 opening/closing이 있다.
 
+cv2.getStructuringElement(shape, ksize[, anchor])
+  1. shape : 구조화 요소 커널의 모양
+      - cv2.MORPH_CROSS : 십자가형
+      - cv2.MORPH_ELLIPSE : 타원형
+      - cv2.MORPH_RECT : 직사각형
+  3. ksize : 구조화 요소 커널의 크기
+  4. anchor : 구조화 요소 커널 기준점. default값 (-1,-1)은 기준점을 중심으로 잡음.
+
+~~~python
 structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
 imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)
 imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)
