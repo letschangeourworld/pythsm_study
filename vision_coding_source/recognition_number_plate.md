@@ -62,7 +62,7 @@ cv2.morphologyEx(src, op, kernel [,dst[,anchor[,iterations[,borderType[,borderVa
      * cv2.MORPH_TOPHAT   : src에서 OPENING을 빼 줌
      * cv2.MORPH_BLACKHAT : CLOSING에서 src를 빼 줌
   3. kernel : 구조화된 커널
-  4. andchor : 기준점
+  4. anchor : 기준점
   5. iterations : 반복 횟수
 
 ~~~python
