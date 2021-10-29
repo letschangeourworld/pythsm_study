@@ -42,15 +42,15 @@ plt.show()
   경계가 조금 부드러워지고 구멍이 메꿔지는 효과가 있음
   
 * cv2.morphologyEx(src, op, kernel [,dst[,anchor[,iterations[,borderType[,borderValue]]]]]) : Opening & Closing
-  - Opening : 침식적용후 팽창적용, 영역이 점점 둥글어 짐, 점잡음,작은물체,돌기 제거용
-  - Closing : 팽창적용후 침식적용, 영역과 영역이 서로 붙음, 이미지 전체 윤곽 파악용
+  Opening : 침식적용후 팽창적용, 영역이 점점 둥글어 짐, 점잡음,작은물체,돌기 제거용
+  Closing : 팽창적용후 침식적용, 영역과 영역이 서로 붙음, 이미지 전체 윤곽 파악용
   1. src : 입력이미지
   2. op : 형태학적 연산
-     a. cv2.MORPH_OPEN     : 침식후 팽창
-     b. cv2.MORPH_CLOSE    : 팽창후 침식
-     c. cv2.MORPH_GRADIENT : 팽창에서 침식을 빼 줌
-     d. cv2.MORPH_TOPHAT   : src에서 OPENING을 빼 줌
-     e. cv2.MORPH_BLACKHAT : CLOSING에서 src를 빼 줌
+     - cv2.MORPH_OPEN     : 침식후 팽창
+     - cv2.MORPH_CLOSE    : 팽창후 침식
+     - cv2.MORPH_GRADIENT : 팽창에서 침식을 빼 줌
+     - cv2.MORPH_TOPHAT   : src에서 OPENING을 빼 줌
+     - cv2.MORPH_BLACKHAT : CLOSING에서 src를 빼 줌
   3. kernel : 구조화된 커널
   4. andchor : 기준점
   5. iterations : 반복 횟수
