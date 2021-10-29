@@ -22,7 +22,7 @@ plt.show()
 이는 binary 또는 grayscale 이미지 상태에서 원본 이미지와 이미지에 가해지는 변형을 결정하는 2개의 입력값을 갖는다.<BR>
 일반적으로 dilation(팽창), erosion(침식) 2개가 있고, 이를 조합하는 opening/closing이 있다.<BR>
 
-#### ◇ cv2.getStructuringElement(shape, ksize[, anchor]) : 원하는 구조로 된 커널 생성
+#### <b>◇ cv2.getStructuringElement(shape, ksize[, anchor]) : 원하는 구조로 된 커널 생성</b>
   
   1. shape : 구조화 요소 커널의 모양 
       * cv2.MORPH_CROSS : 십자가형
