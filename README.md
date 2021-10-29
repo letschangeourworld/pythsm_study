@@ -13,8 +13,8 @@ img = cv2.imread('aaa.jpg', 1)
 * <b>imread :</b> 이미지 불러오기 <br>
      - 좌측 인수 : 이미지 파일 경로입력 <br>
      - 우측 인수 <br>
-        - 0 : 칼라 <br>
-        - 1 : 흑백 <br>
+        - 0 : 흑백 <br>
+        - 1 : 칼라 <br>
 ~~~python
  cv2.imshow('aaa Window', img)
  cv2.waitKey(0)
