@@ -118,10 +118,14 @@ plt.show()
 ~~~
 
 ~~~python
-# 노이즈 줄이기 위해
-# 이미지 구별하기 쉽게 (0, 255)
+cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]] )
+~~~
+![image1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3hxC7%2FbtqJU4lkGql%2FDctAZcntV6dKoG0JaSgZYK%2Fimg.png)
+&nbsp;&nbsp;&nbsp; 
 
-img_blurred = cv2.GaussianBlur(gray, ksize=(5, 5), sigmaX=0)
+~~~python
+
+img_blurred = cv2.GaussianBlur(gray1, ksize=(5, 5), sigmaX=0)
 img_thresh = cv2.adaptiveThreshold(img_blurred,
                                    maxValue=255.0, 
                                    adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
