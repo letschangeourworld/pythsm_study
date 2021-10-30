@@ -120,8 +120,9 @@ plt.show()
 ~~~python
 cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]] )
 ~~~
+&nbsp;&nbsp;&nbsp; 이미지내 필터링 대상물체에 가까이 있는 픽셀과 멀리있는 픽셀 모두 같은 가중치를 두어 평균을 계산해 왔는데
 ![image1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3hxC7%2FbtqJU4lkGql%2FDctAZcntV6dKoG0JaSgZYK%2Fimg.png)
-&nbsp;&nbsp;&nbsp; 
+
 
 ~~~python
 
