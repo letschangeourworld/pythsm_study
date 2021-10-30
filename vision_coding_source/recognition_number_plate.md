@@ -127,9 +127,25 @@ cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]
 ![image1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3hxC7%2FbtqJU4lkGql%2FDctAZcntV6dKoG0JaSgZYK%2Fimg.png)<br>
 ![image2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcUECiH%2FbtqJUME9AwC%2FSWsLYpI5bmnUSgBNb5Fq1K%2Fimg.png)
 
+  1. src : 입력 이미지/영상
+  2. ksize : 가우시안 커널 크기. (0,0)을 지정하면 sigma값에 의해 자동 결정됨
+  3. sigmaX : x방향 sigma
+  4. sigmaY : y방향 sigma, 0이면 sigmaX와 같게 설정됨
+  5. borderType : 가장자리 픽셀확장 방식
+  
 ~~~python
-
+fig = plt.figure(figsize = (15,12))
+for sigma in range(1,4):
+  dst = cv2.GaussianBlur(gray1, ksize=(5, 5), sigma)
+  desc = 'sigma = {}'.format(sigma)
+  cv2.putText(dst, desc, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, 255, 1, cv2.LINE_AA)
+  ax = fig.add_subplot(2,2,sigma)
+  plt.imshow(dst, cmap='gray')
+plt.show()
+~~~  
+~~~python
 img_blurred = cv2.GaussianBlur(gray1, ksize=(5, 5), sigmaX=0)
+
 img_thresh = cv2.adaptiveThreshold(img_blurred,
                                    maxValue=255.0, 
                                    adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
