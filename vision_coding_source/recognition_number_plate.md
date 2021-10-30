@@ -88,11 +88,11 @@ cv2.substract(src1, src2, dst=None, mask=None, dtype=None)   # 두 개의 이미
 &nbsp;&nbsp;&nbsp; 영상간 뺄셈 결과가 0보다 작으면 픽셀값을 0으로 설정
 
 ~~~python
-structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))         # 원하는 형태 구조로 된 커널 생성
-imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)       # 원본 이미지에서 잡티를 제거해 줌
-imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)   # 이미지 전체 윤곽을 얻고 거기에서 원본 이미지를 제거
-imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                              # 두 개의 이미지 합성 (원본이미지와 잡티제거이미지 합성)
-gray1 = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                       # 윤곽선 외의 이미지는 0(검정색)으로 변경
+structuringElement = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))        # 원하는 형태 구조로 된 커널 생성
+imgTopHat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, structuringElement)      # 원본 이미지에서 잡티를 제거해 줌
+imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)  # 이미지 전체 윤곽을 얻고 거기에서 원본 이미지를 제거
+imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                             # 두 개의 이미지 합성 (원본이미지와 잡티제거이미지 합성)
+gray1 = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                     # 윤곽선 외의 이미지는 0(검정색)으로 변경
 
 fig = plt.figure(figsize = (15,12))
 ax1 = fig.add_subplot(2,2,1)
