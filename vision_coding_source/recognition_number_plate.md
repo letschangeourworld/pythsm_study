@@ -120,9 +120,11 @@ plt.show()
 ~~~python
 cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]] )
 ~~~
-&nbsp;&nbsp;&nbsp; 이미지내 필터링 대상물체에 가까이 있는 픽셀과 멀리있는 픽셀 모두 같은 가중치를 두어 평균을 계산해 왔는데
+&nbsp;&nbsp;&nbsp; 이미지내 필터링 대상물체에 가까이 있는 픽셀과 멀리있는 픽셀 모두 같은 가중치를 두어 평균을 계산해 왔었다.
+&nbsp;&nbsp;&nbsp; 그런데 픽셀에 동일한 평균 가중치를 두는 것에서 표준정규확률분포공식(가우시안)에 근거하여 픽셀에 가중치를 가중치를
+&nbsp;&nbsp;&nbsp; 두어 이미지를 처리하는 것을 가우시안 필터링이라고 한다.
 ![image1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3hxC7%2FbtqJU4lkGql%2FDctAZcntV6dKoG0JaSgZYK%2Fimg.png)
-
+![image2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcUECiH%2FbtqJUME9AwC%2FSWsLYpI5bmnUSgBNb5Fq1K%2Fimg.png)
 
 ~~~python
 
