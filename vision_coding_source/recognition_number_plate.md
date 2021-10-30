@@ -94,19 +94,23 @@ imgBlackHat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, structuringElement)  # 
 imgGrayscalePlusTopHat = cv2.add(gray, imgTopHat)                             # 두 개의 이미지 합성 (원본이미지와 잡티제거이미지 합성)
 gray1 = cv2.subtract(imgGrayscalePlusTopHat, imgBlackHat)                     # 윤곽선 외의 이미지는 0(검정색)으로 변경
 
+# 원본이미지에서 잡티제거처리
 fig = plt.figure(figsize = (15,12))
 ax1 = fig.add_subplot(2,2,1)
 plt.title('TopHat')
 plt.imshow(imgTopHat, cmap='gray')
 
+# 이미지 윤곽만 표현
 ax2 = fig.add_subplot(2,2,2)
 plt.title('BlackHat')
 plt.imshow(imgBlackHat, cmap='gray')
 
+# 잡티제거후 흑백처리
 ax3 = fig.add_subplot(2,2,3)
 plt.title('GrayScale + TopHat')
 plt.imshow(imgGrayscalePlusTopHat, cmap='gray')
 
+# 윤곽선외 검정색처리
 ax4 = fig.add_subplot(2,2,4)
 plt.title('GrayScale + TopHat - BlackHat')
 plt.imshow(gray1, cmap='gray')
