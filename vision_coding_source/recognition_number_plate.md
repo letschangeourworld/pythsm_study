@@ -360,85 +360,90 @@ plt.show()
 
 ~~~python
 # 리얼 번호판 추려내기
-MAX_DIAG_MULTIPLYER = 5   # 5
-MAX_ANGLE_DIFF = 12.0     # 12.0
-MAX_AREA_DIFF = 0.5       # 0.5
-MAX_WIDTH_DIFF = 0.8
-MAX_HEIGHT_DIFF = 0.2
-MIN_N_MATCHED = 3         # 3
+MAX_DIAG_MULTIPLYER = 6        # 5     대각선 길이에 곱해줄 숫자
+MAX_ANGLE_DIFF      = 15.0     # 12.0  두 변의 각도차
+MAX_AREA_DIFF       = 0.2      # 0.5   면적 비율
+MAX_WIDTH_DIFF      = 0.9      # 폭 비율
+MAX_HEIGHT_DIFF     = 0.9      # 높이 비율
+MIN_N_MATCHED       = 5        # 3  매치되는 인덱스 갯수
 
-def find_chars(contour_list):
-    matched_result_idx = []
-    for d1 in contour_list:
-        matched_contours_idx = []
-        for d2 in contour_list:
-            if d1['idx'] == d2['idx']:
+def find_chars(c_lst):
+    matched_rst_idx = []
+    for d1 in c_lst:
+        matched_c_idx = []
+        for d2 in c_lst:
+            if d1['idx'] == d2['idx']:      # 윤곽선 인덱스가 같으면 무시
                 continue
             
-            dx = abs(d1['cx'] - d2['cx'])
-            dy = abs(d1['cy'] - d2['cy'])
-            diagonal_length1 = np.sqrt(d1['w'] ** 2 + d1['h'] ** 2)
+            dx = abs(d1['cx'] - d2['cx'])   # 사각형 cx = 변길이/2 의 길이차
+            dy = abs(d1['cy'] - d2['cy'])   # 사각형 cy = 변길이/2 의 길이차
+            diagonal_length1 = np.sqrt(d1['w'] ** 2 + d1['h'] ** 2)  # 대각선 길이 (스칼라값)
+            # 두 점 좌표 유클리드 거리 구하기
             distance = np.linalg.norm(np.array([d1['cx'], d1['cy']]) - np.array([d2['cx'], d2['cy']]))
             
-            if dx == 0:
+            if dx == 0:               # 변 길이가 0이면 각도차는 90
                 angle_diff = 90
-            else:
+            else:                     # 변 길이가 0이 아닐 경우 각도차 구하기
                 angle_diff = np.degrees(np.arctan(dy / dx))
             
-            area_diff = abs(d1['w'] * d1['h'] - d2['w'] * d2['h']) / (d1['w'] * d1['h'])
-            width_diff = abs(d1['w'] - d2['w']) / d1['w']
-            height_diff = abs(d1['h'] - d2['h']) / d1['h']
+            area_diff = abs(d1['w'] * d1['h'] - d2['w'] * d2['h']) / (d1['w'] * d1['h'])  # 면적 비율
+            width_diff = abs(d1['w'] - d2['w']) / d1['w']   # 폭 비율
+            height_diff = abs(d1['h'] - d2['h']) / d1['h']  # 높이 비율
             
             if distance < diagonal_length1 * MAX_DIAG_MULTIPLYER and \
-               angle_diff < MAX_ANGLE_DIFF and \
-               area_diff < MAX_AREA_DIFF and \
-               width_diff < MAX_WIDTH_DIFF and \
-               height_diff < MAX_HEIGHT_DIFF:
-                matched_contours_idx.append(d2['idx'])
+            angle_diff < MAX_ANGLE_DIFF and \
+            area_diff < MAX_AREA_DIFF and \
+            width_diff < MAX_WIDTH_DIFF and \
+            height_diff < MAX_HEIGHT_DIFF:
+                matched_c_idx.append(d2['idx'])
         
         # append this contour
-        matched_contours_idx.append(d1['idx'])
+        matched_c_idx.append(d1['idx'])
         
-        if len(matched_contours_idx) < MIN_N_MATCHED:
+        if len(matched_c_idx) < MIN_N_MATCHED:
             continue
         
-        matched_result_idx.append(matched_contours_idx)
+        matched_rst_idx.append(matched_c_idx)
         
-        unmatched_contour_idx = []
-        for d4 in contour_list:
-            if d4['idx'] not in matched_contours_idx:
-                unmatched_contour_idx.append(d4['idx'])
+        unmatched_c_idx = []
+        for d4 in c_lst:
+            if d4['idx'] not in matched_c_idx:
+                unmatched_c_idx.append(d4['idx'])
         
-        unmatched_contour = np.take(possible_contours, unmatched_contour_idx)
-        
+        unmatched_contour = np.take(possible_contours, unmatched_c_idx)
         # recursive
-        recursive_contour_list = find_chars(unmatched_contour)
-        
-        for idx in recursive_contour_list:
-            matched_result_idx.append(idx)
+        recursive_c_lst = find_chars(unmatched_contour)
+        for idx in recursive_c_lst:
+            matched_rst_idx.append(idx)
         
         break
-    
-    return matched_result_idx
+    return matched_rst_idx
 
-result_idx = find_chars(possible_contours)
-
-matched_result = []
-for idx_list in result_idx:
-    matched_result.append(np.take(possible_contours, idx_list))
+rst_idx = find_chars(possible_contours)
+print(rst_idx)
 
 # visualize possible contours
-temp_result = np.zeros((height, width, channel), dtype=np.uint8)
+matched_rst = []
+for idx_lst in rst_idx:
+    matched_rst.append(np.take(possible_contours, idx_lst))
 
-for r in matched_result:
+temp_result = np.zeros((height, width, channel), dtype=np.uint8)
+for r in matched_rst:
     for d in r:
-        cv2.drawContours(temp_result, d['contour'], -1, (255, 255, 255))
+        cv2.drawContours(temp_result, d['contour'], -1, (255,255,255), 2)
         cv2.rectangle(temp_result,
                       pt1 = (d['x'], d['y']),
-                      pt2 = (d['x']+d['w'], d['y']+d['h']),
-                      color = (255, 255, 255),
-                      thickness = 2)
+                      pt2 = (d['x'] + d['w'], d['y'] + d['h']),
+                      color = (255,255,255),
+                      thickness = 1)
 
+plt.figure(figsize = (13,8))
+plt.imshow(temp_result, 'gray')
+plt.axis('off')
+plt.show()
+~~~
+
+~~~python
 # 똑바로 돌리기
 PLATE_WIDTH_PADDING = 1.3   # 1.3
 PLATE_HEIGHT_PADDING = 1.5  # 1.5
