@@ -257,6 +257,19 @@ plt.show()
 ~~~
 #### 윤곽선 사각형 범위 찾기
 
+<사각형>
+&nbsp;&nbsp;&nbsp; cv2.rectangle(img, pt1, pt2, color[, thickness[, lineType[, shift]]])
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * img : 이미지파일
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * pt1 : 시작점 좌표 (x,y)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * pt2 : 종료점 좌표 (x,y)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * color : 색상 (blue, green, red)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * thickness : 선두께 (default : 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * lineType
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - LINE_8 : 8-connected line
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - LINE_4 : 4-connected line
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - LINE_AA : Anti-aliased line
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - shift : fractional bit (default : 0)
+
 <외곽선 길이> : cv.arcLength(curve, closed) <br>
 &nbsp;&nbsp;&nbsp; * curve : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2), <br>
 &nbsp;&nbsp;&nbsp; * closed: True이면 폐곡선으로 간주 <br>
