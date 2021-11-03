@@ -145,8 +145,17 @@ for sigma in range(1,5):
 plt.show()
 ~~~
 ~~~python
-
-  
+cv2.threshold(src, thresh, maxval, type)
+~~~
+  1. src : 그레이스케일 이미지
+  2. thresh : 기준값
+  3. maxValue : 기준값을 넘었을 때 적용할 값
+  3. thresholdType  : 임계처리 유형
+      - THRESH_BINARY     : 기준값을 넘으면 최대값, 아니면 0
+      - THRESH_BINARY_INV : 기준값을 넘으면 0, 아니면 최대값
+      - THRESH_TRUNC      : 기준값을 넘으면 기준값, 아니면 최대값
+      - THRESH_TOZERO     : 기준값을 넘으면 원래값, 아니면 0
+      - THRESH_TOZERO_INV : 기준값을 넘으면 0, 아니면 원래값
 
 ~~~python
 # 적응임계처리
