@@ -228,8 +228,16 @@ plt.show()
 윤곽선 검출은 '윤곽선, 계층구조' 값으로 반환됨  <br>
 
 ~~~python
-cv2.drawContours(이미지, [윤곽선], 윤곽선 인덱스, (B, G, R), 두께, 선형 타입)
+cv2.drawContours((image, contours, contourIdx, color, thickness=None, lineType=No)
 ~~~
+  • image : 이미지 
+  • contours : (cv2.findContours() 함수로 구한) 외곽선 좌표 정보
+  • contourIdx : 외곽선 인덱스. 음수(-1)를 지정하면 모든 외곽선을 그린다.
+  • color : 외곽선 색상
+  • thickness : 외곽선 두께. thinkness < 0이면 내부를 채운다.
+  • lineType: LINE_4, LINE_8, LINE_AA 중 하나 지정
+  • hierarchy: 외곽선 계층 정보.
+  • maxLevel: 그리기를 수행할 최대 외곽선 레벨. maxLevel = 0 이면 contourIdx로 지정된 외곽선만 그린다.
 ~~~python
 contour1, hierarchy = cv2.findContours(gray1, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
 contour2, hierarchy = cv2.findContours(th1, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
