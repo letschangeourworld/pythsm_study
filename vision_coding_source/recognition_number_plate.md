@@ -281,55 +281,62 @@ plt.show()
 &nbsp;&nbsp;&nbsp; cv2.approxPolyDP(curve, epsilon, closed, approxCurve=None)
  
 ~~~python
-temp_result = np.zeros((height, width, channel), dtype = np.uint8)
-contours_dict = []
-for contour in contours:
-    x, y, w, h = cv2.boundingRect(contour)
-    cv2.rectangle(temp_result,
-                  pt1 = (x, y),
-                  pt2 = (x+w, y+h),
-                  color = (255, 255, 255),
-                  thickness = 2)
+plt.figure(figsize=(14,9))
+for i, c_lst in enumerate(contour_lst):
+    temp_result = np.zeros((height,width,channel), dtype = np.uint8)
+    contours_dict = []
+    for c in c_lst:
+        x, y, w, h = cv2.boundingRect(c)  # 사각형의 네 점의 좌표 받기
+        cv2.rectangle(temp_result,
+                      pt1 = (x, y),
+                      pt2 = (x + w, y + h),
+                      color = (255,255,255),
+                      thickness = 1)
+        # insert to dict
+        contours_dict.append({'contour': c,
+                              'x': x,
+                              'y': y,
+                              'w': w,
+                              'h': h,
+                              'cx': x + (w / 2),
+                              'cy': y + (h / 2) })
+        
+    # 어떤 것이 번호판처럼 생겼는지?
+    MIN_AREA = 80
+    MIN_WIDTH, MIN_HEIGHT = 2, 20
+    MIN_RATIO, MAX_RATIO  = 0.1, 1.0
     
-    # insert to dict
-    contours_dict.append({'contour': contour,
-                          'x': x,
-                          'y': y,
-                          'w': w,
-                          'h': h,
-                          'cx': x + (w / 2),
-                          'cy': y + (h / 2) })
-
-# 어떤게 번호판처럼 생겼는지?
-MIN_AREA = 80
-MIN_WIDTH, MIN_HEIGHT = 2, 8
-MIN_RATIO, MAX_RATIO  = 0.25, 1.0
-
-possible_contours = []
-cnt = 0
-for d in contours_dict:
-    area = d['w'] * d['h']
-    ratio = d['w'] / d['h']
+    possible_contours = []
+    cnt = 0
+    for d in contours_dict:
+        area  = d['w'] * d['h']
+        ratio = d['w'] / d['h']
+        if area > MIN_AREA and \
+        d['w'] > MIN_WIDTH and \
+        d['h'] > MIN_HEIGHT and \
+        MIN_RATIO < ratio < MAX_RATIO:
+            d['idx'] = cnt
+            cnt += 1
+            possible_contours.append(d)
     
-    if area > MIN_AREA and \
-       d['w'] > MIN_WIDTH and \
-       d['h'] > MIN_HEIGHT and \
-       MIN_RATIO < ratio < MAX_RATIO:
-        d['idx'] = cnt
-        cnt += 1
-        possible_contours.append(d)
+    # visualize possible contours
+    temp_result = np.zeros((height,width,channel), dtype=np.uint8)
+    for d in possible_contours:
+        cv2.drawContours(temp_result, d['contour'], -1, (255,255,255), 1)
+        cv2.rectangle(temp_result,
+                      pt1 = (d['x'], d['y']), 
+                      pt2 = (d['x']+ d['w'], d['y'] + d['h']),
+                      color = (0,255,255),
+                      thickness = 1)
+    plt.subplot(2,2,i+1)
+    plt.imshow(temp_result,'gray')
+    plt.title(titles[i])
+    plt.axis('off')
+plt.tight_layout()
+plt.show()
+~~~
 
-# visualize possible contours
-temp_result = np.zeros((height, width, channel), dtype=np.uint8)
-
-for d in possible_contours:
-    cv2.drawContours(temp_result, d['contour'], -1, (255, 255, 255))
-    cv2.rectangle(temp_result,
-                  pt1 = (d['x'], d['y']), 
-                  pt2 = (d['x']+ d['w'], d['y'] + d['h']),
-                  color = (255, 255, 255),
-                  thickness = 2)
-
+~~~python
 # 리얼 번호판 추려내기
 MAX_DIAG_MULTIPLYER = 5   # 5
 MAX_ANGLE_DIFF = 12.0     # 12.0
