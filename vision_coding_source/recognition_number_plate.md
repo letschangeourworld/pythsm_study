@@ -121,8 +121,8 @@ plt.show()
 cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]] )
 ~~~
 &nbsp;&nbsp;&nbsp; 이미지내 필터링 대상물체에 가까이 있는 픽셀과 멀리있는 픽셀 모두 같은 가중치를 두어 평균을 계산해 왔었다.<br>
-&nbsp;&nbsp;&nbsp; 그런데 픽셀에 동일한 평균 가중치를 두는 것에서 표준정규확률분포공식(가우시안)에 근거하여 픽셀에 가중치를 가중치를<br>
-&nbsp;&nbsp;&nbsp; 두어 이미지를 처리하는 것을 가우시안 필터링이라고 한다.<br>
+&nbsp;&nbsp;&nbsp; 그런데 픽셀에 동일한 평균 가중치를 두는 것에서 표준정규확률분포공식(가우시안)에 근거하여 픽셀에 가중치를 주어<br>
+&nbsp;&nbsp;&nbsp; 이미지 처리하는 것을 가우시안 필터링이라고 한다.<br>
 
 ![image1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F3hxC7%2FbtqJU4lkGql%2FDctAZcntV6dKoG0JaSgZYK%2Fimg.png)<br>
 ![image2](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcUECiH%2FbtqJUME9AwC%2FSWsLYpI5bmnUSgBNb5Fq1K%2Fimg.png)
@@ -132,30 +132,73 @@ cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]
   3. sigmaX : x방향 sigma
   4. sigmaY : y방향 sigma, 0이면 sigmaX와 같게 설정됨
   5. borderType : 가장자리 픽셀확장 방식
-  
+
 ~~~python
+# 가우시안 이미지처리 sigma값에 따른 사진모습 테스트
 fig = plt.figure(figsize = (15,12))
-for sigma in range(1,4):
-  dst = cv2.GaussianBlur(gray1, ksize=(5, 5), sigma)
+for sigma in range(1,5):
+  dst = cv2.GaussianBlur(gray1, ksize=(5,5), sigma)
   desc = 'sigma = {}'.format(sigma)
-  cv2.putText(dst, desc, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, 255, 1, cv2.LINE_AA)
+  cv2.putText(dst, desc, (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,255,255), 1, cv2.LINE_AA)
   ax = fig.add_subplot(2,2,sigma)
   plt.imshow(dst, cmap='gray')
 plt.show()
-~~~  
+~~~
 ~~~python
-img_blurred = cv2.GaussianBlur(gray1, ksize=(5, 5), sigmaX=0)
 
-img_thresh = cv2.adaptiveThreshold(img_blurred,
-                                   maxValue=255.0, 
-                                   adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                   thresholdType=cv2.THRESH_BINARY_INV, 
-                                   blockSize=19, 
-                                   C=9)
-plt.figure(figsize=(12, 10))
-plt.imshow(img_thresh, cmap='gray')
+  
+
+~~~python
+# 적응임계처리
+cv2.adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C)
+~~~
+  1. src : 그레이스케일 이미지
+  2. maxValue : 기준값을 넘었을 때 적용할 값
+  3. adaptiveMethod : 영역 내에서 기준값을 계산하는 방법
+      - ADAPTIVE_THRESH_MEAN_C     : 영역 내의 평균값에 c를 뺀 값을 기준값으로 사용 (평균적응 임계처리)
+      - ADPATIVE_THRESH_GAUSSIAN_C : 영역에 추후 설명할 가우시안 블러를 적용한 후, C를 뺀 값을 기준값으로 사용 (가우시안블러 적응임계처리)
+  4. thresholdType  : 임계처리 유형
+      - THRESH_BINARY     : 기준값을 넘으면 최대값, 아니면 0
+      - THRESH_BINARY_INV : 기준값을 넘으면 0, 아니면 최대값
+      - THRESH_TRUNC      : 기준값을 넘으면 기준값, 아니면 최대값
+      - THRESH_TOZERO     : 기준값을 넘으면 원래값, 아니면 0
+      - THRESH_TOZERO_INV : 기준값을 넘으면 0, 아니면 원래값
+
+~~~python
+maxval, thresh = 255, 127
+ret, th1 = cv2.threshold(gray1,
+                         thresh,
+                         maxval,
+                         cv2.THRESH_BINARY_INV)
+blockSize, C = 15, 25
+th2 = cv2.adaptiveThreshold(gray1,
+                            maxval,
+                            cv2.ADAPTIVE_THRESH_MEAN_C,
+                            cv2.THRESH_BINARY_INV,
+                            blockSize,
+                            C)
+th3 = cv2.adaptiveThreshold(gray1,
+                            maxval,
+                            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                            cv2.THRESH_BINARY_INV,
+                            blockSize,
+                            C)
+images = [gray1,th1,th2,th3]
+titles = ['Original','Threshold (Binary_INV)',
+          'Adaptive_Thresh_Mean (Binary_INV)',
+          'Adaptive_Thresh_Gaussian (Binary_INV)']
+
+fig = plt.figure(figsize = (12,8))
+for i in range(4):
+    plt.subplot(2,2,i+1)
+    plt.imshow(images[i], 'gray')
+    plt.title(titles[i])
+    plt.axis('off')
+plt.tight_layout()
 plt.show()
+~~~
 
+~~~python
 #윤곽선
 contours, _ = cv2.findContours(img_thresh, 
                                mode=cv2.RETR_LIST, 
