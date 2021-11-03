@@ -231,17 +231,57 @@ plt.show()
 cv2.drawContours(이미지, [윤곽선], 윤곽선 인덱스, (B, G, R), 두께, 선형 타입)
 ~~~
 ~~~python
-#윤곽선
-contours, _ = cv2.findContours(img_thresh, 
-                               mode=cv2.RETR_LIST, 
-                               method=cv2.CHAIN_APPROX_SIMPLE)
+contour1, hierarchy = cv2.findContours(gray1, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
+contour2, hierarchy = cv2.findContours(th1, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
+contour3, hierarchy = cv2.findContours(th2, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
+contour4, hierarchy = cv2.findContours(th3, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
 
-temp_result = np.zeros((height, width, channel), dtype=np.uint8)
-cv2.drawContours(temp_result, contours=contours, contourIdx=-1, color=(255, 255, 255))
+contours = [contour1,contour2,contour3,contour4]
+images = [gray1,th1,th2,th3]
+titles = ['Original_Contour',
+          'Threshold (Binary_INV)_Contour',
+          'Adaptive_Thresh_Mean (Binary_INV)_Contour',
+          'Adaptive_Thresh_Gaussian (Binary_INV)_Contour']
 
-# 컨투어의 사각형 범위 찾기
+plt.figure(figsize=(15,8))
+for i,c in enumerate(contours):
+    temp_result = np.zeros((height,width,channel), dtype = np.uint8)
+    for j in range(len(c)):
+        cv2.drawContours(temp_result, [c[j]], 0, (255,255,255), 2)
+    plt.subplot(2,2,i+1)
+    plt.imshow(temp_result,'gray')
+    plt.title(titles[i])
+    plt.axis('off')
+plt.tight_layout()
+plt.show()
+~~~
+#### 윤곽선 사각형 범위 찾기
+
+<외곽선 길이> : cv.arcLength(curve, closed) <br>
+&nbsp;&nbsp;&nbsp; * curve : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2), <br>
+&nbsp;&nbsp;&nbsp; * closed: True이면 폐곡선으로 간주 <br>
+
+<외곽선이 감싸는 영역 면적> <br> 
+&nbsp;&nbsp;&nbsp; cv2.contourArea()
+
+<바운딩 박스> : 바운딩 박스 (외곽선을 외접하여 둘러싸는 가장 작은 사각형) <br>
+&nbsp;&nbsp;&nbsp; cv2.boundingRect(array) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * array : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2)
+
+<바운딩 서클> : 바운딩 서클 (외곽선을 외접하여 둘러싸는 가장 작은 원) <br>
+&nbsp;&nbsp;&nbsp; cv2.minEnclosingCircle(points) <br>
+
+<주어진 점을 감싸는 최소 크기 회전된 사각형> <br>
+&nbsp;&nbsp;&nbsp; cv2.minAreaRect()
+
+<주어진 점을 감싸는 최소크기 삼각형> <br>
+&nbsp;&nbsp;&nbsp; cv2.minEnclosingTriangle()
+
+<외곽선을 근사화(단순화)> <br>
+&nbsp;&nbsp;&nbsp; cv2.approxPolyDP(curve, epsilon, closed, approxCurve=None)
+ 
+~~~python
 temp_result = np.zeros((height, width, channel), dtype = np.uint8)
-
 contours_dict = []
 for contour in contours:
     x, y, w, h = cv2.boundingRect(contour)
@@ -259,8 +299,6 @@ for contour in contours:
                           'h': h,
                           'cx': x + (w / 2),
                           'cy': y + (h / 2) })
-
-contours_dict
 
 # 어떤게 번호판처럼 생겼는지?
 MIN_AREA = 80
@@ -280,8 +318,6 @@ for d in contours_dict:
         d['idx'] = cnt
         cnt += 1
         possible_contours.append(d)
-
-possible_contours
 
 # visualize possible contours
 temp_result = np.zeros((height, width, channel), dtype=np.uint8)
