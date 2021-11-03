@@ -116,7 +116,10 @@ plt.title('GrayScale + TopHat - BlackHat')
 plt.imshow(gray1, cmap='gray')
 plt.show()
 ~~~
+### 이미지 필터링 (Image Filtering)
 
+
+가우시안 블러
 ~~~python
 cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType=BORDER_DEFAULT]]] )
 ~~~
@@ -144,6 +147,7 @@ for sigma in range(1,5):
   plt.imshow(dst, cmap='gray')
 plt.show()
 ~~~
+#### 임계처리 (Thresholding)
 ~~~python
 cv2.threshold(src, thresh, maxval, type)
 ~~~
@@ -157,8 +161,8 @@ cv2.threshold(src, thresh, maxval, type)
       - THRESH_TOZERO     : 기준값을 넘으면 원래값, 아니면 0
       - THRESH_TOZERO_INV : 기준값을 넘으면 0, 아니면 원래값
 
+#### 적응임계처리 (Adaptive Thresholding)
 ~~~python
-# 적응임계처리
 cv2.adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C)
 ~~~
   1. src : 그레이스케일 이미지
