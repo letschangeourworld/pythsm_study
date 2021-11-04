@@ -251,25 +251,23 @@ cv2.drawContours(image, contours, contourIdx, color, thickness=None, lineType=No
   8. maxLevel: 그리기를 수행할 최대 외곽선 레벨. maxLevel = 0 이면 contourIdx로 지정된 외곽선만 그린다.  <br>
 
 ~~~python
-contour1, hierarchy = cv2.findContours(gray1, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
-contour2, hierarchy = cv2.findContours(th1, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
-contour3, hierarchy = cv2.findContours(th2, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
-contour4, hierarchy = cv2.findContours(th3, mode=cv2.RETR_CCOMP, method=cv2.CHAIN_APPROX_NONE)
+contour1, hierarchy1 = cv2.findContours(th1, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
+contour2, hierarchy2 = cv2.findContours(th2, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
+contour3, hierarchy3 = cv2.findContours(th3, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
 
-contours = [contour1,contour2,contour3,contour4]
-images = [gray1,th1,th2,th3]
-titles = ['Original_Contour',
-          'Threshold (Binary_INV)_Contour',
-          'Adaptive_Thresh_Mean (Binary_INV)_Contour',
-          'Adaptive_Thresh_Gaussian (Binary_INV)_Contour']
+contour_lst = [contour1,contour2,contour3]
+images = [th1,th2,th3]
+titles = ['Threshold (Binary)_Contour',
+          'Adaptive_Thresh_Mean (Binary)_Contour',
+          'Adaptive_Thresh_Gaussian (Binary)_Contour']
 
-plt.figure(figsize=(15,8))
-for i,c in enumerate(contours):
-    temp_result = np.zeros((height,width,channel), dtype = np.uint8)
+plt.figure(figsize=(13,8))
+for i, c in enumerate(contour_lst):
+    new_canvas = np.zeros((height,width,channel), dtype=np.uint8)
     for j in range(len(c)):
-        cv2.drawContours(temp_result, [c[j]], 0, (255,255,255), 2)
+        cv2.drawContours(new_canvas, c[j], -1, (255,255,255), 2)
     plt.subplot(2,2,i+1)
-    plt.imshow(temp_result,'gray')
+    plt.imshow(new_canvas)
     plt.title(titles[i])
     plt.axis('off')
 plt.tight_layout()
@@ -333,16 +331,15 @@ cv2.approxPolyDP(curve, epsilon, closed, approxCurve=None)
 ~~~python
 plt.figure(figsize=(14,9))
 for i, c_lst in enumerate(contour_lst):
-    temp_result = np.zeros((height,width,channel), dtype = np.uint8)
+    new_canvas = np.zeros((height,width,channel), dtype = np.uint8)
     contours_dict = []
     for c in c_lst:
         x, y, w, h = cv2.boundingRect(c)
-        cv2.rectangle(temp_result,
+        cv2.rectangle(new_canvas,
                       pt1 = (x, y),
                       pt2 = (x + w, y + h),
                       color = (255,255,255),
                       thickness = 1)
-        # insert to dict
         contours_dict.append({'contour': c,
                               'x': x,
                               'y': y,
