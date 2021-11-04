@@ -238,7 +238,7 @@ cv2.findContours(image, mode, method, contours=None, hierarchy=None, offset=None
   5. hierarchy : 외곽선 계층 정보
 
 ~~~python
-cv2.drawContours((image, contours, contourIdx, color, thickness=None, lineType=No)
+cv2.drawContours(image, contours, contourIdx, color, thickness=None, lineType=No)
 ~~~
 
   1. image : 이미지  <br>
