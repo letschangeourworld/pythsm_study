@@ -367,16 +367,16 @@ for i, c_lst in enumerate(contour_lst):
             possible_contours.append(d)
     
     # visualize possible contours
-    temp_result = np.zeros((height,width,channel), dtype=np.uint8)
+    new_canvas = np.zeros((height,width,channel), dtype=np.uint8)
     for d in possible_contours:
-        cv2.drawContours(temp_result, d['contour'], -1, (255,255,255), 1)
-        cv2.rectangle(temp_result,
+        cv2.drawContours(new_canvas, d['contour'], -1, (255,255,255), 1)
+        cv2.rectangle(new_canvas,
                       pt1 = (d['x'], d['y']), 
-                      pt2 = (d['x']+ d['w'], d['y'] + d['h']),
-                      color = (0,255,255),
+                      pt2 = (d['x'] + d['w'], d['y'] + d['h']),
+                      color = (255,255,255),
                       thickness = 1)
     plt.subplot(2,2,i+1)
-    plt.imshow(temp_result,'gray')
+    plt.imshow(new_canvas)
     plt.title(titles[i])
     plt.axis('off')
 plt.tight_layout()
