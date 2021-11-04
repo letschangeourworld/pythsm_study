@@ -178,28 +178,35 @@ cv2.adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C
       - THRESH_TOZERO_INV : 기준값을 넘으면 0, 아니면 원래값
 
 ~~~python
-maxval, thresh = 255, 127
-ret, th1 = cv2.threshold(gray1,
-                         thresh,
-                         maxval,
-                         cv2.THRESH_BINARY_INV)
+thresh, maxval = 127, 255
+ret, binary1 = cv2.threshold(gray1,
+                             thresh,
+                             maxval,
+                             cv2.THRESH_BINARY)
+th1 = cv2.bitwise_not(binary1)
+
 blockSize, C = 15, 25
-th2 = cv2.adaptiveThreshold(gray1,
+at1 = cv2.adaptiveThreshold(gray1,
                             maxval,
                             cv2.ADAPTIVE_THRESH_MEAN_C,
-                            cv2.THRESH_BINARY_INV,
+                            cv2.THRESH_BINARY,
                             blockSize,
                             C)
-th3 = cv2.adaptiveThreshold(gray1,
+th2 = cv2.bitwise_not(at1)
+
+at2 = cv2.adaptiveThreshold(gray1,
                             maxval,
                             cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                            cv2.THRESH_BINARY_INV,
+                            cv2.THRESH_BINARY,
                             blockSize,
                             C)
+th3 = cv2.bitwise_not(at2)
+
 images = [gray1,th1,th2,th3]
-titles = ['Original','Threshold (Binary_INV)',
-          'Adaptive_Thresh_Mean (Binary_INV)',
-          'Adaptive_Thresh_Gaussian (Binary_INV)']
+titles = ['Original',
+          'Threshold (Binary)',
+          'Adaptive_Thresh_Mean (Binary)',
+          'Adaptive_Thresh_Gaussian (Binary)']
 
 fig = plt.figure(figsize = (12,8))
 for i in range(4):
@@ -210,26 +217,30 @@ for i in range(4):
 plt.tight_layout()
 plt.show()
 ~~~
+
 #### Contouring (윤곽선 찾기)
+~~~python
+cv2.findContours(image, mode, method, contours=None, hierarchy=None, offset=None)
+~~~
 
-<검출 방법>
-- cv2.RETR_EXTERNAL : 외곽 윤곽선만 검출하며, 계층 구조를 구성하지 않습니다.
-- cv2.RETR_LIST : 모든 윤곽선을 검출하며, 계층 구조를 구성하지 않습니다.
-- cv2.RETR_CCOMP : 모든 윤곽선을 검출하며, 계층 구조는 2단계로 구성합니다.
-- cv2.RETR_TREE : 모든 윤곽선을 검출하며, 계층 구조를 모두 형성합니다. (Tree 구조)
-
-<근사화 방법>
-- cv2.CHAIN_APPROX_NONE : 윤곽점들의 모든 점을 반환합니다.
-- cv2.CHAIN_APPROX_SIMPLE : 윤곽점들 단순화 수평, 수직 및 대각선 요소를 압축하고 끝점만 남겨 둡니다.
-- cv2.CHAIN_APPROX_TC89_L1 : 프리먼 체인 코드에서의 윤곽선으로 적용합니다.
-- cv2.CHAIN_APPROX_TC89_KCOS : 프리먼 체인 코드에서의 윤곽선으로 적용합니다.
-
-이진화 이미지에서 윤곽선 검출 : cv2.findContours(이진화 이미지, 검색 방법, 근사화 방법) <br>
-윤곽선 검출은 '윤곽선, 계층구조' 값으로 반환됨  <br>
+  1. image : 이진화 이미지
+  2. 검색방법 (mode)
+    - cv2.RETR_EXTERNAL : 외곽 윤곽선만 검출하며, 계층 구조를 구성하지 않습니다.
+    - cv2.RETR_LIST : 모든 윤곽선을 검출하며, 계층 구조를 구성하지 않습니다.
+    - cv2.RETR_CCOMP : 모든 윤곽선을 검출하며, 계층 구조는 2단계로 구성합니다.
+    - cv2.RETR_TREE : 모든 윤곽선을 검출하며, 계층 구조를 모두 형성합니다. (Tree 구조)
+  3. 근사화 방법 (method)
+    - cv2.CHAIN_APPROX_NONE : 윤곽점들의 모든 점을 반환합니다.
+    - cv2.CHAIN_APPROX_SIMPLE : 윤곽점들 단순화 수평, 수직 및 대각선 요소를 압축하고 끝점만 남겨 둡니다.
+    - cv2.CHAIN_APPROX_TC89_L1 : 프리먼 체인 코드에서의 윤곽선으로 적용합니다.
+    - cv2.CHAIN_APPROX_TC89_KCOS : 프리먼 체인 코드에서의 윤곽선으로 적용합니다.
+  4. contours : 검출된 외곽선 좌표 (np.ndarray로 구성된 리스트)
+  5. hierarchy : 외곽선 계층 정보
 
 ~~~python
 cv2.drawContours((image, contours, contourIdx, color, thickness=None, lineType=No)
 ~~~
+
   1. image : 이미지  <br>
   2. contours : (cv2.findContours() 함수로 구한) 외곽선 좌표 정보  <br>
   3. contourIdx : 외곽선 인덱스. 음수(-1)를 지정하면 모든 외곽선을 그린다.  <br>
