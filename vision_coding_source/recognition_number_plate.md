@@ -278,48 +278,65 @@ plt.show()
 #### 윤곽선 사각형 범위 찾기
 
 <사각형>
-&nbsp;&nbsp;&nbsp; cv2.rectangle(img, pt1, pt2, color[, thickness[, lineType[, shift]]]) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - img : 이미지파일 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - pt1 : 시작점 좌표 (x,y) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - pt2 : 종료점 좌표 (x,y) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - color : 색상 (blue, green, red) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - thickness : 선두께 (default : 1) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - lineType <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - LINE_8 : 8-connected line <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - LINE_4 : 4-connected line <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - LINE_AA : Anti-aliased line <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - shift : fractional bit (default : 0) <br>
+~~~python
+cv2.rectangle(img, pt1, pt2, color[, thickness[, lineType[, shift]]]) <br>
+~~~
+  1. img : 이미지파일
+  2. pt1 : 시작점 좌표 (x,y)
+  3. pt2 : 종료점 좌표 (x,y)
+  4. color : 색상 (blue, green, red) 
+  5. thickness : 선두께 (default : 1)
+  6. lineType <br>
+&nbsp;&nbsp;&nbsp;&nbsp; - LINE_8 : 8-connected line <br>
+&nbsp;&nbsp;&nbsp;&nbsp; - LINE_4 : 4-connected line <br>
+&nbsp;&nbsp;&nbsp;&nbsp; - LINE_AA : Anti-aliased line <br>
+&nbsp;&nbsp;&nbsp;&nbsp; - shift : fractional bit (default : 0) <br>
 
-<외곽선 길이> : cv.arcLength(curve, closed) <br>
-&nbsp;&nbsp;&nbsp; * curve : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2), <br>
-&nbsp;&nbsp;&nbsp; * closed: True이면 폐곡선으로 간주 <br>
+<외곽선 길이>
+~~~python
+cv.arcLength(curve, closed)
+~~~
+  1. curve : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2)
+  2. closed: True이면 폐곡선으로 간주
 
-<외곽선이 감싸는 영역 면적> <br> 
-&nbsp;&nbsp;&nbsp; cv2.contourArea()
+<외곽선이 감싸는 영역 면적>
+~~~python
+cv2.contourArea()
+~~~
 
-<바운딩 박스> : 바운딩 박스 (외곽선을 외접하여 둘러싸는 가장 작은 사각형) <br>
-&nbsp;&nbsp;&nbsp; cv2.boundingRect(array) <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * array : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2)
+<바운딩 박스> : 바운딩 박스 (외곽선을 외접하여 둘러싸는 가장 작은 사각형)
+~~~python
+cv2.boundingRect(array)
+~~~
+  1. array : 외곽선 좌표. numpy.ndarray.shape=(K, 1, 2)
 
-<바운딩 서클> : 바운딩 서클 (외곽선을 외접하여 둘러싸는 가장 작은 원) <br>
-&nbsp;&nbsp;&nbsp; cv2.minEnclosingCircle(points) <br>
+<바운딩 서클> : 바운딩 서클 (외곽선을 외접하여 둘러싸는 가장 작은 원)
+~~~python
+cv2.minEnclosingCircle(points)
+~~~
 
-<주어진 점을 감싸는 최소 크기 회전된 사각형> <br>
-&nbsp;&nbsp;&nbsp; cv2.minAreaRect()
+<주어진 점을 감싸는 최소 크기 회전된 사각형>
+~~~python
+cv2.minAreaRect()
+~~~
 
-<주어진 점을 감싸는 최소크기 삼각형> <br>
-&nbsp;&nbsp;&nbsp; cv2.minEnclosingTriangle()
+<주어진 점을 감싸는 최소크기 삼각형>
+~~~python
+cv2.minEnclosingTriangle()
+~~~
 
-<외곽선을 근사화(단순화)> <br>
-&nbsp;&nbsp;&nbsp; cv2.approxPolyDP(curve, epsilon, closed, approxCurve=None)
- 
+<외곽선을 근사화(단순화)>
+~~~python
+cv2.approxPolyDP(curve, epsilon, closed, approxCurve=None)
+~~~
+
 ~~~python
 plt.figure(figsize=(14,9))
 for i, c_lst in enumerate(contour_lst):
     temp_result = np.zeros((height,width,channel), dtype = np.uint8)
     contours_dict = []
     for c in c_lst:
-        x, y, w, h = cv2.boundingRect(c)  # 사각형의 네 점의 좌표 받기
+        x, y, w, h = cv2.boundingRect(c)
         cv2.rectangle(temp_result,
                       pt1 = (x, y),
                       pt2 = (x + w, y + h),
@@ -333,7 +350,7 @@ for i, c_lst in enumerate(contour_lst):
                               'h': h,
                               'cx': x + (w / 2),
                               'cy': y + (h / 2) })
-        
+    
     # 어떤 것이 번호판처럼 생겼는지?
     MIN_AREA = 80
     MIN_WIDTH, MIN_HEIGHT = 2, 20
