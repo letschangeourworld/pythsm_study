@@ -37,3 +37,5 @@ post_message(mytoken,
              "#investment",
              "안녕! 반가워. 나는 정보를 자동으로 보내는 봇이야!")  # 메신저에서 메시지 확인해보기
 ~~~
+
+![bot_image](https://user-images.githubusercontent.com/50024239/140595877-b120d1f1-a8e6-44ed-9b3d-1747195a8fbe.png)
