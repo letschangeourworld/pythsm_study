@@ -1,6 +1,6 @@
 ### Slack 메신저에 정보를 자동으로 보내기 위한 chat 봇 만들기
 
-### ◈ 내 중요정보 json file로 저장
+#### ◈ 내 중요정보 json file로 저장
 ~~~python
 import json           # 텍스트를 json파일로 저장할 때 사용함
 import requests       # 슬랙 앱 접속에 필요함
@@ -15,7 +15,7 @@ with open(file_path, 'w') as outfile:     # 'w' : 저장, 'r' : 불러오기
     json.dump(mydata, outfile)            # mydata사전을 outfile을 열어서 저장
 ~~~
 
-### ◈ 봇을 만들어서 내 메신저로 메시지 보내기
+#### ◈ 봇을 만들어서 내 메신저로 메시지 보내기
 ~~~python
 # 슬랙 메신저에 메시지를 보내기 위해서 접속하는 함수생성
 # token   : 슬랙사이트에서 주어진 본인 고유ID
