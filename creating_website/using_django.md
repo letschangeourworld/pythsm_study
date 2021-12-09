@@ -34,6 +34,9 @@ firstweb
   - 확인 : python manage.py runserver
 
 3. 장고 모델 생성 -> 모델을 생성하면 DB에 저장할 수가 있다.
+
+<애플리케이션 생성>
+- 콘솔 창 myweb 디렉토리에서 manage.py 파일에서 아래 명령어를 실행
 ~~~
 (myweb) python manage.py startapp blog
 ~~~
@@ -54,6 +57,9 @@ firstweb
         ├── tests.py
         └── views.py
 ~~~
+- mysite/settings.py  : 애플리케이션 생성 후 장고에 사용해야 한다고 알려주는 파일
+- 파일 안에 INSTALLED_APPS를 열어, 'blog' 추가
+
 <settings.py>
 ~~~
 INSTALLED_APPS = [
@@ -73,22 +79,21 @@ from django.db import models
 from django.utils import timezone
 
 class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    text = models.TextField()
-    created_date = models.DateTimeField(
-            default=timezone.now)
-    published_date = models.DateTimeField(
-            blank=True, null=True)
-
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
-
-    def __str__(self):
-        return self.title
+   author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+   title = models.CharField(max_length=200)
+   text = models.TextField()
+   created_date = models.DateTimeField(default=timezone.now)
+   published_date = models.DateTimeField(blank=True, null=True)
+   
+   def publish(self):
+      self.published_date = timezone.now()
+      self.save()
+   
+   def __str__(self):
+      return self.title
 ~~~
 ~~~
+
 (myweb) python manage.py makemigrations blog
 (myweb) python manage.py migrate blog
 ~~~
