@@ -57,21 +57,22 @@ firstweb
         ├── tests.py
         └── views.py
 ~~~
-- mysite/settings.py  : 애플리케이션 생성 후 장고에 사용해야 한다고 알려주는 파일
-- 파일 안에 INSTALLED_APPS를 열어, 'blog' 추가
+- firstweb/settings.py : 애플리케이션 생성 후 장고에 사용해야 한다고 알려주는 파일
+- setting.py 파일 안에 INSTALLED_APPS 리스트에 'blog' 추가
 
 <settings.py>
 ~~~
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'blog',
-]
+      'django.contrib.admin',
+      'django.contrib.auth',
+      'django.contrib.contenttypes',
+      'django.contrib.sessions',
+      'django.contrib.messages',
+      'django.contrib.staticfiles',
+      'blog',
+      ]
 ~~~
+
 <models.py>
 ~~~python
 from django.conf import settings
@@ -93,7 +94,6 @@ class Post(models.Model):
       return self.title
 ~~~
 ~~~
-
 (myweb) python manage.py makemigrations blog
 (myweb) python manage.py migrate blog
 ~~~
