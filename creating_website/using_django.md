@@ -9,6 +9,7 @@
 프로젝트 생성 : django-admin startproject (project name)
 
 <생성된 디렉토리>
+~~~python
 firstweb
 ├─manage.py
 └─firstweb
@@ -16,25 +17,27 @@ firstweb
    urls.py
    wsgi.py
    __init__.py
-
+~~~
 manage.py   : 사이트 관리를 도와주는 역할
 settings.py : 웹사이트 설정
 urls.py     : urlresolver(우편배달부)가 사용하는 패턴목록을 포함
 
 1. settings.py 수정
-  - TIME_ZONE = 'Asia/Seoul'
-  - STATIC_URL = '/static/'
-  - STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-  - ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
-
+~~~python
+  TIME_ZONE = 'Asia/Seoul'
+  STATIC_URL = '/static/'
+  STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+  ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+~~~
 2. DB 설정
   - 콘솔창에서 python manage.py migrate 실행
   - 확인 : python manage.py runserver
 
 3. 장고 모델 생성 -> 모델을 생성하면 DB에 저장할 수가 있다.
-
+~~~
 (myweb) python manage.py startapp blog
-
+~~~
+~~~
 firstweb
     ├── firstweb
     |       __init__.py
@@ -50,7 +53,7 @@ firstweb
         ├── models.py
         ├── tests.py
         └── views.py
-
+~~~
 <settings.py>
 INSTALLED_APPS = [
     'django.contrib.admin',
