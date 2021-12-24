@@ -1,4 +1,4 @@
-### ◈ '21.5.12 (수)
+###
 
 * 실습코드 다운로드 (Pythsm 단톡방 공유) <br>
 * pycharm 설치 (pycharm사이트에 가서 community용 무료 다운로드 설치) <br>
@@ -88,8 +88,6 @@ cv2.destroyAllWindows()
               - _VNG   : 디모자이킹 → 그라데이션 사용 <br>
 
 * <b>cap.release()  :</b> 오픈한 캡쳐 객체를 해제한다.<br>
-
-### ◈ '21.5.18(화)
 
 ~~~python
 import cv2 as cv
