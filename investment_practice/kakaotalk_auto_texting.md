@@ -1,6 +1,6 @@
 카톡
 
-'''
+~~~python
 import time, win32con, win32api, win32gui
 import datetime
 import schedule
@@ -21,4 +21,4 @@ def printtest():
     
 if __name__ == '__main__':
     printtest() 
-'''
+~~~
