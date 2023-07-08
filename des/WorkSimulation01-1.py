@@ -43,10 +43,11 @@ class Job(sim.Component):
     def insert(self, workshop):
         workshop.add_job(self)
 
+'''
+다음은 Salabim 라이브러리를 사용하여 
+공정 작업 시뮬레이션을 수행하는 예시 코드
+'''
 
-다음은 Salabim 라이브러리를 사용하여 공정 작업 시뮬레이션을 수행하는 예시 코드입니다.
-
-```python
 import salabim as sim
 
 class Workshop(sim.Component):
@@ -77,7 +78,6 @@ class Workshop(sim.Component):
                 next_workshop.add_job(job)
             else:
                 yield self.passivate()
-
 
 class Job(sim.Component):
     def __init__(self):
