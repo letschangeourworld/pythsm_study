@@ -85,7 +85,9 @@ class Workshop:
 '''
 두 경로 중에 한 개의 경로를 이용하는 제품의 수가 10개이면 
 가득 차 있는 것으로 간주한다.
-제품이 한 경로 이용하여 다음 작업장까지 가는 데 걸리는 소요시간은 15초이다. 
+제품이 한 경로 이용하여 다음 작업장까지 가는 데 걸리는 소요시간은 15초이다.
+여기에 불량제품을 수정하는 공정을 추가해주고,
+불량을 수정하는 시간은 제품 1개당 50초이다. 
 이것을 포함하는 코드로 다시 작성해 본다.
 '''
 
@@ -127,14 +129,20 @@ class C_Worker(sim.Component):
                 yield self.passivate()
 
 class Job(sim.Component):
-    def __init__(self):
+    def __init__(self, is_defective=False):
         self.set_exit(env.exit)
+        self.is_defective = is_defective
 
     def process_time(self):
+        if self.is_defective:
+            return 50
         return 45 if self.current_workshop.id == 1 else 30 if self.current_workshop.id == 2 else 55
 
     def insert(self, workshop):
         workshop.add_job(self)
+        if self.is_defective:
+            workshop.broken_products.append(self)
+            workshop.repair.activate()
 
 Workshop(1, env, 3)
 Workshop(2, env, 2)
