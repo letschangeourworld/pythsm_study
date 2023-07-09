@@ -1,6 +1,3 @@
-
-
-
 import salabim as sim
 
 class Workshop(sim.Component):
@@ -31,7 +28,6 @@ class Workshop(sim.Component):
                 next_workshop.add_job(job)
             else:
                 yield self.passivate()
-
 
 class Job(sim.Component):
     def __init__(self):
@@ -48,8 +44,6 @@ class Job(sim.Component):
 공정 작업 시뮬레이션을 수행하는 예시 코드
 '''
 
-import salabim as sim
-
 class Workshop(sim.Component):
     def __init__(self, id, env, capacity):
         self.id = id
@@ -89,9 +83,7 @@ class Job(sim.Component):
     def insert(self, workshop):
         workshop.add_job(self)
 
-
 env = sim.Environment()
-
 workshops = {}
 for i in range(4):
     workshops[i] = Workshop(i, env, 1)
@@ -113,11 +105,7 @@ env.run()
 제품을 일정 시간 동안 처리하는 시간을 설정합니다.
 `Workshop` 클래스의 `process` 메소드에서는 
 대기열에 작업이 있는지 확인한 후, 작업장에 작업
-
 '''
-
-
-import salabim as sim
 
 class Workshop(sim.Component):
     def __init__(self, id, env, capacity):
@@ -151,7 +139,6 @@ class Workshop(sim.Component):
             else:
                 yield self.passivate()
 
-
 class Job(sim.Component):
     def __init__(self):
         self.set_exit(env.exit)
@@ -174,7 +161,6 @@ class Factory(sim.Component):
 
             yield self.hold(1)
 
-
 def animate(env):
     while True:
         yield env.timeout(0.1)
@@ -187,7 +173,8 @@ def animate(env):
 
         for i, workshop in enumerate(workshops.values()):
             for j, worker in enumerate(workshop.next_worker):
-                w[i
+                w[i]
+
 
 '''
 다음은 공장에 작업장이 3개가 있고 
