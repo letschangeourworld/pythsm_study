@@ -1,12 +1,12 @@
 /*
-따라하기 강의
-https://m.blog.naver.com/rock11201/222879641299
+[flutterflow 따라하기 강의]
+   https://m.blog.naver.com/rock11201/222879641299
+[flutterflow 사이트]
+   https://flutterflow.io/
 
-플러터플로우 사이트
-https://flutterflow.io/
-
-FlutterFlow로 만든 앱 화면을 App Store에 게시하고 
-서비스하기 위해서는 Xcode를 사용하여 앱을 빌드해야 한다.
+FlutterFlow로 만든 앱 화면을 
+App Store에 게시하고 서비스하기 위해서는
+Xcode를 사용하여 앱을 빌드해야 한다.
 
 1. 우선 Mac OS용 컴퓨터와 Xcode를 설치
 2. FlutterFlow에서 앱을 빌드하기 위해 Flutter SDK를 설치
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () { 
-                  // 입력한 정보를 저장하거나 다른 작업을 수행할 수 있는 코드 작성
+             // 입력정보 저장 또는 다른 작업 수행 가능
                 },
                 child: Text('저장'),
               ),
@@ -63,13 +63,10 @@ class MyApp extends StatelessWidget {
 }
 
 /*
-위 코드는 화면 중앙에 이름과 이메일을 입력할 수 있는 두 개의 텍스트 필드와, 
+위 코드는 화면 중앙에 이름과 이메일을 입력할 수 있는 두 개의 텍스트 필드와 
 입력한 정보를 저장할 수 있는 저장 버튼이 있는 간단한 화면이다.
-코드 상에서 `TextField` 위젯을 사용하여 입력 필드를 생성하고, 
-`ElevatedButton` 위젯을 사용하여 저장 버튼을 생성한다.
-버튼 클릭 시, onPressed 콜백 함수를 통해 입력한 정보를 저장하거나
-다른 작업을 수행할 수 있다. 
-이 코드를 참고하여 원하는 정보 입력 화면을 구성하고 
-필요한 코드를 작성하면 된다.
+코드 상에서 `TextField` 위젯을 사용하여 입력 필드를 생성하고 
+`ElevatedButton` 위젯을 사용하여 저장 버튼을 생성한다. 버튼 클릭 시,
+onPressed 콜백 함수를 통해 입력한 정보를 저장하거나 다른 작업을 수행할 수 있다.
 */
 
