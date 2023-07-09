@@ -4,6 +4,8 @@
 [flutterflow 사이트]
    https://flutterflow.io/
 
+   https://thoughtful-tarsier-267.notion.site/f408ac46e2c34cd981a1b2e3033aef98
+
 FlutterFlow로 만든 앱 화면을 
 App Store에 게시하고 서비스하기 위해서는
 Xcode를 사용하여 앱을 빌드해야 한다.
