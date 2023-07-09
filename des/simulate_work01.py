@@ -7,7 +7,6 @@
 또한 animate()함수를 이용해 보자.
 '''
 
-
 import salabim as sim
 
 class Factory:
