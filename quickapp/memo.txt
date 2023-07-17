@@ -1,9 +1,12 @@
-[flutterflow 따라하기 강의]
+flutterflow 따라하기 강의
    https://m.blog.naver.com/rock11201/222879641299
-[flutterflow 사이트]
-   https://flutterflow.io/
 
+flutterflow 사이트
+   https://flutterflow.io/
    https://thoughtful-tarsier-267.notion.site/f408ac46e2c34cd981a1b2e3033aef98
+
+Flutter Useful Sites
+   https://fluttergems.dev/  → 구성품기능(위젯) 코드 벤치마킹
 
 FlutterFlow로 만든 앱 화면을 
 App Store에 게시하고 서비스하기 위해서는
@@ -21,3 +24,18 @@ Xcode를 사용하여 앱을 빌드해야 한다.
 
 위와 같은 과정을 거쳐 FlutterFlow로 만든 앱 화면을 
 App Store에서 서비스할 수 있슴
+
+--------------------------------------------------------------------------------
+23.7.17 Practice 01
+
+1. 자식클래스에서 부모클래스 멤버함수를 호출하기 외
+   https://dev-yakuza.posstree.com/ko/flutter/dart/class/
+   → dartpad에서 연습해보기 
+
+2. 버튼 팝업 연습해 보기
+   https://fluttergems.dev/packages/animated_floating_buttons/
+   → dartpad에서 부분 연습하고 android studio에서 lib폴더에 main.dart 수정해보기
+     lib폴더에 라이브러리 dart 파일을 만들어서 저장해서 main.dart에서 import로 불러오기
+
+
+
