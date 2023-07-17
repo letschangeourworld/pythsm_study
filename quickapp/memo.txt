@@ -32,7 +32,7 @@ App Store에서 서비스할 수 있슴
    https://dev-yakuza.posstree.com/ko/flutter/dart/class/
    → dartpad에서 연습해보기 
 
-2. 버튼 팝업 연습해 보기
+2. 버튼 팝업 연습해 보기 (코드가 길기 때문에 꼭 안 해봐도 됨)
    https://fluttergems.dev/packages/animated_floating_buttons/
    → dartpad에서 부분 연습하고 android studio에서 lib폴더에 main.dart 수정해보기
    → lib폴더에 라이브러리 dart 파일을 만들어서 저장해서 main.dart에서 import로 불러오기
