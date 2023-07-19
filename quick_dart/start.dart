@@ -12,6 +12,14 @@ void main() {
 // 2. 데이터 타입
 
 /*
+data type 은 메모리에 저장되는 데이터 속성을 말함
 
+data type : 숫자(number),문자열(String), 리스트(List), 맵(Maps),불리언(Boolean)
+
+숫자(number) : int, double, num
+문자열(String) : String
+리스트(List) : List
+맵(Maps) : Map (key와 value 값의 집합으로 묶음)
+불리언(Boolean) : bool (참과 거짓 판단)
 
 */
