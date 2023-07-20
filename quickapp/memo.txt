@@ -62,6 +62,15 @@ Flutter로 개발시 반드시 해야하는 것
       : 필요한 것만 해라!
     3.DRY (Do not Repeat Yourself)
       : 동일코드 반복하지 마라!
+    # provider나 get_it 라이브러리로 시작하자!!
+ - Restful API
+ - JSON
+ - local storage,Serializers
+ - SQLite,Firebase
+ - Redux,MVVM,MVC,Lifting State
+ - TDD
+
+
 
 
 
