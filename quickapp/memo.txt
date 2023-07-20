@@ -25,7 +25,8 @@ Xcode를 사용하여 앱을 빌드해야 한다.
 위와 같은 과정을 거쳐 FlutterFlow로 만든 앱 화면을 
 App Store에서 서비스할 수 있슴
 
---------------------------------------------------------------------------------
+---------------------------------------------------
+
 23.7.17 Practice 01
 
 1. 자식클래스에서 부모클래스 멤버함수를 호출하기 외
@@ -44,8 +45,7 @@ https://tech.ashe.kr/m/2
 https://fluttersamples.com/
 https://github.com/olexale/flutter_roadmap
 
-
-provider 사용법
+☑️ provider 사용법
 https://dev-yakuza.posstree.com/en/flutter/provider/
 
 
