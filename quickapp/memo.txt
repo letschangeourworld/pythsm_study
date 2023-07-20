@@ -71,7 +71,15 @@ Flutter로 개발시 반드시 해야하는 것
  - JSON
  - local storage,Serializers
  👉SQLite,Firebase
- - Redux,MVVM,MVC,Lifting State
+ - Archietecture : Redux,MVVM,MVC,Lifting State
+    - MVC : https://pub.dev/packages/mvc_pattern
+            https://github.com/brianegan/flutter_architecture_samples/tree/master/mvc
+    - Redux : https://pub.dev/packages/flutter_redux
+              https://github.com/brianegan/flutter_architecture_samples/tree/master/redux
+              https://pub.dev/packages/redux
+    - Vanilla Lifting State up 
+      : https://github.com/brianegan/flutter_architecture_samples/tree/master/vanilla
+
  - TDD
  - Package Manager : Pub,Popular Plugin
  - Leaks
