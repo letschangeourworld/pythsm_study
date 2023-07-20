@@ -26,7 +26,6 @@ Xcode를 사용하여 앱을 빌드해야 한다.
 App Store에서 서비스할 수 있슴
 
 -------------------------------------------------
-
 23.7.17 Practice 01
 
 1. 자식클래스에서 부모클래스 멤버함수를 호출하기 외
@@ -36,7 +35,7 @@ App Store에서 서비스할 수 있슴
 2. 버튼 팝업 연습
    https://fluttergems.dev/packages/animated_floating_buttons/
 
-
+-------------------------------------------------
 Flutter dev RoadMap
 https://tech.ashe.kr/m/2
 https://github.com/olexale/flutter_roadmap
@@ -45,9 +44,11 @@ Flutter로 개발시 반드시 해야하는 것
  - android studio
  - Dart Language
     : Concurrent,Reactive,Functional
- - Material Widgets, Material Design
+
+ 📌Material Widgets, Material Design
     : Widget of week(youtube), Material Design Concepts
- - Core Design Patterns
+
+ 📌Core Design Patterns
     1.Observer
     2.Command
     3.Factory
@@ -56,35 +57,38 @@ Flutter로 개발시 반드시 해야하는 것
     6.State
     7.Decorator
     8.Composite
- - Core Design Principles
+
+ 📌Core Design Principles
     1.KISS (Keep It Simple Stupid/Short and Simple/Small and Simple)
       : 짧고 단순하게 해라!
     2.YAGNI (You Ain't Gonna Need It)
       : 필요한 것만 해라!
     3.DRY (Do not Repeat Yourself)
       : 동일코드 반복하지 마라!
-    # provider나 get_it 라이브러리로 시작하자!!
+   👉 provider나 get_it 라이브러리로 시작하자!!
+
  - Restful API
  - JSON
  - local storage,Serializers
- - SQLite,Firebase
+ 👉SQLite,Firebase
  - Redux,MVVM,MVC,Lifting State
  - TDD
  - Package Manager : Pub,Popular Plugin
  - Leaks
- - CI Server : Github Actions,Travis
+ 👉CI Server : Github Actions,Travis
  - Fastlane
  - Test Builds Distribution
  - User behavior analytics
  - Crash logging
- - App Store/Google Play Guidlines
+ - App Store/Google Play Guidelines
  - App Store Connect
  - Google Dev Console
-
+-------------------------------------------------
 
 Flutter Samples
 https://fluttersamples.com/
 
+-------------------------------------------------
 ☑️ Flutter/Dart Study
 https://dev-yakuza.posstree.com/ko/flutter/
 
@@ -164,8 +168,7 @@ https://dev-yakuza.posstree.com/ko/flutter/
 73. Flutter 카메라 플러그인 사용 사진쵤영
 74. Flutter 카메라 플러그인 테스트
 75. Flutter 이미지를 base64 타입으로 변경
-
-
+-------------------------------------------------
 
 
 
