@@ -25,7 +25,7 @@ Xcode를 사용하여 앱을 빌드해야 한다.
 위와 같은 과정을 거쳐 FlutterFlow로 만든 앱 화면을 
 App Store에서 서비스할 수 있슴
 
----------------------------------------------------
+-------------------------------------------------
 
 23.7.17 Practice 01
 
@@ -44,6 +44,7 @@ https://github.com/olexale/flutter_roadmap
 Flutter로 개발시 반드시 해야하는 것
  - android studio
  - Dart Language
+    : Concurrent,Reactive,Functional
  - Material Widgets, Material Design
     : Widget of week(youtube), Material Design Concepts
  - Core Design Patterns
@@ -69,15 +70,20 @@ Flutter로 개발시 반드시 해야하는 것
  - SQLite,Firebase
  - Redux,MVVM,MVC,Lifting State
  - TDD
-
-
-
-
+ - Package Manager : Pub,Popular Plugin
+ - Leaks
+ - CI Server : Github Actions,Travis
+ - Fastlane
+ - Test Builds Distribution
+ - User behavior analytics
+ - Crash logging
+ - App Store/Google Play Guidlines
+ - App Store Connect
+ - Google Dev Console
 
 
 Flutter Samples
 https://fluttersamples.com/
-
 
 ☑️ Flutter/Dart Study
 https://dev-yakuza.posstree.com/ko/flutter/
