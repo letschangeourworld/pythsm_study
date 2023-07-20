@@ -37,10 +37,37 @@ App Store에서 서비스할 수 있슴
    https://fluttergems.dev/packages/animated_floating_buttons/
 
 
-
+Flutter dev RoadMap
 https://tech.ashe.kr/m/2
-https://fluttersamples.com/
 https://github.com/olexale/flutter_roadmap
+
+Flutter로 개발시 반드시 해야하는 것
+ - android studio
+ - Dart Language
+ - Material Widgets, Material Design
+    : Widget of week(youtube), Material Design Concepts
+ - Core Design Patterns
+    1.Observer
+    2.Command
+    3.Factory
+    4.Dependency Injection
+    5.Builder
+    6.State
+    7.Decorator
+    8.Composite
+ - Core Design Principles
+    1.KISS (Keep It Simple Stupid/Short and Simple/Small and Simple)
+      : 짧고 단순하게 해라!
+    2.YAGNI (You Ain't Gonna Need It)
+      : 필요한 것만 해라!
+    3.DRY (Do not Repeat Yourself)
+      : 동일코드 반복하지 마라!
+
+
+
+
+Flutter Samples
+https://fluttersamples.com/
 
 
 ☑️ Flutter/Dart Study
