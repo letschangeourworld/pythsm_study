@@ -46,7 +46,7 @@ https://fluttersamples.com/
 https://github.com/olexale/flutter_roadmap
 
 
-☑️ 플러터 공부하기 교재 사이트
+☑️ Flutter/Dart Study
 https://dev-yakuza.posstree.com/ko/flutter/
 
 순서
@@ -118,7 +118,7 @@ https://dev-yakuza.posstree.com/ko/flutter/
 66. Flutter 자식위젯 상관없이 스크롤
 67. Flutter pub.deb에 패키지 배포
 68. Flutter pub.deb에 배포자동화
-69. dart Bull 파키지 이용 pubspec.yaml 자동업데이트
+69. Dart Bull 파키지 이용 pubspec.yaml 자동업데이트
 70. Flutter Image.network 테스트
 71. Dart 테스트에서 print 츌력내용확인
 72. Flutter build_runner와 Mockito 사용
