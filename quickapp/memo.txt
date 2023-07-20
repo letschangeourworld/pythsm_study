@@ -86,6 +86,27 @@ https://dev-yakuza.posstree.com/ko/flutter/
 34. GetX를 이용한 Flutter 상태관리
 35. GetX 라우트 관리
 36. GetX 종속성 관리
+37. GetX 다국어 지원
+38. Getx 테마
+39. GetX BottomSheet
+40. GetX Dialog
+41. GetX Snackbar
+42. GetX 플랫폼 및 디바이스 정보
+43. Flutter url_launcher 이용 브라우저,메일,전화
+44. Flutter url_launcher 이용 iOS에서 외부 브라우저 열기
+45. Flutter package_info_plus 이용
+46. Flutter device_info_plus 이용
+47. Flutter http로 API 호출
+48. Flutter in_app_review 이용
+49. Flutter_local_notifications 이용
+50. Flutter webview_flutter 이용 웹페이지 표시
+51. Flutter webview_flutter 이용 쿠키 처리
+52. Flutter github Actions로 코드검사
+53. Flutter Github Dependabot 이용
+54. Flutter 테스트 커버리지
+55. Flutter flutter_colorpicker
+56. Flutter VScode 설정
+
 
 
 
