@@ -1,4 +1,4 @@
-// 1. 변수
+// 1. var
 
 void main() {
   var value1 = 'test';
