@@ -1,7 +1,7 @@
 // string interpolation
 
 void main() {
-  String name = 'Yakuza';
+  String name = 'pythsm';
   int num = 1;
 
   print('User: (${num}) ${name}');
