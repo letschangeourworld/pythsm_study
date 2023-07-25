@@ -79,6 +79,19 @@ void main() {
   print(newFruits);
   print(newFruits.toList());
 
+  // map 함수 안에 함수형태로 입력시키고 Iterable로 반복 입력
+  Iterable<String> newFruits1 = fruits10.map((e) => 'My name is $e.');
+  print(newFruits);
+  print(newFruits.toList());
+
+  /*
+  결과
+  (My name is Apple, My name is Banana, My name is Kiwi)
+  [My name is Apple, My name is Banana, My name is Kiwi]
+  (your name is Apple., your name is Banana., your name is Kiwi.)
+  [your name is Apple., your name is Banana., your name is Kiwi.]
+  */
+  
   List<int> numbers1 = [1, 2, 3, 4, 5];
   int result = numbers1.fold(0, (previousValue, element) {
     int sum = previousValue + element;
