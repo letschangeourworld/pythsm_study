@@ -33,11 +33,14 @@ void main() {
 
   print(fruits5);
 
+  // 리스트의 각 성분들을 ', '를 중심으로 한 문자열로 연결
   List<String> fruits6 = ['Apple', 'Banana', 'Kiwi'];
   print(fruits6.join(', '));
 
   List<String> fruits7 = ['Apple', 'Banana', 'Kiwi'];
-  print(fruits7.indexOf('Banana'));
+  print(fruits7.indexOf('Banana')); // 결과 : 1
+  print(fruits7.indexOf('Apple')); // 결과 : 0
+  print(fruits7.indexOf('Kiwi'));  // 결과 : -1 ==> 리스트의 맨 마지막 성분 의미
 
   // where() 구문 안에 함수형태로 넣어서 반복 출력
   // indexOf() : 각 문자열에 특정 문자가 포함되어 있는 경우, 그 index 추출
