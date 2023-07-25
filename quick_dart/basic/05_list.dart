@@ -91,7 +91,8 @@ void main() {
   (your name is Apple., your name is Banana., your name is Kiwi.)
   [your name is Apple., your name is Banana., your name is Kiwi.]
   */
-  
+
+   
   List<int> numbers1 = [1, 2, 3, 4, 5];
   int result = numbers1.fold(0, (previousValue, element) {
     int sum = previousValue + element;
