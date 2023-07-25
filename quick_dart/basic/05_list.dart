@@ -25,6 +25,8 @@ void main() {
 
   print(fruits4);
 
+  // 빈 리스트 생성, growable : true 시, 성분을 추가할 때마다 메모리 할당
+  // growable : false 시, 성분 추가하려고 해도 안 됨, error 발생
   List<String> fruits5 = List.empty(growable: true);
 
   fruits5.add('Apple');
@@ -41,6 +43,8 @@ void main() {
   print(fruits7.indexOf('Banana')); // 결과 : 1
   print(fruits7.indexOf('Apple')); // 결과 : 0
   print(fruits7.indexOf('Kiwi'));  // 결과 : -1 ==> 리스트의 맨 마지막 성분 의미
+  // 리스트 안에 원하는 성분이 존재하지 않아도 -1 를 출력
+  print(fruits7.indexOf('a')); // 결과 : -1
 
   // where() 구문 안에 함수형태로 넣어서 반복 출력
   // indexOf() : 각 문자열에 특정 문자가 포함되어 있는 경우, 그 index 추출
