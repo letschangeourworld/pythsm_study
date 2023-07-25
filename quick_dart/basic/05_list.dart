@@ -39,19 +39,32 @@ void main() {
   List<String> fruits7 = ['Apple', 'Banana', 'Kiwi'];
   print(fruits7.indexOf('Banana'));
 
+  // where() 구문 안에 함수형태로 넣어서 반복 출력
+  // indexOf() : 각 문자열에 특정 문자가 포함되어 있는 경우, 그 index 추출
   List<String> fruits8 = ['Apple', 'Banana', 'Kiwi'];
   print(fruits8.where((fruit) => fruit.toLowerCase().indexOf('a') >= 0));
 
   List<String> fruits9 = ['Apple', 'Banana', 'Kiwi'];
 
+  // 리스트에 있는 내용을 한 개씩 반복 출력
   fruits9.forEach((fruit) {
     print('${fruit}!');
   });
 
+  // 리스트 각각의 요소가 문자열이면 interpolation {} 을 생략해도 됨
+  // fruits9.forEach((fruit) {
+  //   print('$fruit!');
+  // });
+  
   for (String fruit in fruits9) {
     print('${fruit}!!');
   }
 
+  // interpolation 생략해도 됨
+  // for (String fruit in fruits9) {
+  //   print('$fruit!!');
+  // }
+  
   List<String> fruits10 = ['Apple', 'Banana', 'Kiwi'];
   Iterable<String> newFruits = fruits10.map((e) {
     return 'My name is ${e}';
