@@ -40,10 +40,9 @@ void main() {
   print(fruits6.join(', '));
 
   List<String> fruits7 = ['Apple', 'Banana', 'Kiwi'];
-  print(fruits7.indexOf('Banana')); // 결과 : 1
-  print(fruits7.indexOf('Apple')); // 결과 : 0
-  print(fruits7.indexOf('Kiwi'));  // 결과 : -1 ==> 리스트의 맨 마지막 성분 의미
-  // 리스트 안에 원하는 성분이 존재하지 않아도 -1 를 출력
+  print(fruits7.indexOf('Banana'));
+  print(fruits7.indexOf('Apple'));
+  print(fruits7.indexOf('Kiwi'));
   print(fruits7.indexOf('a')); // 결과 : -1
 
   // where() 구문 안에 함수형태로 넣어서 반복 출력
