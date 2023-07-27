@@ -1,3 +1,10 @@
+/*
+| Structure |
+ Container <- Card <- Row
+ Row <- 1. Image
+        2. Expanded <- Container <- Column <- Text1 / Text2 / Text3
+*/
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp()); // const
