@@ -1,6 +1,6 @@
 /*
 | Structure |
- Container <- Card <- Row
+ Container <- Card <- Row <-
  Row <- 1. Image
         2. Expanded <- Container <- Column <- Text1 / Text2 / Text3
 */
