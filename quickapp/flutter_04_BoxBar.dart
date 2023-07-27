@@ -39,7 +39,8 @@ class MyHomePage extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(2.0, 10.0, 2.0, 10.0), // const
         children: const <Widget>[ // const, Widget <- W UpperLetter
           ProductBox(
-            name: 'iPhone',
+            name: 'IPhone',
+            description: 'IPhone is the stylist phone ever.',
             price: 1000,
             image: "iphone.jpg"
           ), // ProductBox
@@ -51,8 +52,15 @@ class MyHomePage extends StatelessWidget {
 
 class ProductBox extends StatelessWidget {
   // null check : ? and required
-  const ProductBox({Key? key, this.name, this.price, required this.image}) : super(key: key);
+  const ProductBox(
+   {Key? key,
+    this.name,
+    this.description,
+    this.price,
+    required this.image}) : super(key: key);
+  
   final String? name; // null check
+  final String? description;
   final int? price; // null check
   final String image;
   
@@ -60,7 +68,7 @@ class ProductBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(2), // const
-      height: 120,
+      height: 130,
       child: Card(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,7 +83,8 @@ class ProductBox extends StatelessWidget {
                       name!, // null check operator
                   style: const TextStyle(fontWeight: FontWeight.bold) // const
                   ),
-                Text("Price: $price USD"),
+                  Text('$description'),
+                  Text("Price: $price USD"),
                 ], // <Widget>[]
               ) // Column
             ) // Container
