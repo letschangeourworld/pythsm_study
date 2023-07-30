@@ -181,6 +181,7 @@ https://dev-yakuza.posstree.com/ko/flutter/
 
 2023.07.26
 
+Basic
 6, 7, 8, 9, 10 : 성
 11,12,13,14,15 : 박
 16,17,18,19,20 : 유
