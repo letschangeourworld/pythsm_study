@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: const MyHomePage(title:' '),
+      home: const MyHomePage(title:'AnyLike'),
     );
   }
 }
@@ -67,15 +67,15 @@ class ProductBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(0),
+      padding: const EdgeInsets.all(1),
       height: 140,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Image.asset('images/$image',width: 150, height: 140),
           Expanded(
               child: Container(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.all(1),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -98,6 +98,7 @@ class ProductBox extends StatelessWidget {
 
 class RatingBox extends StatefulWidget {
   const RatingBox({Key? key}) : super(key: key);
+  
   @override
   RatingBoxState createState() => RatingBoxState();
 }
@@ -122,7 +123,7 @@ class RatingBoxState extends State<RatingBox> {
 
   @override
   Widget build(BuildContext context) {
-    double size = 25;
+    double? size = 25;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,10 +142,11 @@ class RatingBoxState extends State<RatingBox> {
         Container(
           padding: const EdgeInsets.all(1),
           child: IconButton(
-            icon: ( _rating >=2 ? Icon(Icons.start, size: size) :
+            icon: ( _rating >= 2 ? Icon(Icons.star, size: size) :
             Icon(Icons.star_border, size: size)),
-            color: Colors.red,
+            color: Colors.blue,
             onPressed: _setRatingAsTwo,
+            iconSize: size,
           ),
         ),
         Container(
@@ -152,7 +154,7 @@ class RatingBoxState extends State<RatingBox> {
           child: IconButton(
             icon: ( _rating >= 3 ? Icon(Icons.star, size: size) :
             Icon(Icons.star_border, size: size)),
-            color: Colors.red,
+            color: Colors.blue,
             onPressed: _setRatingAsThree,
             iconSize: size,
           ),
@@ -161,3 +163,4 @@ class RatingBoxState extends State<RatingBox> {
     );
   }
 }
+
