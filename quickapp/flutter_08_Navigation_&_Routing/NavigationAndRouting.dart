@@ -111,10 +111,11 @@ class ProductPage extends StatelessWidget {
       ), // AppBar
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(5),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Image.asset('images/${item.image}'),
               Expanded(
@@ -122,13 +123,20 @@ class ProductPage extends StatelessWidget {
                   padding: const EdgeInsets.all(5),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
                           item.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold)
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fonSize: 30) // TextStyle
                       ), // Text
                       Text(item.description),
-                      Text('Price: KRW ${item.price}'),
+                      Text('Price: KRW ${item.price}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold) // TextStyle
+                          ), // Text
                       RatingBox(item: item)
                     ], // <Widget>[]
                   ), // Column
@@ -215,12 +223,17 @@ class ProductBox extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         item.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15), // TextStyle
+                      ), // Text
                       Text(item.description),
                       Text(
-                        'Price: KRW ${item.price}'
-                      ),
+                        'Price: KRW ${item.price}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13) // TextStyle
+                      ), // Text
                       ScopedModelDescendant<Product>(
                           builder: (context, child, item) {
                             return RatingBox(item: item);
