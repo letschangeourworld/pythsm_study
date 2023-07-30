@@ -1,7 +1,7 @@
 /*
-1. 별표 등급 매기는 RatingBox 위젯생성 : StatefulWidget (State Management)
-2. images 폴더생성후 image 저장하고 pubspec.yaml 의 assets 항목 설정
-3. StatelessWidget : MyApp, MyHomePage, ProductBox
+1. RatingBox 위젯 : StatefulWidget (State Management)
+2. images 폴더생성 > image 저장 > pubspec.yaml > assets 설정
+3. MyApp, MyHomePage, ProductBox 위젯 : StatelessWidget
 */
 
 import 'package:flutter/material.dart';
