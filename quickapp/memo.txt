@@ -178,7 +178,6 @@ https://dev-yakuza.posstree.com/ko/flutter/
 75. Flutter 이미지를 base64 타입으로 변경
 -------------------------------------------------
 
-
 2023.07.26 (수)
 
 Dart Basic
