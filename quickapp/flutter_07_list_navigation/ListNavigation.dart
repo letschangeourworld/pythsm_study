@@ -1,3 +1,12 @@
+/*
+[1] Set pubspec.yaml for downloading scoped_model library
+dependencies:
+  scoped_model: ^2.0.0  // latest version (202307)
+[2] Create images directory and input iphone.jpg image
+    and then set pubspec.yaml as following;
+assets:
+  - images/
+*/
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -11,7 +20,7 @@ class Product extends Model {
 
   Product(this.name, this.description, this.price, this.image, this.rating);
 
-  factory Product.fromMap(Map<String,dynamic> json) {
+  factory Product.fromJson(Map<String,dynamic> json) {
     return Product(
       json['name'],
       json['decription'],
@@ -58,9 +67,9 @@ class MyApp extends StatelessWidget {
       title: 'AnyLike',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
-      ),
+      ), // ThemeData
       home: MyHomePage(title:'AnyLike'),
-    );
+    ); // MaterialApp
   }
 }
 
@@ -81,8 +90,8 @@ class MyHomePage extends StatelessWidget {
         itemBuilder: (context, index) {
           return ProductBox(item: items[index]);
         },
-      )
-    );
+      ) // ListView.builder
+    ); // Scaffold
   }
 }
 
@@ -107,8 +116,8 @@ class RatingBox extends StatelessWidget {
             color: Colors.blue[500],
             onPressed: () => item.updateRating(1),
             iconSize: size,
-          ),
-        ),
+          ), // IconButton
+        ), // Container
         Container(
           padding: const EdgeInsets.all(0),
           child: IconButton(
@@ -117,8 +126,8 @@ class RatingBox extends StatelessWidget {
             color: Colors.blue[500],
             onPressed: () => item.updateRating(2),
             iconSize: size,
-          ),
-        ),
+          ), // IconButton
+        ), // Container
         Container(
           padding: const EdgeInsets.all(0),
           child: IconButton(
@@ -127,10 +136,10 @@ class RatingBox extends StatelessWidget {
             color: Colors.blue[500],
             onPressed: () => item.updateRating(3),
             iconSize: size,
-          ),
-        ),
-      ],
-    );
+          ), // IconButton
+        ), // Container
+      ], // <Widget>[]
+    ); // Row
   }
 }
 
@@ -169,15 +178,15 @@ class ProductBox extends StatelessWidget {
                           builder: (context, child, item) {
                             return RatingBox(item: item);
                           }
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                      )  // ScopedModelDescendant
+                    ], // <Widget>[]
+                  ), // Column
+                ), // ScopedModel
+              ), // Container
+            ), // Expanded
+          ], // <Widget>[]
+        ), // Row
+      ), // Card
+    ); // Container
   }
 }
