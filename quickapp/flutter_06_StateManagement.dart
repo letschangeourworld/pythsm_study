@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -12,9 +11,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'AnyLike',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
       ),
-      home: const MyHomePage(title:'AnyLike'),
+      home: const MyHomePage(title:' '),
     );
   }
 }
@@ -28,7 +27,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Listing'),
+        title: const Text('Product List'),
       ),
       body: ListView(
         shrinkWrap: false,
@@ -36,27 +35,9 @@ class MyHomePage extends StatelessWidget {
         children: const <Widget>[
           ProductBox(
             name: 'IPhone',
-            description: 'iPhone is the stylist phone ever.',
+            description: 'IPhone is the stylist phone ever.',
             price: 1000,
-            image: 'IPhone.jpg',
-          ),
-          ProductBox(
-            name: 'Laptop',
-            description: 'Laptop is most productive development tool.',
-            price: 2000,
-            image: 'IPhone.jpg'
-          ),
-          ProductBox(
-            name: 'Pen_drive',
-            description: 'Pen_drive is the stylish ever.',
-            price: 100,
-            image: 'IPhone.jpg',
-          ),
-          ProductBox(
-            name: 'Tablet_PC',
-            description: 'Tablet PC is the most useful device for meeting.',
-            price: 1000,
-            image: 'IPhone.jpg',
+            image: 'iphone.jpg',
           ),
         ],
       ),
@@ -70,7 +51,7 @@ class ProductBox extends StatelessWidget {
         required this.name,
         required this.description,
         required this.price,
-        required this.image }) : super(key: key);
+        required this.image } ) : super(key: key);
 
   final String name;
   final String description;
@@ -80,31 +61,30 @@ class ProductBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(1),
+      padding: const EdgeInsets.all(0),
       height: 140,
-      child: Card(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Image.asset(image),
-            Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Image.asset('images/$image',width: 150, height: 140),
+          Expanded(
               child: Container(
                 padding: const EdgeInsets.all(0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Text(
                       name,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(description),
-                    Text('Price: $price USD'),
+                    Text('Price : USD $price'),
+                    const RatingBox(),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -136,39 +116,37 @@ class RatingBoxState extends State<RatingBox> {
 
   @override
   Widget build(BuildContext context) {
-    double size = 10;
-    // print(_rating);
+    double size = 25;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(1),
           child: IconButton(
-            icon: (_rating >= 1 ? Icon(Icons.star, size: size,) :
-            Icon(Icons.star_border, size: size,)),
-            color: Colors.red[500],
+            icon: ( _rating >= 1 ? Icon(Icons.star, size: size) :
+            Icon(Icons.star_border, size: size)),
+            color: Colors.red,
             onPressed: _setRatingAsOne,
             iconSize: size,
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(1),
           child: IconButton(
-            icon: (_rating >= 2 ? Icon(Icons.star, size: size,) :
-            Icon(Icons.star_border, size: size,)),
-            color: Colors.red[500],
+            icon: ( _rating >=2 ? Icon(Icons.start, size: size) :
+            Icon(Icons.star_border, size: size)),
+            color: Colors.red,
             onPressed: _setRatingAsTwo,
-            iconSize: size,
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(1),
           child: IconButton(
-            icon: (_rating >= 3 ? Icon(Icons.star, size: size,) :
-            Icon(Icons.star_border, size: size,)),
-            color: Colors.red[500],
+            icon: ( _rating >= 3 ? Icon(Icons.star, size: size) :
+            Icon(Icons.star_border, size: size)),
+            color: Colors.red,
             onPressed: _setRatingAsThree,
             iconSize: size,
           ),
