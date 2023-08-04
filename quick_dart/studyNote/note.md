@@ -198,6 +198,22 @@ void main() {
     Seal is not Whale
 
 
+### ◇ Condition Expression, 조건표현
+
+#### 1. 조건 ? 표현식1 : 표현식2;
+- 조건이 참이면 표현식1, 거짓이면 표현식2
+
+#### 2. 좌항?.우항
+- 좌항이 null값이면 null을 리턴, 그렇지 않으면 우항 리턴
+- ex) mammal?.name mammal이 → null값이면 null 리턴, 아니면 mammal.name 리턴
+
+#### 3. 좌항??우항
+- 좌항이 null이 아니면 좌항 리턴, 아니면 우항 리턴
+- ex) mammal.name ?? 'mammal name' → mammal.name이 null이면 'mammal name' 리턴
+
+
+
+
 
 
 
