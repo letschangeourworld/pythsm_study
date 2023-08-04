@@ -85,6 +85,7 @@
 
 <pre>
    <code>
+      // multi function 안에 add and sub function이 참조됨
       int add(int a, int b) {
          return a + b;
       }
@@ -105,8 +106,24 @@
 </pre>
 
 #### 3. optional parameter (선택매개변수)
-   - named optional parameter (이름지정된 선택매개변수)
-   - positional optional parameter (위치적 선택매개변수)
+    named optional parameter (이름지정된 선택매개변수)
+
+      int getYear(String Sorento, {String Genesis, String EV6}) {}      
+      int getYear('Sorento', {Genesis : 2019, EV6 : 2023}) {}
+    
+    positional optional parameter (위치적 선택매개변수)
+<pre>
+   <code>
+      String getName(String carName, [String carHost = 'Emily', String numberPlate = '62구 9999']) {
+      }
+
+      
+   </code>
+</pre>
+      
+
+
+      
 #### 4. anonymous function (익명함수) & lambda expression
 - 
 
