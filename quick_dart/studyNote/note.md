@@ -26,7 +26,7 @@
 * No public,protected,private keyword
 * private identifiers : use underscore( _ ) in front of variables.
 * debug mode and release mode
-* built-in identifiers (내장식별자, 내장함수)
+* built-in identifiers (내장식별자, 내장함수) <br>
   : <b>abstract</b>,<b>as</b>,<b>dynamic</b>,export,<b>factory</b>,Function, <br>
     <b>get</b>,<b>import</b>,<b>implements</b>,<b>static</b>,typedef,<b>mixin</b>,<b>set</b>, etc. <br>
 * Contextual keyword (문맥적 키워드) : sync,async,hide,on,show <br>
