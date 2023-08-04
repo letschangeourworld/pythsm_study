@@ -33,9 +33,9 @@
        get, import, implements, static, typedef, mixin, set, etc.
 #### 6. Contextual keyword (문맥적 키워드)
        sync, async, hide, on, show
-#### 2 keywords can't be used as an identifier in 'async','async*','sync*' methods
+#### 7. 2 keywords can't be used as an identifier in 'async','async*','sync*' methods
        await, yield
-#### Reserved words
+#### 8. Reserved words
        assert, break, case, catch, class, const, continue, do, else,
        enum, extends, false, final, finally, for, if, in, is, new,
        null, return, super, switch, this, throw, true, try, var,
@@ -104,6 +104,7 @@
       // 15 * 5 = 75
    </code>
 </pre>
+<br>
 
 #### 3. Optional parameter (선택매개변수)
 - 매개변수에 중괄호({})를 붙여서 표현하면 나중에 값을 입력해도 되고 안 해도 됨
@@ -151,7 +152,14 @@ main() {
 }
    </code>
 </pre>
+<br>
 
+### ◇ Operator, 연산자
+
+#### 1. Type Inspection Operator
+    as  : supertype conversion (상위타입으로 변환)
+    is  : ~ 이면 true
+    is! : ~ 이면 false
 
 
 
