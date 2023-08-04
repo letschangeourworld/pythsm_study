@@ -25,9 +25,9 @@
 
 * class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
   
-* variable type keyword : var, dynamic, int, String, double, bool, etc.
-* There is No public, protected, private keyword
-* private identifiers : use underscore( _ ) in front of variables.
+* variable type keyword : <b>var, dynamic, int, String, double, bool,</b> etc.
+* There is No <b>public, protected, private </b>keyword
+* private identifiers : use <b>underscore( _ )</b> in front of variables.
 * debug mode and release mode
 
 * built-in identifiers (내장식별자, 내장함수) <br>
