@@ -59,14 +59,17 @@
    - bool    : true or false
    - var     : 타입미지정 : 타입추정하여 자동지정 ▷ 타입변경불가
    - dynamic : 타입미지정 ▷ 타입변경가능
-   - List    : 리스트 <type>[]
+   - List    : 리스트
    - Set     : 데이터셋 ▷ 순서 X, 중복 X
    - Map     : key, value 값 형태 데이터셋
 
 <br>
 <br>
 
-
+<b>Constant, 상수</b> <br>
+   - final : 값변경 불가능, variable 맨 앞에 붙임, runtime시 상수화
+   - const : 값변경 불가능, variable 맨 앞에 붙임, compiletime시 상수화  
+   ※ 
 
 
 
