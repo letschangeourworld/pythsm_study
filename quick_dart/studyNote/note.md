@@ -116,13 +116,36 @@
       String getName(String carName, [String carHost = 'Emily', String numberPlate = '62구 9999']) {
          return '$carName : , $carHost : , $numberPlate : ';
       }
+      
       main() {
          print('${getName('Sorento')}');
          print('${getName('Sorento', 'Peter')}');
       }
-      
-#### 4. anonymous function (익명함수) & lambda expression
-- 
+
+#### 3.3 anonymous function (익명함수) & lambda expression
+
+<pre>
+   <code>
+int add(int a, int b) {
+   return a + b;
+}
+
+var multi = (_a, _b) {
+   return _a * _b;
+};
+
+sub(_a, _b) => _a - _b;
+
+main() {
+   int a = 10;
+   int b = 5 ;
+  
+   print('$a + $b = ${add(a, b)}');
+   print('$a * $b = ${multi(a,b)}');
+   print('$a - $b = ${sub(a,b)}' );
+}
+   </code>
+</pre>
 
 
 
