@@ -69,18 +69,18 @@
 <b>Constant, 상수</b> <br>
    - final : 값변경 불가능, variable 맨 앞에 붙임, runtime시 상수화
    - const : 값변경 불가능, variable 맨 앞에 붙임, compiletime시 상수화  
-   
-   ※ compiletime과 runtime 시점 상수화란?
-      - compile은 소스코드를 기계어로 변경해 주는 작업으로 문법상 이상이 없으면 error가 없음.
-      - 그러나 compile시 변수에 값이 없는 상태, null 이 발견되면 compile error 발생함.
-      - 값이 미지정된 변수를 초기화하여 지정하라는 error message임.
-      - 이 때, const 대신 final을 사용하면 어떻게 될까?
-      - 이미 compile된 전체 프로그램을 실제로 실행시키는 Run을 하는데 이 시점이 runtime임.
-      - compile시에는 변수값을 받을 수 없다는 것을 컴퓨터가 final로 알고 있기 때문에,
-      - 전체프로그램이 실행되면서 생성된 변수값을 넘겨 받게 되어 error가 없게 됨. 
-      - 그러나 const에서 null safety 확보, syntax error수정 등을 진행하는 것이 좋고,
-      - 그런 것이 아니라면 final도 관계없음.
-      - 프로그램 실행시 변수값이 알 수 없는 이유로 변경되는 것을 사전에 방지하기 위해 상수사용 필수임
+   <br>
+   ※ compiletime과 runtime 시점 상수화란? <br>
+      - compile은 소스코드를 기계어로 변경해 주는 작업으로 문법상 이상이 없으면 error가 없음.<br>
+      - 그러나 compile시 변수에 값이 없는 상태, null 이 발견되면 compile error 발생함.<br>
+      - 값이 미지정된 변수를 초기화하여 지정하라는 error message임.<br>
+      - 이 때, const 대신 final을 사용하면 어떻게 될까?<br>
+      - 이미 compile된 전체 프로그램을 실제로 실행시키는 Run을 하는데 이 시점이 runtime임.<br>
+      - compile시에는 변수값을 받을 수 없다는 것을 컴퓨터가 final로 알고 있기 때문에,<br>
+      - 전체프로그램이 실행되면서 생성된 변수값을 넘겨 받게 되어 error가 없게 됨. <br>
+      - 그러나 const에서 null safety 확보, syntax error수정 등을 진행하는 것이 좋고,<br>
+      - 그런 것이 아니라면 final도 관계없음.<br>
+      - 프로그램 실행시 변수값이 알 수 없는 이유로 변경되는 것을 사전에 방지하기 위해 상수사용 필수임<br>
 
 
 
