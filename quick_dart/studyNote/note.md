@@ -1,5 +1,5 @@
 
-## 1. Installation & Configuration
+## ◈ Installation & Configuration
 
 ### 1.1. Flutter Installation ▷ C drive
    - Dart-sdk download and installation if needed
@@ -14,25 +14,23 @@
    - SDK Tools <br>
        - Android SDK Build-Tools 34 <br> 
        - CMake <br>
-              - Android SDK Comman-line Tools <br>
-        - SDK Platforms : Android 11 installation <br>
-    - Device Manager <br>
-        - Create Device <br>
-        - Phone pixel 2 api 30 : Android 11 <br>
+       - Android SDK Comman-line Tools <br>
+       - SDK Platforms : Android 11 installation <br>
+   - Device Manager <br>
+       - Create Device <br>
+       - Phone pixel 2 api 30 : Android 11 <br>
 <br>
 
-## Dart Language
+## ◈ Dart Language
 
-* class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
-  
-* variable type keyword : <b>var, dynamic, int, String, double, bool,</b> etc.
-* There is No <b>public, protected, private </b>keyword
-* private identifiers : use <b>underscore( _ )</b> in front of variables.
-* debug mode and release mode
+### 1. class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
+### 2. variable type keyword : <b>var, dynamic, int, String, double, bool,</b> etc.
+### 3. There is No <b>public, protected, private </b>keyword
+### 4. private identifiers : use <b>underscore( _ )</b> in front of variables.
 
-* built-in identifiers (내장식별자, 내장함수) <br>
-  - <b>abstract, as, dynamic, export, factory, Function,
-  - get, import, implements, static, typedef, mixin, set, etc.</b>
+### 5. built-in identifiers (내장식별자, 내장함수) <br>
+       - <b>abstract, as, dynamic, export, factory, Function,
+       - get, import, implements, static, typedef, mixin, set, etc.</b>
 * Contextual keyword (문맥적 키워드)
   - <b>sync, async, hide, on, show</b> <br>
 * 2 keywords can't be used as an identifier in 'async','async*','sync*' methods <br>
