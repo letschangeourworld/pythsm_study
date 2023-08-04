@@ -47,7 +47,6 @@
 
 <b>Comment, 주석</b> <br>
 //, /* contents */ <br>
-
 <br>
 <br>
 
@@ -62,7 +61,6 @@
    - List    : 리스트
    - Set     : 데이터셋 ▷ 순서 X, 중복 X
    - Map     : key, value 값 형태 데이터셋
-
 <br>
 <br>
 
@@ -80,13 +78,18 @@
       - 그러나 const에서 null safety 확보, syntax error수정 등을 진행하는 것이 좋고,<br>
       - 그런 것이 아니라면 final도 관계없음.<br>
       - 프로그램 실행시 변수값이 알 수 없는 이유로 변경되는 것을 사전에 방지하기 위해 상수사용 필수.
-
 <br>
 <br>
 
 ### Function, 함수
 
-
+- 다트언어는 모든 것이 객체(object)임.
+- variable이 function 참조 및 전달가능
+- optional parameter (선택매개변수)
+     - named optional parameter (이름지정된 선택매개변수)
+     - positional optional parameter (위치적 선택매개변수)
+- anonymous function (익명함수) & lambda expression
+- 
 
 
 
