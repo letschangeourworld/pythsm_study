@@ -106,8 +106,12 @@
 </pre>
 
 #### 3. Optional parameter (선택매개변수)
-#### 3.1 Named optional parameter (이름지정된 선택매개변수)
+- 매개변수에 중괄호({})를 붙여서 표현하면 나중에 값을 입력해도 되고 안 해도 됨
+- 매개변수에 대괄호([])를 붙이면 초기값을 지정할 수 있고, 나중에 초기값과 다른 값을 입력하면,
+- 초기값은 무시되고 현재 입력한 값을 사용함
 
+#### 3.1 Named optional parameter (이름지정된 선택매개변수)
+ 
       int getYear(String Sorento, {String Genesis, String EV6}) {}      
       int getYear('Sorento', {Genesis : 2019, EV6 : 2023}) {}
 
@@ -123,6 +127,8 @@
       }
 
 #### 3.3 anonymous function (익명함수) & lambda expression
+- 매개변수값을 나중에 입력하고 임의의 변수명으로 표현
+- 람다표현은 arrrow function 으로 { return } 부분을 대체하여 한 줄로 표현가능
 
 <pre>
    <code>
@@ -134,7 +140,7 @@ var multi = (_a, _b) {
    return _a * _b;
 };
 
-sub(_a, _b) => _a - _b;
+sub(_a, _b) => _a - _b; // 람다표현식
 
 main() {
    int a = 10;
