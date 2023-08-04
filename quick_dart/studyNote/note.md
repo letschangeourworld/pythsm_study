@@ -15,12 +15,10 @@
         ㄷ. Android SDK Comman-line Tools <br>
         ㄹ. SDK Platforms : Android 11 installation <br>
     c. Device Manager <br>
-        ㄱ. Create Device
-        ㄴ. Phone pixel 2 api 30 : Android 11
+        ㄱ. Create Device <br>
+        ㄴ. Phone pixel 2 api 30 : Android 11 <br>
 
-
-
-Dart Language
+## Dart Language
 
 * class -> compile (storing to memory) -> instance (finished storing to memory)
 * variable type keyword : var,dynamic,int,String,double,bool, etc.
