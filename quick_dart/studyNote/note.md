@@ -1,11 +1,11 @@
 
 ## 1. Installation & Configuration
 
-### 1.1. Flutter Installation ▷ C drive <br>
-          - Dart-sdk download and installation if needed <br>
-    1.2. Configuration Check with flutter doctor <br>
+### 1.1. Flutter Installation ▷ C drive
+          - Dart-sdk download and installation if needed
+### 1.2. Configuration Check with flutter doctor <br>
           - java latest update, VS development upgrade etc. <br>
-    1.3. Android Studio Installation and configuration <br>
+### 1.3. Android Studio Installation and configuration <br>
           - settings ▷ Plugins ▷ flutter installation and dart <br>
               - path selection : flutter install files directory <br>
               - path selection : dart-sdk install files directory <br>
