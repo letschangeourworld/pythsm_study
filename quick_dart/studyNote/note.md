@@ -18,20 +18,28 @@
         ㄱ. Create Device <br>
         ㄴ. Phone pixel 2 api 30 : Android 11 <br>
 
+
 ## Dart Language
 
-* class -> compile (storing to memory) -> instance (finished storing to memory)
+* class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
 * variable type keyword : var,dynamic,int,String,double,bool, etc.
 * No public,protected,private keyword
-* private identifiers : use underscore(_) in front of variables.
+* private identifiers : use underscore( _ ) in front of variables.
 * debug mode and release mode
 * built-in identifiers (내장식별자, 내장함수)
-  : abstract,as,dynamic,export,factory,Function,get,import,
-    implements,static,typedef,mixin,set, etc.
-* Contextual keyword (문맥적 키워드) : sync,async,hide,on,show
-* 2 keywords can't be used as an identifier in 'async','async*','sync*' methods
-  : await, yield
+  : <b>abstract</b>,<b>as</b>,<b>dynamic</b>,export,<b>factory</b>,Function, <br>
+    <b>get</b>,<b>import</b>,<b>implements</b>,<b>static</b>,typedef,<b>mixin</b>,<b>set</b>, etc. <br>
+* Contextual keyword (문맥적 키워드) : sync,async,hide,on,show <br>
+* 2 keywords can't be used as an identifier in 'async','async*','sync*' methods <br>
+  : await, yield <br>
 * reserved words
+
+
+
+
+
+
+
 
 
 
