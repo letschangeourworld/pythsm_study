@@ -105,23 +105,21 @@
    </code>
 </pre>
 
-#### 3. optional parameter (선택매개변수)
-#### 3.1 named optional parameter (이름지정된 선택매개변수)
-<pre>
-   <code>
+#### 3. Optional parameter (선택매개변수)
+#### 3.1 Named optional parameter (이름지정된 선택매개변수)
+
       int getYear(String Sorento, {String Genesis, String EV6}) {}      
       int getYear('Sorento', {Genesis : 2019, EV6 : 2023}) {}
-   </code>
-</pre>
 
-#### 3.2 positional optional parameter (위치적 선택매개변수)
-<pre>
-   <code>
+#### 3.2 Positional optional parameter (위치적 선택매개변수)
+
       String getName(String carName, [String carHost = 'Emily', String numberPlate = '62구 9999']) {
+         return '$carName : , $carHost : , $numberPlate : ';
       }
-   </code>
-</pre>
-      
+      main() {
+         print('${getName('Sorento')}');
+         print('${getName('Sorento', 'Peter')}');
+      }
       
 #### 4. anonymous function (익명함수) & lambda expression
 - 
