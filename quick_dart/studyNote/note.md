@@ -23,23 +23,23 @@
 
 ## ◈ Dart Language
 
-### 1. class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
-### 2. variable type keyword : <b>var, dynamic, int, String, double, bool,</b> etc.
-### 3. There is No <b>public, protected, private </b>keyword
-### 4. private identifiers : use <b>underscore( _ )</b> in front of variables.
+#### 1. class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
+#### 2. variable type keyword : <b>var, dynamic, int, String, double, bool,</b> etc.
+#### 3. There is No <b>public, protected, private </b>keyword
+#### 4. private identifiers : use <b>underscore( _ )</b> in front of variables.
 
-### 5. built-in identifiers (내장식별자, 내장함수) <br>
-       - <b>abstract, as, dynamic, export, factory, Function,
-       - get, import, implements, static, typedef, mixin, set, etc.</b>
-* Contextual keyword (문맥적 키워드)
-  - <b>sync, async, hide, on, show</b> <br>
-* 2 keywords can't be used as an identifier in 'async','async*','sync*' methods <br>
-  - <b>await, yield</b> <br>
-* Reserved words <br>
-  - <b>assert, break, case, catch, class, const, continue, do, else,
-  - enum, extends, false, final, finally, for, if, in, is, new,
-  - null, return, super, switch, this, throw, true, try, var,
-  - void, while, with, etc </B>
+#### 5. built-in identifiers (내장식별자, 내장함수) <br>
+       abstract, as, dynamic, export, factory, Function,
+       get, import, implements, static, typedef, mixin, set, etc.
+#### 6. Contextual keyword (문맥적 키워드)
+       sync, async, hide, on, show
+#### 2 keywords can't be used as an identifier in 'async','async*','sync*' methods
+       await, yield
+#### Reserved words
+       assert, break, case, catch, class, const, continue, do, else,
+       enum, extends, false, final, finally, for, if, in, is, new,
+       null, return, super, switch, this, throw, true, try, var,
+       void, while, with, etc </B>
 <br>
 <br>
 
