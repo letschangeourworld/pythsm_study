@@ -1,20 +1,20 @@
 
-## 1.0.0 Installation & Configuration
+## 1. Installation & Configuration
 
-#### 1.1.0 Flutter Installation ▷ C drive <br>
-           Dart-sdk download and installation if needed <br>
-     1.2.0 Configuration Check with flutter doctor <br>
-           - java latest update, VS development upgrade etc. <br>
-     1.3.0 Android Studio Installation and configuration <br>
-    - settings ▷ Plugins ▷ flutter installation and dart <br>
-        - path selection : flutter install files directory <br>
-        - path selection : dart-sdk install files directory <br>
-    -  File ▷ New Project ▷ flutter or dart <br>
-    - Android SDK Manager <br>
-    - SDK Tools <br>
-        - Android SDK Build-Tools 34 <br> 
-        - CMake <br>
-        - Android SDK Comman-line Tools <br>
+### 1.1. Flutter Installation ▷ C drive <br>
+          - Dart-sdk download and installation if needed <br>
+    1.2. Configuration Check with flutter doctor <br>
+          - java latest update, VS development upgrade etc. <br>
+    1.3. Android Studio Installation and configuration <br>
+          - settings ▷ Plugins ▷ flutter installation and dart <br>
+              - path selection : flutter install files directory <br>
+              - path selection : dart-sdk install files directory <br>
+          - File ▷ New Project ▷ flutter or dart <br>
+          - Android SDK Manager <br>
+          - SDK Tools <br>
+              - Android SDK Build-Tools 34 <br> 
+              - CMake <br>
+              - Android SDK Comman-line Tools <br>
         - SDK Platforms : Android 11 installation <br>
     - Device Manager <br>
         - Create Device <br>
