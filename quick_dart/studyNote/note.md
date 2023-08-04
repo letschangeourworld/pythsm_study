@@ -51,7 +51,7 @@
 <br>
 <br>
 
-<b>Data Type </b> <br>
+### Data Type
    - num     : int or double ▷ supertype(상위타입)
    - int     : 정수
    - double  : 실수
@@ -66,7 +66,7 @@
 <br>
 <br>
 
-<b>Constant, 상수</b> <br>
+### Constant, 상수
    - final : 값변경 불가능, variable 맨 앞에 붙임, runtime시 상수화
    - const : 값변경 불가능, variable 맨 앞에 붙임, compiletime시 상수화
    - compiletime과 runtime 시점 상수화란? <br>
