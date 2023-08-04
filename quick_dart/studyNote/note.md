@@ -1,11 +1,11 @@
 
-## Installation & Configuration
+## 1.0.0 Installation & Configuration
 
-1. Flutter Installation ▷ C drive <br>
-   Dart-sdk download and installation if needed <br>
-2. Configuration Check with flutter doctor <br>
-    - java latest update, VS development upgrade etc. <br>
-3. Android Studio Installation and configuration <br>
+#### 1.1.0 Flutter Installation ▷ C drive <br>
+           Dart-sdk download and installation if needed <br>
+     1.2.0 Configuration Check with flutter doctor <br>
+           - java latest update, VS development upgrade etc. <br>
+     1.3.0 Android Studio Installation and configuration <br>
     - settings ▷ Plugins ▷ flutter installation and dart <br>
         - path selection : flutter install files directory <br>
         - path selection : dart-sdk install files directory <br>
@@ -85,6 +85,13 @@
 
 - 다트언어는 모든 것이 객체(object)임.
 - variable이 function 참조 및 전달가능
+
+<pre>
+   <code>
+      
+   </code>
+</pre>
+
 - optional parameter (선택매개변수)
      - named optional parameter (이름지정된 선택매개변수)
      - positional optional parameter (위치적 선택매개변수)
