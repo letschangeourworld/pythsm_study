@@ -163,7 +163,6 @@ main() {
 
 <pre>
    <code>
-
 class Mammal {
   String name = 'Mammal';
 }
@@ -191,7 +190,6 @@ void main() {
     print('Seal is not Whale');
   }
 }
- 
    </code>
 </pre>
 
