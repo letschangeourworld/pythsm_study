@@ -19,32 +19,32 @@
     - Device Manager <br>
         - Create Device <br>
         - Phone pixel 2 api 30 : Android 11 <br>
-
+<br>
 
 ## Dart Language
 
 * class ▷ compile (storing to memory) ▷ instance (finished storing to memory)
   
-* variable type keyword : var,dynamic,int,String,double,bool, etc.
-* No public,protected,private keyword
+* variable type keyword : var, dynamic, int, String, double, bool, etc.
+* There is No public, protected, private keyword
 * private identifiers : use underscore( _ ) in front of variables.
 * debug mode and release mode
 
 * built-in identifiers (내장식별자, 내장함수) <br>
-  - <b>abstract</b>, <b>as</b>, <b>dynamic</b>, export, <b>factory</b>, Function,
-  - <b>get</b>, <b>import</b>, <b>implements</b>, <b>static</b>, typedef,
-  - <b>mixin</b>, <b>set</b>, etc.
+  - <b>abstract, as, dynamic, export, factory, Function,
+  - get, import, implements, static, typedef, mixin, set, etc.</b>
 * Contextual keyword (문맥적 키워드)
-  - sync, async, hide, on, show <br>
+  - <b>sync, async, hide, on, show</b> <br>
 * 2 keywords can't be used as an identifier in 'async','async*','sync*' methods <br>
-  - await, yield <br>
+  - <b>await, yield</b> <br>
 * Reserved words <br>
-  - assert, break, case, catch, class, const, continue, do, else,
+  - <b>assert, break, case, catch, class, const, continue, do, else,
   - enum, extends, false, final, finally, for, if, in, is, new,
   - null, return, super, switch, this, throw, true, try, var,
-  - void, while, with, etc
- 
-| Comment, 주석 | <br>
+  - void, while, with, etc </B>
+<br>
+<br>
+<b>Comment, 주석</b> <br>
 //, /* contents */ <br>
 
 
