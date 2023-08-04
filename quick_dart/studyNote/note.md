@@ -53,10 +53,10 @@
     double  : 실수
     String  : 문자열
     bool    : true or false
-    var     : 타입미지정 : 타입추정하여 자동지정 ▷ 타입변경불가
-    dynamic : 타입미지정 ▷ 타입변경가능
+    var     : 타입미지정(undefined type) : 타입추정하여 자동지정 ▷ 타입변경불가
+    dynamic : 타입미지정(undefined type) ▷ 타입변경가능
     List    : 리스트
-    Set     : 데이터셋 ▷ 순서 X, 중복 X
+    Set     : 데이터셋 ▷ 순서 X & 중복 X
     Map     : key, value 값 형태 데이터셋
 <br>
 <br>
@@ -78,10 +78,10 @@
 <br>
 <br>
 
-### Function, 함수
+### ◇ Function, 함수
 
-- 다트언어는 모든 것이 객체(object)임.
-- variable이 function 참조 및 전달가능
+#### 1. 다트언어는 모든 것이 객체(object)임.
+#### 2. Variable이 Function참조 및 전달가능
 
 <pre>
    <code>
@@ -89,10 +89,10 @@
    </code>
 </pre>
 
-- optional parameter (선택매개변수)
-     - named optional parameter (이름지정된 선택매개변수)
-     - positional optional parameter (위치적 선택매개변수)
-- anonymous function (익명함수) & lambda expression
+#### 3. optional parameter (선택매개변수)
+   - named optional parameter (이름지정된 선택매개변수)
+   - positional optional parameter (위치적 선택매개변수)
+#### 4. anonymous function (익명함수) & lambda expression
 - 
 
 
