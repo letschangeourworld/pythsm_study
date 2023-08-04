@@ -42,23 +42,22 @@
        void, while, with, etc </B>
 <br>
 <br>
-
 <b>Comment, 주석</b> <br>
 //, /* contents */ <br>
 <br>
 <br>
 
-### Data Type
-   - num     : int or double ▷ supertype(상위타입)
-   - int     : 정수
-   - double  : 실수
-   - String  : 문자열
-   - bool    : true or false
-   - var     : 타입미지정 : 타입추정하여 자동지정 ▷ 타입변경불가
-   - dynamic : 타입미지정 ▷ 타입변경가능
-   - List    : 리스트
-   - Set     : 데이터셋 ▷ 순서 X, 중복 X
-   - Map     : key, value 값 형태 데이터셋
+### ◇ Data Type
+    num     : int or double ▷ supertype(상위타입)
+    int     : 정수
+    double  : 실수
+    String  : 문자열
+    bool    : true or false
+    var     : 타입미지정 : 타입추정하여 자동지정 ▷ 타입변경불가
+    dynamic : 타입미지정 ▷ 타입변경가능
+    List    : 리스트
+    Set     : 데이터셋 ▷ 순서 X, 중복 X
+    Map     : key, value 값 형태 데이터셋
 <br>
 <br>
 
