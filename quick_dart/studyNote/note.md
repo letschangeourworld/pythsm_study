@@ -161,6 +161,43 @@ main() {
     is  : ~ 이면 true
     is! : ~ 이면 false
 
+<pre>
+   <code>
+
+class Mammal {
+  String name = 'Mammal';
+}
+class Seal extends Mammal {
+  @override
+  String name = 'Seal';
+}
+class Whale extends Mammal {
+  @override
+  String name = 'Whale';
+}
+void main() {
+  Seal seal = Seal();
+  Whale whale = Whale();
+
+  Mammal mammal1 = seal;
+  Mammal mammal2 = whale;
+
+  print('mammal1.name = ${mammal1.name}');
+  print('mammal2.name = ${mammal2.name}');
+
+  if (seal is Whale) {
+    print('Seal is Whale');
+  } else {
+    print('Seal is not Whale');
+  }
+}
+ 
+   </code>
+</pre>
+
+    mammal1.name = Seal
+    mammal2.name = Whale
+    Seal is not Whale
 
 
 
