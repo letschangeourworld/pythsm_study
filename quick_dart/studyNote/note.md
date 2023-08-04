@@ -68,8 +68,7 @@
 
 <b>Constant, 상수</b> <br>
    - final : 값변경 불가능, variable 맨 앞에 붙임, runtime시 상수화
-   - const : 값변경 불가능, variable 맨 앞에 붙임, compiletime시 상수화  
-   <br>
+   - const : 값변경 불가능, variable 맨 앞에 붙임, compiletime시 상수화
    - compiletime과 runtime 시점 상수화란? <br>
       - compile은 소스코드를 기계어로 변경해 주는 작업으로 문법상 이상이 없으면 error가 없음.<br>
       - 그러나 compile시 변수에 값이 없는 상태, null 이 발견되면 compile error 발생함.<br>
