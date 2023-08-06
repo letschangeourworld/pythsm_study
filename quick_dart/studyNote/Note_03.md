@@ -40,17 +40,21 @@
 
 <br>
 
-     __Class (자동차 생산공장)_____
-    | class name (생산차 제조명)   |
-    | member variables (생산재료)  |
-    | member methods (생산공법)    |
-    | Constructor (주문서,생산착수) | 
-
-
+     __  Class (자동차 생산공장) ____
+    | class name (생산차 제조명)     |
+    |  member variables (생산정보)   |
+    |  member methods (생산공법)     |
+    |  Constructor (주문서,생산착수)  |
+    |_______________________________ |
+    ※ 주문이 들어오면 각각의 다양한 생산정보대로 다양한 차를 생산한다. 
+       → 한 공장에서 여러가지 옵션으로 생산된 차 (세부적인 표현) : instance (인스턴스)
+       → 한 공장에서 만들어진 차 (일반적인 표현) : object (객체)
+       → 한 공장에서 차가 만들어지는 과정 : 인스턴스화
+       
 
 ### Constructor, 생성자
-- instance 생성시 호출되는 '인스턴스 초기화 method'임
-
+- instance 생성시 호출되는 '인스턴스 초기화 method'임.
+- 자동차 생산공장이 고객 주문이 들어와야 공장이 움직이듯이 constructor가 있어야 생산이 시작됨.
 
 #### 1. Default Constructor
 
