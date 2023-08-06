@@ -72,4 +72,26 @@
 
 
 
-    
+
+<pre>
+    <code>
+class Foo {
+  String item;
+  int cnt;
+  Foo(this.item, this.cnt);
+}
+
+class Foo2 extends Foo {
+  double ratio;
+  Foo2(super.item,super.cnt,this.ratio);
+}
+
+void main() {
+  Foo2 yourFoo = Foo2('table', 5, 2.5);
+  var Foo2(:item,:cnt,:ratio) = yourFoo;
+  print(' 품명: $item\n 판매량: $cnt\n 판매율: $ratio %');
+}
+    </code>
+</pre>
+
+
