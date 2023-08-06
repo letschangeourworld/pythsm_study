@@ -1,5 +1,5 @@
 
-### Class
+### ◈ Class
 
     [1]
     class 클래스명 {
@@ -54,7 +54,7 @@
        → 한 공장에서 차가 만들어지는 과정 : 인스턴스화
        
 
-### Constructor, 생성자
+### ◈ Constructor, 생성자
 - instance 생성시 호출되는 '인스턴스 초기화 method'임.
 - 자동차 생산공장이 고객 주문이 들어와야 공장이 움직이듯이 constructor가 있어야 생산이 시작됨.
 
