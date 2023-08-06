@@ -25,8 +25,8 @@
       }
     }
     main() {
-      var student = Human(); // var는 변수타입 자동생성, student타입은 Human 타입
-      var teacher = Human(); // var는 변수타입 자동생성, teacher타입은 Human 타입
+      var student = Human();   // var는 변수타입 자동생성, student타입은 Human 타입
+      var teacher = Human();   // var는 변수타입 자동생성, teacher타입은 Human 타입
       Human mankind = Human(); // mankind는 변수타입을 Human으로 지정해줌
 
       student.name = 'Emily';
