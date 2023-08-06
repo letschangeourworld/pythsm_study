@@ -211,6 +211,13 @@ void main() {
 - 좌항이 null이 아니면 좌항 리턴, 아니면 우항 리턴
 - ex) mammal.name ?? 'mammal name' → mammal.name이 null이면 'mammal name' 리턴
 
+### ◇ Cascade Expression
+- 클래스 안에 있는 멤버함수를 반복적으로 불러올 때, 이를 생략하는 방법
+- ex) Mammal mammal = Mammal()
+      ..name = 'seal'
+      ..habitatCode(12)
+      ..speciesInfo(); 
+- .. 으로 원래 적어줘야 할 mammal.name 에서 mammal을 생략할 수 있게 됨
 
 
 
