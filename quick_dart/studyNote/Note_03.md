@@ -70,8 +70,11 @@
 
 #### 6. Factory Constructor
 
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <pre>
     <code>
@@ -94,4 +97,7 @@ void main() {
     </code>
 </pre>
 
+        품명: table
+        판매량: 5
+        판매율: 2.5 %
 
