@@ -1,5 +1,6 @@
 
 ### □ Conditional Statement, 조건문
+
 - if/if~else
 
       [1]
@@ -48,10 +49,33 @@
         print('number is the rest of them');
       }
 
-  
+- assert
+      - condition 이 false 이면 error 발생
+      - debug mode 에서만 동작하고 프로그램 실행의 release mode 에서 미동작
+
+      [1]
+      assert(condition);
+
+      [ex]
+      assert(a > 0);
 
 
+### □ Iteration or Loop Statement, 반복문
 
+- for
+
+      [1]
+      for (initialization; condition; operator) {
+            execute statement;
+      }
+
+      [ex]
+      for (int i = 1; i < 5; i++) {
+            print('i = $i');
+      }
+
+- while
+- do~while
 
 
 
