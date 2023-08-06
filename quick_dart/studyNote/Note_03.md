@@ -38,6 +38,7 @@
       print('mankind name : ${mankind.getName()}');
     }
 
+<br>
 
      __Class (자동차 생산공장)_____
     | class name (생산차 제조명)   |
