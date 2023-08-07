@@ -43,7 +43,7 @@ ____________________________________________________
 
      __  Class (자동차 생산공장) ____
     |                               | 
-    | class name (생산차 제조명)     |
+    | class name (생산차 제조명)      |
     |  member variables (생산정보)   |
     |  member methods (생산공법)     |
     |  Constructor (주문서,생산착수)  |
