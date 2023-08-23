@@ -39,7 +39,7 @@ def main():
         ret,frame = camera.read()
         frame = read_qrcodes(frame)
         cv2.imshow('QR code reader', frame)
-        if cv2.waitKey(1) & 0xFF == 27:
+        if cv2.waitKey(0) & 0xFF == 27:
             break
 
     camera.release()
