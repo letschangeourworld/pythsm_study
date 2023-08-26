@@ -10,7 +10,6 @@ def main():
     camera = cv2.VideoCapture(0)
     ret,frame = camera.read()
     lst = []
-    df = pd.DataFrame(columns = ['qr'])
     while ret:
         ret,frame = camera.read()
         qrcodes = decode(frame)
@@ -27,7 +26,7 @@ def main():
     cv2.destroyAllWindows()
     df = pd.DataFrame(columns = ['QR'])
     df['QR'] = lst
-    df.to_csv('qr_df1.csv')
+    df.to_csv('qr_df.csv')
 
 if __name__ == '__main__':
     main()
