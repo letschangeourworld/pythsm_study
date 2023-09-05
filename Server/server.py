@@ -1,3 +1,5 @@
+# 웹브라우저에 웹캡 영상 보기 : flask 서버
+
 from flask import Flask
 from flask import request
 from flask import Response
