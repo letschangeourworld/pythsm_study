@@ -1,6 +1,6 @@
 '''
 youtube_dl 라이브러리 안의 extractor 폴더의 youtube.py 프로그램을 수정해줘야 한다.
-위 파일코드를 확인해 볼 것
+YoutubeVideo.py 파일을 확인해 볼 것
 '''
 
 
