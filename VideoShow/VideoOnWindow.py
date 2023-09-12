@@ -1,14 +1,23 @@
 import cv2
 import platform
 
-src = 0
+# 외부접속
+ip = "000.000.000.000"
+port = 51216
+user = "iii"
+password = "aaa"
+url = f'rtsp://{user}:{password}@{ip}:{port}/11'
+
+# # PC Webcam 접속
+# url = 0
+
 if platform.system() == 'Windows':
-    cap = cv2.VideoCapture(src, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
 else:
-    cap = cv2.VideoCapture(src)
-    
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+    cap = cv2.VideoCapture(url)
+
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
 while cap.isOpened():
     grabbed, frame = cap.read()
