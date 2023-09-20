@@ -53,6 +53,8 @@ class ChatMessage(ft.Row):
             ft.colors.TEAL,
             ft.colors.YELLOW
             ]
+        
+        # 채팅자이름을 해시암호화하여 13개 칼라로 나눠서 나온 나머지 숫자로 칼라값 설정
         return colors_lookup[hash(user_name) % len(colors_lookup)]
 
 # 실행용 Main 메서드
@@ -92,17 +94,24 @@ def main(page: ft.Page):
                         message_type = "chat_message")
                         )
             new_message.value = ""
-            new_message.focus()
+            new_message.focus() # 메시지 전송시 텍스트 포커스 상실 방지
             page.update()
-    
+
+    # 메시지 텍스트 타입 구분 메서드
     def on_message(message: Message):
+        # 채팅 입력 텍스트일 경우 (채팅창)
         if message.message_type == "chat_message":
-            m = ChatMessage(message)
+            # ChatMessage 클래스 활성화
+            m = ChatMessage(message) 
+            
+        # 로그인 입력 텍스트일 경우 (로그인창)
         elif message.message_type == "login_message":
+            # 텍스트 메서드 사용
             m = ft.Text(message.text,
                         italic = True,
                         color = ft.colors.BLACK45,
                         size = 12)
+        
         chat.controls.append(m)
         page.update()
     
