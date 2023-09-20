@@ -1,9 +1,8 @@
-#import modules
 import socket
 import threading
 import flet as ft
 import os
-from chatapp import Message, ChatMessage
+from ChatApp import Message, ChatMessage
 from flask import Flask
 from flask_cors import CORS
 
