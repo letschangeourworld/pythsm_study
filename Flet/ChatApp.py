@@ -59,8 +59,45 @@ class ChatMessage(ft.Row):
 
 # 실행용 Main 메서드
 def main(page: ft.Page):
+    page.horizontal_alignment = "stretch"  # 채팅창의 기본배열방향 : 수평
+    page.title = "Flet Chat Window"        # 채팅창 이름설정
+
+    # 채팅참여클릭 메서드 (로그인창)
+    def join_chat_click(e):
+        # 채팅자 이름입력값이 없을 경우, 에러문 생성
+        if not join_user_name.value:
+            join_user_name.error_text = "Name cannot be blank!"  # 이름입력란에 에러메시지를 넣기
+            join_user_name.update()  # 그 상태로 업데이트
+        else:
+            page.session.set("user_name", join_user_name.value)  # 이름값 입력받으면 채팅세션가동
+            page.dialog.open = False                             # 이름값 입력창 닫기
+            page.dialog.modal = False                            # 이름값 입력창 닫기
+            new_message.prefix = ft.Text(f"{join_user_name.value}: ") # 채팅입력란에 '이름 :'과 같이 입력하고 대기
+            
+            # 현재 채팅창 구독 시작하면서 채팅자가 들어왔다는 메시지 전송
+            # 메시지 타입은 '로그인 메시지'
+            page.pubsub.send_all(
+                Message(user_name = join_user_name.value,
+                        text = f"{join_user_name.value} has joined the chat.",
+                        message_type = "login_message")
+                        )
+            page.update()  # 그 상태로 업데이트
+
+    # 메시지란 입력후 클릭실행 메서드 (채팅창)
+    def send_message_click(e):
+        # 새메시지가 입력되었을 경우에만 실행
+        if new_message.value != "":
+            # 현재 채팅창 구독 시작하면서 새 메시지 전송
+            # 메시지 타입은 '채팅 메시지'
+            page.pubsub.send_all(
+                Message(page.session.get("user_name"),
+                        new_message.value,
+                        message_type = "chat_message")
+                        )
+            new_message.value = ""
+            new_message.focus() # 메시지 전송시 텍스트 포커스 상실 방지
+            page.update()
     
-    ############### 메시지 타입구분 ########################################
     # 메시지 텍스트 타입 구분 메서드
     def on_message(message: Message):
         # 채팅 입력 텍스트일 경우 (채팅창)
@@ -81,60 +118,6 @@ def main(page: ft.Page):
         page.update()
     
     page.pubsub.subscribe(on_message)
-    
-    ############## 채팅창 ##################################################
-    # 채팅 메시지 (리스트뷰)
-    chat = ft.ListView(
-        expand = True,
-        spacing = 10,
-        auto_scroll = True
-        )
-    
-    # 새 메시지 형태 만들기
-    new_message = ft.TextField(
-        hint_text = "Write a message...",
-        autofocus = True,
-        shift_enter = True,
-        min_lines = 1,
-        max_lines = 5,
-        filled = True,
-        expand = True,
-        on_submit = send_message_click
-        )
-    
-    page.horizontal_alignment = "stretch"  # 채팅창의 기본배열방향 : 수평
-    page.title = "Flet Chat Window"        # 채팅창 이름설정
-
-    # 채팅창에 리스트뷰와 텍스트필드 넣기
-    ## Container 생성
-    page.add(ft.Container(content = chat,
-                          border = ft.border.all(1, ft.colors.OUTLINE),
-                          border_radius = 5,
-                          padding = 10,
-                          expand = True
-                          ),
-             ## 새 메시지 입력될 메시지란 생성
-             ft.Row([new_message,
-                     ft.IconButton(icon = ft.icons.SEND_ROUNDED,
-                                   tooltip = "Send message",
-                                   on_click = send_message_click)
-                     ])
-             )
-    
-    # 메시지란 입력후 클릭실행 메서드 (채팅창)
-    def send_message_click(e):
-        # 새메시지가 입력되었을 경우에만 실행
-        if new_message.value != "":
-            # 현재 채팅창 구독 시작하면서 새 메시지 전송
-            # 메시지 타입은 '채팅 메시지'
-            page.pubsub.send_all(
-                Message(page.session.get("user_name"),
-                        new_message.value,
-                        message_type = "chat_message")
-                        )
-            new_message.value = ""
-            new_message.focus() # 메시지 전송시 텍스트 포커스 상실 방지
-            page.update()
 
     ############## 로그인창 ################################################
     # 로그인창 생성
@@ -158,26 +141,40 @@ def main(page: ft.Page):
                                  actions_alignment = "end"
                                  )
     
-    # 채팅참여클릭 메서드 (로그인창)
-    def join_chat_click(e):
-        # 채팅자 이름입력값이 없을 경우, 에러문 생성
-        if not join_user_name.value:
-            join_user_name.error_text = "Name cannot be blank!"  # 이름입력란에 에러메시지를 넣기
-            join_user_name.update()  # 그 상태로 업데이트
-        else:
-            page.session.set("user_name", join_user_name.value)  # 이름값 입력받으면 채팅세션가동
-            page.dialog.open = False                             # 이름값 입력창 닫기
-            page.dialog.modal = False                            # 이름값 입력창 닫기
-            new_message.prefix = ft.Text(f"{join_user_name.value}: ") # 채팅입력란에 '이름 :'과 같이 입력하고 대기
-            
-            # 현재 채팅창 구독 시작하면서 채팅자가 들어왔다는 메시지 전송
-            # 메시지 타입은 '로그인 메시지'
-            page.pubsub.send_all(
-                Message(user_name = join_user_name.value,
-                        text = f"{join_user_name.value} has joined the chat.",
-                        message_type = "login_message")
-                        )
-            page.update()  # 그 상태로 업데이트
+    # 채팅 메시지 (리스트뷰)
+    chat = ft.ListView(
+        expand = True,
+        spacing = 10,
+        auto_scroll = True
+        )
+    
+    # 새 메시지 형태 만들기
+    new_message = ft.TextField(
+        hint_text = "Write a message...",
+        autofocus = True,
+        shift_enter = True,
+        min_lines = 1,
+        max_lines = 5,
+        filled = True,
+        expand = True,
+        on_submit = send_message_click
+        )
+    
+    # 채팅창에 리스트뷰와 텍스트필드 넣기
+    ## Container 생성
+    page.add(ft.Container(content = chat,
+                          border = ft.border.all(1, ft.colors.OUTLINE),
+                          border_radius = 5,
+                          padding = 10,
+                          expand = True
+                          ),
+             ## 새 메시지 입력될 메시지란 생성
+             ft.Row([new_message,
+                     ft.IconButton(icon = ft.icons.SEND_ROUNDED,
+                                   tooltip = "Send message",
+                                   on_click = send_message_click)
+                     ])
+             )
 
 ########### 최종실행 ############################################
 ft.app(target = main, view = ft.WEB_BROWSER)  # 웹브라우저에서 실행 
