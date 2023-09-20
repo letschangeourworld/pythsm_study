@@ -177,7 +177,6 @@ def main(page: ft.Page):
              )
 
 ########### 최종실행 ############################################
-ft.app(target = main, view = ft.WEB_BROWSER)  # 웹브라우저에서 실행 
+ft.app(port = 3000, target = main, view = ft.WEB_BROWSER)  # 웹브라우저에서 실행 
 
 ### flet run aaa.py -d 로 실행시 hot reload 효과
-
