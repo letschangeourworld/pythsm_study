@@ -60,7 +60,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = "stretch"  # 채팅창의 기본배열방향 : 수평
     page.title = "Flet Chat Window"        # 채팅창 이름설정
 
-    # 채팅참여클릭 메서드
+    # 채팅참여클릭 메서드 (로그인창)
     def join_chat_click(e):
         # 채팅자 이름입력값이 없을 경우, 에러문 생성
         if not join_user_name.value:
@@ -71,7 +71,7 @@ def main(page: ft.Page):
             page.dialog.open = False                             # 이름값 입력창 닫기
             page.dialog.modal = False                            # 이름값 입력창 닫기
             new_message.prefix = ft.Text(f"{join_user_name.value}: ") # 채팅입력란에 '이름 :'과 같이 입력하고 대기
-            # 현재 채팅창 구독을 시작하면서 채팅자가 들어왔다는 메시지 전송
+            # 현재 채팅창 구독 시작하면서 채팅자가 들어왔다는 메시지 전송
             # 메시지 타입은 '로그인 메시지'
             page.pubsub.send_all(
                 Message(user_name = join_user_name.value,
@@ -80,9 +80,12 @@ def main(page: ft.Page):
                         )
             page.update()  # 그 상태로 업데이트
     
-    # 메시지란 입력후 클릭 메서드
+    # 메시지란 입력후 클릭 메서드 (채팅창)
     def send_message_click(e):
+        # 새메시지가 입력되었을 경우에만 실행
         if new_message.value != "":
+            # 현재 채팅창 구독 시작하면서 새 메시지 전송
+            # 메시지 타입은 '채팅 메시지'
             page.pubsub.send_all(
                 Message(page.session.get("user_name"),
                         new_message.value,
