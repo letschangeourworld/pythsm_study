@@ -118,7 +118,7 @@ def main(page: ft.Page):
         page.update()
     
     page.pubsub.subscribe(on_message)
-
+    
     ############## 로그인창 ################################################
     # 로그인창 생성
     # 채팅자 이름 입력란 (텍스트필드) 생성
