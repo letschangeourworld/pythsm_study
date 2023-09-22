@@ -29,9 +29,9 @@ def main(page: ft.Page):
         n_client = client.recv(1024)
         print(n_client.decode())
         while n_client:
-            message = input("Inpu Message")
+            message = input("Input Message")
             client.send(message.encode())
-            n_client =client.recv(1024)
+            n_client = client.recv(1024)
             print(n_client.decode())
     except:
         print(f"Unable to connect to server {HOST}{PORT}")
