@@ -24,9 +24,6 @@ for p in dir_lst:
   # pdf file의 3페이지를 더해넣기
   # merger.append(fileobj = file, page=(0, 3))
 
-  # anmother function 3
-  # 
-
 # to save the merged pdf files and create the object of a merged file again
 output = open('ppp_merged.pdf', 'wb')
 merger.write(output)
