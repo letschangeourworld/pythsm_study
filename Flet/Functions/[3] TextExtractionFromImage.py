@@ -1,3 +1,7 @@
+'''
+Text Extraction from Images
+'''
+
 import flet as ft
 from flet import *
 import pytesseract      # Need to install pytesseract
