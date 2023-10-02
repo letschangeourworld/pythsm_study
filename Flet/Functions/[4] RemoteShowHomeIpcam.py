@@ -21,8 +21,8 @@ network is as follows:
 
 '''
 
-ip = "<ip address>"    # public IP address
-port = <port number>   # public port
+ip = "222.129.207.155"    # public IP address
+port = 51234              # public port
 user = "<user name of ipcamera>"
 password = "<password of ipcamera>"
 url = f"rtsp://{user}:{password}@{ip}:{port}/11"
