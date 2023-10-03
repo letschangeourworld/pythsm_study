@@ -47,12 +47,15 @@ class VideoShow(ft.UserControl):
                 break
     
     def build(self):
-        self.img = ft.Image(border_radius = ft.border_radius.all(10))
+        self.img = ft.Image(border_radius = ft.border_radius.all(10))  # Cover ft.Image class onto self.imag path
         return self.img
 
 def main(page: ft.Page):
+    # Control the size of Window page
     page.window_width = 800
     page.window_height = 650
+    
+    # Appbar at the top of window page
     page.appbar = ft.AppBar(
         leading = ft.Icon(
             ft.icons.BEACH_ACCESS,
@@ -70,6 +73,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.scroll = 'always'
 
+    # For the Functions at the Left part of page
     left_sec = ft.NavigationRail(
         selected_index = 0,
         label_type = ft.NavigationRailLabelType.ALL,
@@ -106,7 +110,8 @@ def main(page: ft.Page):
         # on_change = lambda e: print('Selected Destination: ',
         #                             e.control.selected_index )
     )
-
+    
+    # For the Functions at the Right part of page
     right_sec = ft.Container(
         margin = ft.margin.only(bottom = 30),
         content = ft.Column(
@@ -151,6 +156,7 @@ def main(page: ft.Page):
         )
     )
 
+    # For merging with 2 parts of page
     section_all = ft.Container(
         ft.Row(
             [
@@ -162,6 +168,7 @@ def main(page: ft.Page):
             height = 300
         )
     )
+    
     page.add(section_all)
     page.update()
 
