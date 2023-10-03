@@ -137,7 +137,7 @@ def main(page: ft.Page):
                         size = 14,
                         weight = ft.FontWeight.BOLD,
                         italic = True ),
-                ft.Text("| User Name : homecam",
+                ft.Text(f"| User Name : {user}",
                         size = 14,
                         weight = ft.FontWeight.BOLD,
                         italic = True ),
