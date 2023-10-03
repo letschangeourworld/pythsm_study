@@ -2,7 +2,6 @@
 1. Remotely connecting to Ip camera at home
 2. Displaying the IPCAM video screen on flet window in real time
 '''
-
 import flet as ft
 import base64
 import cv2
@@ -18,7 +17,6 @@ When remotely connecting through 222.129.207.155:51234 on web,
 network is as follows:
 
 222.129.207.155:51234 (from outside) <-----> home router <-----> 192.168.0.55:554 (IP camera)
-
 '''
 
 ip = "222.129.207.155"    # public IP address
@@ -28,14 +26,14 @@ password = "<password of ipcamera>"
 url = f"rtsp://{user}:{password}@{ip}:{port}/11"
 cap = cv2.VideoCapture(url)  # Activating the VideoCapture class in the specific url
 
-class Countdown(ft.UserControl):
+class VideoShow(ft.UserControl):
     def __init__(self):
         super().__init__()
 
     def did_mount(self):
-        self.update_timer()
+        self.video_update()
 
-    def update_timer(self):
+    def video_update(self):
         while True:
             try:
                 _, frame = cap.read()  # Getting a image frame of IP camera
@@ -52,108 +50,9 @@ class Countdown(ft.UserControl):
         self.img = ft.Image(border_radius = ft.border_radius.all(10))
         return self.img
 
-# The left part of page : navigation menu (temporary test trial)
-left_sec = ft.NavigationRail(
-    selected_index = 0,
-    label_type = ft.NavigationRailLabelType.ALL,
-    min_width = 140,
-    min_extended_width = 200,
-    leading = ft.FloatingActionButton(
-        icon = ft.icons.CREATE,
-        text = "ADD",
-        bgcolor = ft.colors.LIGHT_BLUE_300
-    ),
-    group_alignment = -0.9,
-    destinations = [
-        ft.NavigationRailDestination(
-            icon = ft.icons.FAVORITE_BORDER,
-            selected_icon = ft.icons.FAVORITE,
-            label = "FIRST" ),
-        ft.NavigationRailDestination(
-            icon_content = ft.Icon(ft.icons.BOOKMARK_BORDER),
-            selected_icon_content = ft.Icon(ft.icons.BOOKMARK),
-            label = 'SECOND' ),
-        ft.NavigationRailDestination(
-            icon = ft.icons.SETTINGS_OUTLINED,
-            selected_icon_content = ft.Icon(ft.icons.SETTINGS),
-            label_content = ft.Text("SETTINGS") )
-    ],
-    on_change = lambda e: print('Selected Destination: ',
-                                e.control.selected_index )
-)
-
-# The right part of page : Display video from ip camera
-right_sec = ft.Container(
-    margin = ft.margin.only(bottom = 30),
-    content = ft.Column(
-        [
-            ft.Card(
-                elevation = 30,
-                content = ft.Container(
-                    bgcolor = ft.colors.WHITE,
-                    padding = 10,
-                    border_radius = ft.border_radius.all(10),
-                    content = ft.Column(
-                        [
-                            Countdown(),
-                            ft.Text(
-                                "   Now, This Camera Is Running In Real Time..",
-                                size = 15,
-                                color = ft.colors.BLACK,
-                                weight = ft.FontWeight.BOLD,
-                                italic = True,
-                                style = ft.TextThemeStyle.TITLE_MEDIUM
-                            )
-                        ]
-                    )
-                )
-            ),
-          # When making another Card..
-            # ft.Card(
-            #     elevation = 30,
-            #     content = ft.Container(
-            #         bgcolor = ft.colors.WHITE,
-            #         padding = 10,
-            #         border_radius = ft.border_radius.all(10),
-            #         content = ft.Column(
-            #             [
-            #                 # ft.Text(
-            #                 #     "Slider1", size = 15,
-            #                 #     weight = 'bold', color = ft.colors.BLACK ),
-            #                 # ft.Slider(
-            #                 #     min = 400, max = 500,
-            #                 #     on_change = lambda e: height_changed() ),
-            #                 # ft.Text(
-            #                 #     "Slider2", size = 15,
-            #                 #     weight = 'bold', color = ft.colors.BLACK ),
-            #                 # ft.Slider(
-            #                 #     min = 400, max = 500,
-            #                 #     on_change = lambda e: height_changed() )
-            #             ]
-            #         )
-            #     )
-            # )
-        ],
-        alignment = ft.MainAxisAlignment.CENTER,
-        expand = True
-    )
-)
-
-# Merging two parts of page
-section_all = ft.Container(
-    ft.Row(
-        [
-            left_sec,
-            ft.VerticalDivider(width = 1),
-            right_sec
-        ],
-        width = 200,
-        height = 300
-    )
-)
-
-# Execution
 def main(page: ft.Page):
+    page.window_width = 800
+    page.window_height = 650
     page.appbar = ft.AppBar(
         leading = ft.Icon(
             ft.icons.BEACH_ACCESS,
@@ -170,9 +69,104 @@ def main(page: ft.Page):
     page.padding = 10
     page.theme_mode = ft.ThemeMode.LIGHT
     page.scroll = 'always'
+
+    left_sec = ft.NavigationRail(
+        selected_index = 0,
+        label_type = ft.NavigationRailLabelType.ALL,
+        min_width = 140,
+        min_extended_width = 200,
+        leading = ft.FloatingActionButton(
+            content = ft.Row(
+                [
+                    ft.Icon(ft.icons.ADD),
+                    ft.Text("FIRST")
+                ],
+                alignment = "center"
+            ),
+            bgcolor = ft.colors.AMBER_300,
+            shape = ft.RoundedRectangleBorder(radius = 5),
+            width = 90,
+            mini = True,
+        ),
+        group_alignment = -0.7,
+        destinations = [
+            ft.NavigationRailDestination(
+                icon = ft.icons.ADD_OUTLINED,
+                selected_icon_content = ft.Icon(ft.icons.ADD),
+                label_content = ft.Text("SECOND") ),
+            ft.NavigationRailDestination(
+                icon_content = ft.Icon(ft.icons.BOOKMARK_BORDER),
+                selected_icon_content = ft.Icon(ft.icons.BOOKMARK),
+                label_content = ft.Text('THIRD') ),
+            ft.NavigationRailDestination(
+                icon = ft.icons.SETTINGS_OUTLINED,
+                selected_icon_content = ft.Icon(ft.icons.SETTINGS),
+                label_content = ft.Text("SETTINGS") )
+        ],
+        # on_change = lambda e: print('Selected Destination: ',
+        #                             e.control.selected_index )
+    )
+
+    right_sec = ft.Container(
+        margin = ft.margin.only(bottom = 30),
+        content = ft.Column(
+            [
+                ft.Card(
+                    elevation = 30,
+                    content = ft.Container(
+                        bgcolor = ft.colors.WHITE,
+                        padding = 10,
+                        border_radius = ft.border_radius.all(10),
+                        content = ft.Column(
+                            [
+                                VideoShow(),
+                                ft.Text(
+                                    "   Now, Camera Is Running In Real Time..",
+                                    size = 15,
+                                    color = ft.colors.BLACK,
+                                    weight = ft.FontWeight.BOLD,
+                                    italic = True,
+                                    style = ft.TextThemeStyle.TITLE_MEDIUM
+                                ),
+                                
+                            ]
+                        )
+                    )
+                ),
+                ft.Text("| Camera Name : IPCAM",
+                        size = 14,
+                        weight = ft.FontWeight.BOLD,
+                        italic = True ),
+                ft.Text("| User Name : homecam",
+                        size = 14,
+                        weight = ft.FontWeight.BOLD,
+                        italic = True ),
+                ft.Text(f"| Recent Public IP : {ip}:{port}",
+                        size = 14,
+                        weight = ft.FontWeight.BOLD,
+                        italic = True )
+            ],
+            alignment = ft.MainAxisAlignment.CENTER,
+            expand = True
+        )
+    )
+
+    section_all = ft.Container(
+        ft.Row(
+            [
+                left_sec,
+                ft.VerticalDivider(width = 1),
+                right_sec
+            ],
+            width = 200,
+            height = 300
+        )
+    )
     page.add(section_all)
+    page.update()
 
 if __name__ == "__main__":
     ft.app(target = main)
     cap.release()
     cv2.destroyAllWindows()
+
