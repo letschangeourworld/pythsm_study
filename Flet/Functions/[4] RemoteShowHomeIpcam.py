@@ -1,22 +1,26 @@
 
 '''
 [Basic Functions Reference]
-□ page     : Whole page of window
+□ page     : - Whole page of window
+             - padding,window_width,window_height,appbar,
+               theme_mode,scroll,add,update
                 ---> ft.Page(), flet 클래스
 □ usercontrol : controlling the Funtions inside a Class through a build function
                 ---> ft.UserControl, flet 클래스
 □ controls : controlling the data
-                ---> flet클래스들의 인수, list 데이터 받음 
-□ append   : adding the data to the list repeatedly
+                ---> flet클래스 내부 인수, list 데이터 받음 
+□ append   : adding the data to the list repeatedly (python 내장함수)
 □ stack    : laying a Container upon another
                 ---> ft.Stack(). flet 클래스, list 데이터 받음 
-□ Container : margin,width,height,border_radius,padding,bottom,
-              gradient,content                         
+□ Container : - A outer frame inside a window page
+              - margin,width,height,border_radius,padding,bottom,
+                gradient,content                         
                 ---> ft.Container(), flet 클래스
                 ---> ft.border_radius(), flet 함수
                 ---> ft.padding(), flet 함수 
                 ---> ft.margin(), flet 함수
-□ gradient : LinearGradient(begin,end,colors)
+□ gradient : - Displaying and merging with the various colors on the specific background
+             - LinearGradient(begin,end,colors)
                 ---> ft.LinearGradient(), flet 함수
                 ---> ft.alignment(), flet 함수 
 □ content  : Column([Text, Row],spacing,scroll),
@@ -29,11 +33,21 @@
                 ---> ft.Text(), flet 클래스
 □ Row      : ([list_data],scroll)
                 ---> ft.Row(), flet 클래스
-□ AppBar   : The design at the top of window page
+□ AppBar   : - The design at the top of window page
+             - AppBar(leading,leading_width,title,bgcolor,...)
                 ---> ft.AppBar(), flet 클래스
                 ---> ft.Icon(), flet 클래스
-                ---> ft.icons(), flet 함수
-                ---> ft.colors(), flet 함수
+                      └> ft.icons(), flet 함수
+                      └> ft.colors(), flet 함수
+□ NavigationRail : - The menu for importing or exporting an another functions or pages
+                   - selected_index,label_type,min_width,min_extended_width,
+                     leading,group_alignment,destinations,on_change,on_click,...
+                     ---> ft.NavigationRailLabelType()
+                     ---> ft.NavigationRailDestination()
+
+                     
+
+□ FloatingActionButton : 
 '''
 ####################################################################
 '''
