@@ -7,14 +7,15 @@
                 ---> ft.Page(), flet 클래스
 □ usercontrol : controlling the Funtions inside a Class through a build function
                 ---> ft.UserControl, flet 클래스
-□ controls : A list of Controls to display inside the Row or Column
+□ controls : A list of Controls to display inside the Row,Column,Stack
                 ---> flet클래스 내부 인수, list 데이터 받음 
 □ append   : adding the data to the list repeatedly (python 내장함수)
-□ stack    : laying a Container upon another
+□ stack    : - Lists laying a Container upon another
+             - width,height,bgcolor,border_radius,...
                 ---> ft.Stack(). flet 클래스, list 데이터 받음 
 □ Container : - A outer frame inside a window page
-              - margin,width,height,border_radius,padding,bottom,
-                gradient,content,alignment,...                         
+              - content,margin,padding,alignment,width,height,border_radius,
+                bottom,gradient,ink,on_click,animate,...                         
                 ---> ft.Container(), flet 클래스
                 ---> ft.border_radius(), flet 함수
                 ---> ft.padding(), flet 함수 
