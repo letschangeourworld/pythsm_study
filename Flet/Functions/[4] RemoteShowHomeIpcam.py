@@ -7,14 +7,14 @@
                 ---> ft.Page(), flet 클래스
 □ usercontrol : controlling the Funtions inside a Class through a build function
                 ---> ft.UserControl, flet 클래스
-□ controls : controlling the data
+□ controls : A list of Controls to display inside the Row or Column
                 ---> flet클래스 내부 인수, list 데이터 받음 
 □ append   : adding the data to the list repeatedly (python 내장함수)
 □ stack    : laying a Container upon another
                 ---> ft.Stack(). flet 클래스, list 데이터 받음 
 □ Container : - A outer frame inside a window page
               - margin,width,height,border_radius,padding,bottom,
-                gradient,content                         
+                gradient,content,alignment,...                         
                 ---> ft.Container(), flet 클래스
                 ---> ft.border_radius(), flet 함수
                 ---> ft.padding(), flet 함수 
@@ -29,10 +29,20 @@
                 ---> ft.Image(), flet 클래스
                 ---> ft.border_radius, flet 함수
                 ---> ft.ImageFit, flet 클래스
-□ Text     : (text_data,weight,size,color)
+□ Text     : (value,weight,size,color,style,..)
                 ---> ft.Text(), flet 클래스
-□ Row      : ([list_data],scroll)
-                ---> ft.Row(), flet 클래스
+                     └> value : string type
+                     └> ft.FontWeight()
+                     └> ft.TextThemeStyle()
+□ Row      : - Arranging in the direction of row for components
+             - controls,spacing,alignment
+                ---> ft.Row(), flet 클래스, list 데이터 받음 
+                     └> ft.MainAxisAlignment()
+□ Column   : - Arranging in the direction of column for components
+             - controls,alignment,horizontal_alignmnet,wrap,width,height,
+               spacing,run_spacing,scroll,on_scroll,on_scroll_interval,... 
+                ---> ft.Column(), flet 클래스, list 데이터 받음
+                     └> ft.ScrollMode()
 □ AppBar   : - The design at the top of window page
              - AppBar(leading,leading_width,title,bgcolor,...)
                 ---> ft.AppBar(), flet 클래스
@@ -44,10 +54,8 @@
                      leading,group_alignment,destinations,on_change,on_click,...
                      ---> ft.NavigationRailLabelType()
                      ---> ft.NavigationRailDestination()
-
-                     
-
-□ FloatingActionButton : 
+□ FloatingActionButton : - Action Button
+                         - content,bgcolor,shape,width,on_click,on_change,...
 '''
 ####################################################################
 '''
