@@ -172,7 +172,7 @@ dt = ft.DataTable(
 
 def main(page: ft.Page):
     page.fonts = {
-        "HDSansText":"C:\\Users\\2801123\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HYUNDAISANSTEXTKROTFREGULAR.OTF"
+        "HDSansText":"<font Address>"
     }
     page.title = "MH TABLE"
     page.window_width = 1000
