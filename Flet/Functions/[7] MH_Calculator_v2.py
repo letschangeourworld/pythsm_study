@@ -36,7 +36,14 @@ def main(page: ft.Page):
         bgcolor = ft.colors.SURFACE_VARIANT
     )
 
-    option_text = ft.Text()
+    option_text = ft.Text(
+                color = ft.colors.BLACK,
+                weight = "bold",
+                text_align = ft.TextAlign.RIGHT,
+                width = 47,
+                font_family = "HDSansText"
+                                        
+    )
     def add_btn_clicked(e):
         option_text.value = f"{line4_dd.value}"
         page.update()
@@ -475,13 +482,7 @@ def main(page: ft.Page):
                                         font_family = "HDSansText"
                                         )),
                     # 6 SPEC
-                    ft.DataCell(ft.Text(option_text.value,
-                                        color = ft.colors.BLACK,
-                                        weight = "bold",
-                                        text_align = ft.TextAlign.RIGHT,
-                                        width = 50,
-                                        font_family = "HDSansText"
-                                        )),
+                    ft.DataCell(option_text),
                     # 7 Symbol
                     ft.DataCell(ft.Text(values[6],
                                         color = ft.colors.BLACK,
