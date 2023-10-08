@@ -41,9 +41,8 @@ def main(page: ft.Page):
                 weight = "bold",
                 text_align = ft.TextAlign.RIGHT,
                 width = 47,
-                font_family = "HDSansText"
-                                        
-    )
+                font_family = "HDSansText")
+                
     def add_btn_clicked(e):
         option_text.value = f"{line4_dd.value}"
         page.update()
