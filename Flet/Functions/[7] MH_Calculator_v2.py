@@ -39,7 +39,7 @@ def main(page: ft.Page):
     option_text = ft.Text()
     def add_btn_clicked(e):
         option_text.value = f"{line4_dd.value}"
-        return option_text
+        page.update()
 
     t = ft.Text()
     def textbox_changed(e):
