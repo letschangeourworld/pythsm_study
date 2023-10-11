@@ -2,7 +2,7 @@ import flet as ft
 
 def main(page: ft.Page):
     page.fonts = {
-        "HDSansText":"C:\\Users\\2801123\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HYUNDAISANSTEXTKROTFREGULAR.OTF"
+        "HDSansText":"<font file path>"
     }
     page.title = "Paint Manufacturing Engineering Team 1"
     page.window_width = 1160
