@@ -41,12 +41,16 @@ def main(page: ft.Page):
                         ft.Icon(ft.icons.DRIVE_FILE_RENAME_OUTLINE_SHARP),
                         ft.Text("Standard Sheet",
                                 font_family = "HDSansText",
-                                size = 15
+                                size = 15,
+                                weight = "bold"
                                 )
                     ]
                 ),
                 content = ft.Container(
-                    content = ft.Text("This is TAB 1"),
+                    content = ft.Text("Standard Sheet Data Table", 
+                    font_family = "HDSansText",
+                    size = 15,
+                    weight = "bold"),
                     alignment = ft.alignment.center
                 ),
             ),
@@ -56,11 +60,12 @@ def main(page: ft.Page):
                         ft.Icon(ft.icons.DRIVE_FILE_RENAME_OUTLINE_ROUNDED),
                         ft.Text("Paint Area",
                                 font_family = "HDSansText",
-                                size = 15
+                                size = 15,
+                                weight = "bold"
                                 )
                     ]
                 ),
-                content = ft.Text("This is TAB 2")
+                content = ft.Text("Paint Area Data Table", weight = "bold")
             ),
             ft.Tab(
                 tab_content = ft.Row(
@@ -72,7 +77,7 @@ def main(page: ft.Page):
                                 )
                     ]
                 ),
-                content = ft.Text("This is TAB 3")
+                content = ft.Text("MH Calculator")
             )
         ],
         # expand = 1,
