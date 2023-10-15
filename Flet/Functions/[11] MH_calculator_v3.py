@@ -577,7 +577,7 @@ def main(page: ft.Page):
             size = 30,
             weight = ft.FontWeight.BOLD,
             color = ft.colors.WHITE,
-            font_family = "HDSansText"
+            font_family = "HDText"
         ),
         center_title = False,
         bgcolor = ft.colors.ON_SURFACE_VARIANT
