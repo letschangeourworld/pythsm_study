@@ -5,7 +5,7 @@ To show and extract DataFrame of excel files on flet
 '''
 
 class DtPage(ft.UserControl):
-    default_row_per_page = 10
+    default_row_per_page = 5
     default_sheet_number = 1
     def __init__(
         self,
@@ -32,12 +32,15 @@ class DtPage(ft.UserControl):
         
         self.v_current_page = ft.Text(
             str(self.current_page),
-            tooltip = "현재 페이지 설정을 위해 클릭하시오.",
-            weight = ft.FontWeight.BOLD
+            tooltip = "현재 페이지",
+            weight = ft.FontWeight.BOLD,
+            color = ft.colors.BLACK87,
+            text_align = ft.TextAlign.RIGHT,
+            font_family = "HDText"
         )
         
         self.current_page_changer_field = ft.TextField(
-            value = str(self.current_page),
+            value = self.v_current_page,
             dense = True,
             filled = False,
             width = 50,
@@ -45,7 +48,7 @@ class DtPage(ft.UserControl):
             visible = False,
             keyboard_type = ft.KeyboardType.NUMBER,
             content_padding = 2,
-            text_align = ft.TextAlign.CENTER
+            text_align = ft.TextAlign.RIGHT
         )
         
         # 콘텐츠에 더블탭을 감지하기 위한 Gesture Detector
@@ -71,7 +74,12 @@ class DtPage(ft.UserControl):
             text_align = ft.TextAlign.CENTER
         )
         
-        self.v_count = ft.Text(weight = ft.FontWeight.BOLD)
+        self.v_count = ft.Text(color = ft.colors.BLACK,
+                               weight = "bold",
+                               text_align = ft.TextAlign.CENTER,
+                               font_family = "HDText"
+                               )
+        
         self.pdt = ft.DataTable(
             columns = self.dt.columns,
             rows = self.build_rows()
@@ -98,10 +106,9 @@ class DtPage(ft.UserControl):
     # 페이지당 행수를 설정하는 함수생성
     def set_rows_per_page(self, new_row_per_page: str):
         try:
-            if 1 <= int(new_row_per_page) <= self.num_rows:
-                self.rows_per_page = int(new_row_per_page)
-            else:
-                self.default_row_per_page
+            self.rows_per_page = int(new_row_per_page) \
+                if 1 <= int(new_row_per_page) <= self.num_rows \
+                else self.default_row_per_page
         except ValueError:
             self.rows_per_page = self.default_row_per_page
         
@@ -118,12 +125,10 @@ class DtPage(ft.UserControl):
     def set_page(self, page: [str, int, None] = None, delta: int = 0):
         if page is not None:
             try:
-                if 1 <= int(page) <= self.num_pages:
-                    self.current_page = int(page)
-                else:
-                    self.current_page = 1
+                self.current_page = int(page) if 1 <= int(page) <= self.num_pages else 1
             except ValueError:
                 self.current_page = 1
+                
         # delta값이 1 (True)일 경우, 현재 페이지수에 1을 더함 (다음페이지가기)
         elif delta:
             self.current_page += delta
@@ -162,10 +167,7 @@ class DtPage(ft.UserControl):
     # 그렇지 않을 경우 : 현재 페이지에 1을 뺀 값을 first_idx_multi에 입력 (이전 페이지값)
     def dt_on_page(self) -> tuple[int, int]:
         # 현재 페이지가 1 일 경우
-        if self.current_page == 1:
-            first_idx_multi = 0
-        else:
-            first_idx_multi = self.current_page - 1
+        first_idx_multi = 0 if self.current_page == 1 else self.current_page - 1
         
         # 설정한 페이지의 행수에 이전 페이지 값을 곱함
         first_idx = first_idx_multi * self.rows_per_page
@@ -191,9 +193,9 @@ class DtPage(ft.UserControl):
                                 ft.Row(
                                     [
                                         ft.IconButton(
-                                        ft.icons.KEYBOARD_DOUBLE_ARROW_LEFT,
-                                        on_click = self.goto_first_page,
-                                        tooltip = "첫페이지"
+                                            ft.icons.KEYBOARD_DOUBLE_ARROW_LEFT,
+                                            on_click = self.goto_first_page,
+                                            tooltip = "첫페이지"
                                         ),
                                         ft.IconButton(
                                             ft.icons.KEYBOARD_ARROW_LEFT,
@@ -208,7 +210,7 @@ class DtPage(ft.UserControl):
                                         ),
                                         ft.IconButton(
                                             ft.icons.KEYBOARD_DOUBLE_ARROW_RIGHT,
-                                            on_click=self.goto_last_page,
+                                            on_click = self.goto_last_page,
                                             tooltip = "마지막페이지"
                                         )   
                                     ]
@@ -227,10 +229,10 @@ class DtPage(ft.UserControl):
                                 ),
                                 self.v_count,
                             ],
-                            alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
+                            alignment = ft.MainAxisAlignment.SPACE_EVENLY
                         ),
                     ],
-                    scroll=ft.ScrollMode.AUTO
+                    scroll = ft.ScrollMode.AUTO
                 ),
                 padding = 5,
             ),
@@ -238,14 +240,14 @@ class DtPage(ft.UserControl):
         )
     
     def on_double_tap_page_changer(self, e):
-        self.current_page_changer_field.value = str(self.current_page)
+        self.current_page_changer_field.value = self.v_current_page.value
         self.v_current_page.visible = not self.v_current_page.visible
         self.current_page_changer_field.visible = not self.current_page_changer_field.visible
         self.update()
         
     def refresh_data(self):
         self.pdt.rows = self.build_rows()
-        self.v_count.value = f"총 행수: {self.num_rows}"
+        self.v_count.value = f"총 행수 : {self.num_rows}"
         self.v_current_page.value = f"{self.current_page}/{self.num_pages}"
         self.current_page_changer_field.visible = False
         self.v_current_page.visible = True
