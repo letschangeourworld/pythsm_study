@@ -17,6 +17,7 @@ def tab_menu(page,
         plant_name= plant_name,
         process_name = process_name,
         car_model_name = car_model_name)
+        
     paint_table = PaintArea(
         datatable = area_datatable,
         car_model_name = car_model_name)
