@@ -35,12 +35,9 @@ def main(page: ft.Page):
     
     plant_name = nd.plant_name
     plant_keys = list(plant_name.keys())
-    # plant_values = list(plant_name.values())
     process_name = nd.process_name
-    # process_keys = list(process_name.keys())
     process_values = list(process_name.values())
     car_model_name = nd.car_model_name
-    # car_keys = list(car_model_name.keys())
     car_values = list(car_model_name.values())
     
     df_std_sht = pd.read_excel("mh_instruction_sheet.xlsx",
