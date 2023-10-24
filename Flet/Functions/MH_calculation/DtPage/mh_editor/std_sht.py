@@ -38,12 +38,12 @@ class StdSht(ft.UserControl):
                                         ft.Row(
                                             [
                                                 ft.Text(self.title,
-                                                color = ft.colors.BLACK,
-                                                weight = "bold",
-                                                size = 20,
-                                                text_align = ft.TextAlign.CENTER,
-                                                style = ft.TextThemeStyle.HEADLINE_MEDIUM,
-                                                font_family = "HDText"),
+                                                        color = ft.colors.BLACK,
+                                                        weight = "bold",
+                                                        size = 20,
+                                                        text_align = ft.TextAlign.CENTER,
+                                                        style = ft.TextThemeStyle.HEADLINE_MEDIUM,
+                                                        font_family = "HDText"),
                                             ],
                                             alignment = ft.MainAxisAlignment.START
                                         ),
