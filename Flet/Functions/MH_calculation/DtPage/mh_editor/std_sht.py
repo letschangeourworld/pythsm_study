@@ -50,25 +50,25 @@ class StdSht(ft.UserControl):
                                         ft.Row(
                                             [
                                                 ft.Text(f"| Plant : {self.plant_name} ",
-                                                color = ft.colors.BLACK,
-                                                weight = "bold",
-                                                size = 15,
-                                                text_align = ft.TextAlign.RIGHT,
-                                                font_family = "HDText"
+                                                        color = ft.colors.BLACK,
+                                                        weight = "bold",
+                                                        size = 15,
+                                                        text_align = ft.TextAlign.RIGHT,
+                                                        font_family = "HDText"
                                                 ),
-                                        ft.Text(f"| Process : {self.process_name} ",
-                                                color = ft.colors.BLACK,
-                                                weight = "bold",
-                                                size = 15,
-                                                text_align = ft.TextAlign.RIGHT,
-                                                font_family = "HDText"
+                                                ft.Text(f"| Process : {self.process_name} ",
+                                                        color = ft.colors.BLACK,
+                                                        weight = "bold",
+                                                        size = 15,
+                                                        text_align = ft.TextAlign.RIGHT,
+                                                        font_family = "HDText"
                                                 ),
-                                        ft.Text(f"| Car Model : {self.car_name}  ",
-                                                color = ft.colors.BLACK,
-                                                weight = "bold",
-                                                size = 15,
-                                                text_align = ft.TextAlign.RIGHT,
-                                                font_family = "HDText"
+                                                ft.Text(f"| Car Model : {self.car_name}  ",
+                                                        color = ft.colors.BLACK,
+                                                        weight = "bold",
+                                                        size = 15,
+                                                        text_align = ft.TextAlign.RIGHT,
+                                                        font_family = "HDText"
                                                 ),
                                             ],
                                             alignment = ft.MainAxisAlignment.END
