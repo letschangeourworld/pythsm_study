@@ -4,19 +4,20 @@ from paint_area import PaintArea
 import mh_calc as mc
 import pandas as pd
 import name_data as nd
+from dataframe import *
 
 df_name = nd.files
-# df_name_keys = list(df_name.keys())
-df_name_values = list(df_name.values())
+df_name_list = list(df_name.values())
 
-def std_tab_menu(page,
-                 std_datatable,
-                 plant_name,
-                 process_name,
-                 car_model_name,
-                 df):
+def std_tab_menu(
+    page,
+    df,
+    plant_name,
+    process_name,
+    car_model_name):
     
-    tabs = pd.ExcelFile(df_name_values).sheet_names
+    tabs = pd.ExcelFile(df).sheet_names
+    std_datatable = ft.DataTable()
     
     std_table = StdSht(
         datatable = std_datatable,
