@@ -4,20 +4,14 @@ from paint_area import PaintArea
 import mh_calc as mc
 
 def tab_menu(page,
-             std_datatable,
+             df_dict,
              area_datatable,
              plant_name,
              process_name,
              car_model_name ):
-    # def tabs_changed(e):
-    #     print(f"Tabs changed to {e.control.selected_index}")
     
-    std_table = StdSht(
-        datatable = std_datatable,
-        plant_name= plant_name,
-        process_name = process_name,
-        car_model_name = car_model_name)
-        
+    #std_tabs = tab
+    
     paint_table = PaintArea(
         datatable = area_datatable,
         car_model_name = car_model_name)
