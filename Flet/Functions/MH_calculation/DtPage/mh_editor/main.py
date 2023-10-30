@@ -41,16 +41,16 @@ def main(page: ft.Page):
     
     df_dict = nd.files
     df_names_list = list(df_dict.values())
+    std_df_name = df_name_list[0]
     
-    df_paint_area = pd.read_excel("mh_part_area_sheet.xlsx")
+    df_paint_area = pd.read_excel(df_name_list[1])
     df_paint_area = df_paint_area.fillna("")
     area_datatable = ft.DataTable(columns = col_name(df_paint_area),
                                   rows = rows(df_paint_area)
                                  )
-    
     page.add(
         tm.tab_menu(page = page,
-                    df_dict = df_dict,
+                    df_name = std_df_name,
                     area_datatable = area_datatable,
                     plant_name = plant_keys[2],
                     process_name = process_values[0],
