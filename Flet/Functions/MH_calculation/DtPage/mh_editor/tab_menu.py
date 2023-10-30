@@ -5,21 +5,21 @@ import mh_calc as mc
 import tab_in_std as tis
 
 def tab_menu(page,
-             df_name,
-             area_datatable,
+             std_df_name,
+             area_df_name,
              plant_name,
              process_name,
              car_model_name ):
     
     std_tabs = tis.std_tab_menu(
         page = page,
-        df_name = df_name,
+        df_name = std_df_name,
         plant_name = plant_name,
         process_name = process_name,
         car_model_name = car_model_name)
     
     paint_table = PaintArea(
-        df = df,
+        df_name = area_df_name,
         car_model_name = car_model_name)
     
     top_menu = ft.Tabs(
