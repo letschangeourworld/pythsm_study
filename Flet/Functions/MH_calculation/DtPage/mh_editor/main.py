@@ -1,7 +1,6 @@
 import flet as ft
 import tab_menu as tm
 import pandas as pd
-from dataframe import *
 import name_data as nd
 
 def main(page: ft.Page):
