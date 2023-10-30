@@ -7,16 +7,16 @@ from dataframe import *
 
 def std_tab_menu(
     page,
-    df,
+    df_name,
     plant_name,
     process_name,
     car_model_name):
     
-    df_sht_names_list = pd.ExcelFile(df).sheet_names
+    df_sht_names_list = pd.ExcelFile(df_name).sheet_names
     
     std_tables_list = []
     for sn in df_sht_names_list:
-        std_df = pd.read_excel(df,
+        std_df = pd.read_excel(df_name,
                                sheet_name = df_sht_names_list[sn],
                                header = 1)
         std_df = std_df.iloc[:26,2:]
