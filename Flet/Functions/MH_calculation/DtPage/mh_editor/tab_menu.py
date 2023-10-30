@@ -19,7 +19,7 @@ def tab_menu(page,
         car_model_name = car_model_name)
     
     paint_table = PaintArea(
-        datatable = area_datatable,
+        df = df,
         car_model_name = car_model_name)
     
     top_menu = ft.Tabs(
