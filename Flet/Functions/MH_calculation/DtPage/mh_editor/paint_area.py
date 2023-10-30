@@ -9,7 +9,9 @@ class PaintArea(ft.UserControl):
                  car_model_name: str = "차종명"):
         super().__init__()
         
-        self.df = pd.read_excel(df_name)
+        df = pd.read_excel(df_name)
+        df = df.fillna("")
+        self.df = df
         self.dt = ft.DataTable(columns = col_name(self.df),
                                rows = rows(self.df))
         self.title = table_title
