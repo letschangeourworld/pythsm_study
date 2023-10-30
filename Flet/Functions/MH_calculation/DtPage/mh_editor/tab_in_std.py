@@ -50,8 +50,8 @@ def std_tab_menu(
                     ]
                 ),
                 content = std_table
-            )
-        ] for std_table, sht_name in zip(std_tables_list, df_sht_names_list)
+            ) for std_table, sht_name in zip(std_tables_list, df_sht_names_list)
+        ]
     )
     return ft.Column(
         expand = True,
