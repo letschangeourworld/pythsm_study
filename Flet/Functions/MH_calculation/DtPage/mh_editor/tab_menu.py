@@ -5,7 +5,7 @@ import mh_calc as mc
 import tab_in_std as tis
 
 def tab_menu(page,
-             df_dict,
+             df_name,
              area_datatable,
              plant_name,
              process_name,
@@ -13,7 +13,7 @@ def tab_menu(page,
     
     std_tabs = tis.std_tab_menu(
         page = page,
-        df_dict = df_dict,
+        df_name = df_name,
         plant_name = plant_name,
         process_name = process_name,
         car_model_name = car_model_name)
