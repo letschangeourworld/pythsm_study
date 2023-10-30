@@ -4,29 +4,29 @@ from paint_area import PaintArea
 import mh_calc as mc
 import tab_in_std as tis
 
-def tab_menu(page: page,
-             df : df_dict,
-             paint_area : area_datatable,
-             plant : plant_name,
-             process : process_name,
-             car_model : car_model_name ):
+def tab_menu(page,
+             df_dict,
+             area_datatable,
+             plant_name,
+             process_name,
+             car_model_name ):
     
-    std_tabs = tis.std_tab_menu(page = page,
-                                df = df_dict,
-                                plant = plant_name,
-                                process = process_name,
-                                car_model = car_model_name)
+    std_tabs = tis.std_tab_menu(
+        page = page,
+        df_dict = df_dict,
+        plant_name = plant_name,
+        process_name = process_name,
+        car_model_name = car_model_name)
     
     paint_table = PaintArea(
         datatable = area_datatable,
         car_model_name = car_model_name)
     
-    menu = ft.Tabs(
+    top_menu = ft.Tabs(
         selected_index = 0,
         animation_duration = 300,
         scrollable = True,
         expand = True,
-        # on_change = tabs_changed,
         tabs = [
             ft.Tab(
                 tab_content = ft.Row(
@@ -68,5 +68,5 @@ def tab_menu(page: page,
     return ft.Column(
         expand = True,
         alignment = ft.MainAxisAlignment.CENTER,
-        controls = [menu]
+        controls = [top_menu]
     )
