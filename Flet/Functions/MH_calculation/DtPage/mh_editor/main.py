@@ -39,20 +39,8 @@ def main(page: ft.Page):
     car_model_name = nd.car_model_name
     car_values = list(car_model_name.values())
     
-    # df_dict = 
-    
-    df_std_sht = pd.read_excel("mh_instruction_sheet.xlsx",
-                               sheet_name = "drysand1",
-                               header = 1)
-    df_std_sht = df_std_sht.iloc[:26,2:]
-    df_std_sht = df_std_sht.fillna("")
-    df_std_sht = df_std_sht[df_std_sht.iloc[:,6] != ""]
-    df_std_sht.iloc[:,3] = df_std_sht.iloc[:,3].apply(lambda x: round(x,3))
-    df_std_sht.iloc[:,5] = df_std_sht.iloc[:,5].apply(lambda x: round(x))
-    df_std_sht.iloc[:,6] = df_std_sht.iloc[:,6].apply(lambda x: round(x,1))
-    std_datatable = ft.DataTable(columns = col_name(df_std_sht),
-                                 rows = rows(df_std_sht)
-                                )
+    df_dict = nd.files
+    df_names_list = list(df_dict.values())
     
     df_paint_area = pd.read_excel("mh_part_area_sheet.xlsx")
     df_paint_area = df_paint_area.fillna("")
