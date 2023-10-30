@@ -39,6 +39,8 @@ def main(page: ft.Page):
     car_model_name = nd.car_model_name
     car_values = list(car_model_name.values())
     
+    # df_dict = 
+    
     df_std_sht = pd.read_excel("mh_instruction_sheet.xlsx",
                                sheet_name = "drysand1",
                                header = 1)
@@ -60,7 +62,7 @@ def main(page: ft.Page):
     
     page.add(
         tm.tab_menu(page = page,
-                    std_datatable = std_datatable,
+                    df_dict = df_dict,
                     area_datatable = area_datatable,
                     plant_name = plant_keys[2],
                     process_name = process_values[0],
