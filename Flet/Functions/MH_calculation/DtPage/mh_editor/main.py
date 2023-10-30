@@ -47,16 +47,12 @@ def main(page: ft.Page):
     df_names_dict = nd.files
     df_names_list = list(df_names_dict.values())
     std_df_name = df_names_list[0]
+    area_df_name = df_names_list[1]
     
-    df_paint_area = pd.read_excel(df_names_list[1])
-    df_paint_area = df_paint_area.fillna("")
-    area_datatable = ft.DataTable(columns = col_name(df_paint_area),
-                                  rows = rows(df_paint_area)
-                                 )
     page.add(
         tm.tab_menu(page = page,
-                    df_name = std_df_name,
-                    area_datatable = area_datatable,
+                    std_df_name = std_df_name,
+                    area_df_name = area_df_name,
                     plant_name = plant_name,
                     process_name = process_name,
                     car_model_name = car_model_name
