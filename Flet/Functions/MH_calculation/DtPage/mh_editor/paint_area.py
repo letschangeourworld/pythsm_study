@@ -1,12 +1,17 @@
 import flet as ft
+import pandas as pd
+from dataframe import *
 
 class PaintArea(ft.UserControl):
     def __init__(self,
-                 datatable: ft.DataTable,
+                 df: pd.DataFrame,
                  table_title: str = "Painting Area Table",
                  car_model_name: str = "차종명"):
         super().__init__()
-        self.dt = datatable
+        
+        self.df = df
+        self.dt = ft.DataTable(columns = col_name(self.df),
+                               rows = rows(self.df))
         self.title = table_title
         self.car_name = car_model_name
         self.pdt = ft.DataTable(
