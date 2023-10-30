@@ -4,12 +4,12 @@ from dataframe import *
 
 class PaintArea(ft.UserControl):
     def __init__(self,
-                 df: pd.DataFrame,
+                 df_name,
                  table_title: str = "Painting Area Table",
                  car_model_name: str = "차종명"):
         super().__init__()
         
-        self.df = df
+        self.df = pd.read_excel(df_name)
         self.dt = ft.DataTable(columns = col_name(self.df),
                                rows = rows(self.df))
         self.title = table_title
