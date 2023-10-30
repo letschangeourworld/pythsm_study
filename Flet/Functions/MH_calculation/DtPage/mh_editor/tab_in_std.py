@@ -1,7 +1,5 @@
 import flet as ft
 from std_sht import StdSht
-from paint_area import PaintArea
-import mh_calc as mc
 import pandas as pd
 from dataframe import *
 
