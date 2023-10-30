@@ -32,18 +32,23 @@ def main(page: ft.Page):
         bgcolor = ft.colors.ON_SURFACE_VARIANT
     )
     
-    plant_name = nd.plant_name
-    plant_keys = list(plant_name.keys())
-    process_name = nd.process_name
-    process_values = list(process_name.values())
-    car_model_name = nd.car_model_name
-    car_values = list(car_model_name.values())
+    plant_names_dict = nd.plant_name
+    plant_keys = list(plant_names_dict.keys())
+    plant_name = plant_keys[2]
     
-    df_dict = nd.files
-    df_names_list = list(df_dict.values())
-    std_df_name = df_name_list[0]
+    process_names_dict = nd.process_name
+    process_values = list(process_names_dict.values())
+    process_name = process_values[0]
     
-    df_paint_area = pd.read_excel(df_name_list[1])
+    car_model_dict = nd.car_model_name
+    car_model_values = list(car_model_dict.values())
+    car_model_name = car_model_values[0]
+    
+    df_names_dict = nd.files
+    df_names_list = list(df_names_dict.values())
+    std_df_name = df_names_list[0]
+    
+    df_paint_area = pd.read_excel(df_names_list[1])
     df_paint_area = df_paint_area.fillna("")
     area_datatable = ft.DataTable(columns = col_name(df_paint_area),
                                   rows = rows(df_paint_area)
@@ -52,9 +57,9 @@ def main(page: ft.Page):
         tm.tab_menu(page = page,
                     df_name = std_df_name,
                     area_datatable = area_datatable,
-                    plant_name = plant_keys[2],
-                    process_name = process_values[0],
-                    car_model_name = car_values[0]
+                    plant_name = plant_name,
+                    process_name = process_name,
+                    car_model_name = car_model_name
                     )
     )
 
