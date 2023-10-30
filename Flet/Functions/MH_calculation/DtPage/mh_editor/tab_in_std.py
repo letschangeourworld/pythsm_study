@@ -6,11 +6,11 @@ import pandas as pd
 from dataframe import *
 
 def std_tab_menu(
-    page,
-    df_dict,
-    plant_name,
-    process_name,
-    car_model_name):
+    page : page,
+    df : df_dict,
+    plant : plant_name,
+    process : process_name,
+    car_model : car_model_name):
     
     # df_name : The name or path of excel files made in a dictionary
     df_names_list = list(df_dict.values())
