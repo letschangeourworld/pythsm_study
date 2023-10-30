@@ -2,15 +2,20 @@ import flet as ft
 from std_sht import StdSht
 from paint_area import PaintArea
 import mh_calc as mc
+import tab_in_std as tis
 
-def tab_menu(page,
-             df_dict,
-             area_datatable,
-             plant_name,
-             process_name,
-             car_model_name ):
+def tab_menu(page: page,
+             df : df_dict,
+             paint_area : area_datatable,
+             plant : plant_name,
+             process : process_name,
+             car_model : car_model_name ):
     
-    #std_tabs = tab
+    std_tabs = tis.std_tab_menu(page = page,
+                                df = df_dict,
+                                plant = plant_name,
+                                process = process_name,
+                                car_model = car_model_name)
     
     paint_table = PaintArea(
         datatable = area_datatable,
@@ -33,7 +38,7 @@ def tab_menu(page,
                                 weight = "bold")
                     ]
                 ),
-                content = std_table
+                content = std_tabs
             ),
             ft.Tab(
                 tab_content = ft.Row(
