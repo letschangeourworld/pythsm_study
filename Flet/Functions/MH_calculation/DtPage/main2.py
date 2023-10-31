@@ -9,7 +9,7 @@ def main(page: ft.Page):
         "HDText" : f"{font_path}"
     }
     page.scroll = "always"
-    page.title = "Paint Manufacturing Engineering"
+    page.title = ""
     page.window_width = 1240
     page.window_height = 900
     page.theme_mode = ft.ThemeMode.LIGHT
