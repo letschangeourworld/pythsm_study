@@ -11,7 +11,7 @@ def main(page: ft.Page):
         "HDText" : f"{font_path}"
     }
     page.scroll = "auto"
-    page.title = "Paint Manufacturing Engineering"
+    page.title = ""
     page.window_width = 1100
     page.window_height = 860
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -38,7 +38,7 @@ def main(page: ft.Page):
     csv = simpledt.CSVDataTable("./day.csv")
     pdt = DtPage(
         datatable = csv.datatable,
-        table_title = "도장면적리스트",        
+        table_title = "",        
     )
     pdt.datatable.border = ft.border.all(1,"gray")
     
