@@ -15,8 +15,8 @@ class StdSht(ft.UserControl):
         self.plant_name = plant_name
         self.car_name = car_model_name
         self.pdt = ft.DataTable(
-            width= 1005,
-            border = ft.border.all(0.5, color = ft.colors.BLACK45),
+            width= 1010,
+            border = ft.border.all(1.5, color = ft.colors.BLACK45),
             border_radius = 10,
             heading_row_color = ft.colors.BLACK26,
             heading_row_height = 40,
@@ -80,7 +80,7 @@ class StdSht(ft.UserControl):
                             ],
                         ),
                         padding = 25,
-                        bgcolor = ft.colors.BLUE_GREY_100,
+                        bgcolor = ft.colors.BLUE_GREY_50,
                         border_radius = ft.border_radius.all(10)
                     ),
                     elevation = 5,
