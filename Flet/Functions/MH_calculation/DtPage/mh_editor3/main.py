@@ -49,13 +49,14 @@ def main(page: ft.Page):
     area_df_name = df_names_list[1]
     
     page.add(
-        tm.tab_menu(page = page,
-                    std_df_name = std_df_name,
-                    area_df_name = area_df_name,
-                    plant_name = plant_name,
-                    process_name = process_name,
-                    car_model_name = car_model_name
-                    )
+        tm.tab_menu(
+            page = page,
+            std_df_name = std_df_name,
+            area_df_name = area_df_name,
+            plant_name = plant_name,
+            process_name = process_name,
+            car_model_name = car_model_name
+        )
     )
 
 if __name__ == "__main__":
