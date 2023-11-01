@@ -20,6 +20,8 @@ def tab_menu(page,
     paint_table = PaintArea(
         df_name = area_df_name,
         car_model_name = car_model_name)
+        
+    mh_calc = mc.mh_calc(page)
     
     top_menu = ft.Tabs(
         selected_index = 0,
@@ -61,7 +63,8 @@ def tab_menu(page,
                                 weight = "bold")
                     ]
                 ),
-                content = mc.mh_calc(page))
+                content = mh_calc
+            )
         ]
     )
     
