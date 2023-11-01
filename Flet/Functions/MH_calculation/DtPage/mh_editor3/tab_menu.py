@@ -54,6 +54,18 @@ def tab_menu(page,
                 content = paint_table
             ),
             ft.Tab(
+                tab_content = ft.Row(
+                    [
+                        ft.Icon(ft.icons.DRIVE_FILE_RENAME_OUTLINE_SHARP),
+                        ft.Text("Code Ref",
+                                font_family = "HDText",
+                                size = 15,
+                                weight = "bold")
+                    ]
+                ),
+            
+            ),
+            ft.Tab(
                  tab_content = ft.Row(
                     [
                         ft.Icon(ft.icons.CALCULATE),
