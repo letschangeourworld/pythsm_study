@@ -5,6 +5,7 @@ def code_ref_txt(keys, values):
         ft.Container(
             ft.Column(
                 [
+                    ft.Text(""),
                     ft.Row(
                         [
                             ft.Text(
@@ -18,7 +19,8 @@ def code_ref_txt(keys, values):
                     ) for key, value in zip(keys, values)
                 ]
             ),
-            alignment = ft.MainAxisAlignment.START
+            alignment = ft.MainAxisAlignment.START,
+            padding = 25
         ),
         elevation = 5
     )
