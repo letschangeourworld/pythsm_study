@@ -15,12 +15,12 @@ def col_name(df: pd.DataFrame) -> list:
 
 def rows(df: pd.DataFrame) -> list:
     rows = []
-    for tp in df.itertuples():
+    for row in df.itertuples():
         rows.append(
             ft.DataRow(
                 cells = [
                     ft.DataCell(
-                        ft.Text(tp[col_no],
+                        ft.Text(row[col_no],
                                 color = ft.colors.BLACK87,
                                 weight = "bold",
                                 text_align = ft.TextAlign.RIGHT,
