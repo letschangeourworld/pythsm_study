@@ -5,7 +5,6 @@ def code_ref_txt(keys, values):
         ft.Container(
             ft.Column(
                 [
-                    ft.Text(""),
                     ft.Row(
                         [
                             ft.Text(
