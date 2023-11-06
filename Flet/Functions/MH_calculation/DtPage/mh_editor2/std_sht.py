@@ -5,9 +5,9 @@ class StdSht(ft.UserControl):
     def __init__(self,
                  datatable: ft.DataTable,
                  table_title: str = "Instruction Table",
-                 process_name: str = "공정명",
-                 plant_name: str = "공장명",
-                 car_model_name: str = "차종명"):
+                 process_name: str = "",
+                 plant_name: str = "",
+                 car_model_name: str = ""):
         super().__init__()
         self.dt = datatable
         self.title = table_title
