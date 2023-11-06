@@ -126,6 +126,7 @@
   - clip_behavior: Optional[ClipBehavior] = None,
 
 ### ft.Control
+
   - self,
   - ref: Optional[Ref] = None,
   - expand: Union[None, bool, int] = None,
@@ -135,7 +136,6 @@
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
-
   - self.__page: Optional[Page] = None
   - self.__attrs: Dict[str, Any] = {}
   - self.__previous_children = []
