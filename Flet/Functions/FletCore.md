@@ -24,6 +24,11 @@
   - ft.GestureDetector
   - ft.Tabs
 
+### ft.UserControl이 받는 데이터
+  - ft.Stack
+  - Control 이나 List[Control] 형식의 데이터를 값으로 받는다.
+
+
 ### ft.Control이 받는 데이터
   - self,
   - ref: Optional[Ref] = None,
