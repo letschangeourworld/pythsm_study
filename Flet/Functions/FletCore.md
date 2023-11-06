@@ -11,6 +11,8 @@
   - ft.DataCell
   - ft.Page
   - ft.Tab
+    
+  
 
 ### ft.ConstrainedControl을 데이터로 받는 클래스
   - ft.Stack
@@ -141,6 +143,22 @@
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
+
+상속데이터
+  - self.__page: Optional[Page] = None
+  - self.__attrs: Dict[str, Any] = {}
+  - self.__previous_children = []
+  - self._id = None
+  - self.__uid: Optional[str] = None
+  - self.expand = expand
+  - self.col = col
+  - self.opacity = opacity
+  - self.tooltip = tooltip
+  - self.visible = visible
+  - self.disabled = disabled
+  - self.__data: Any = None
+  - self.data = data
+  - self.__event_handlers = {}
 
 ### ft.ConstrainedControl이 받는 데이터
    - self,
