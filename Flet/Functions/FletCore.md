@@ -12,6 +12,7 @@
   - ft.Page
 
 ### ft.ConstrainedControl을 데이터로 받는 클래스
+  - ft.Stack
   - ft.Card
   - ft.Column <- ScrollableControl을 데이터로도 받음
   - ft.Container
