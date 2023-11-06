@@ -24,6 +24,34 @@
   - ft.GestureDetector
   - ft.Tabs
 
+### ft.DataColumn이 받는 데이터
+  - self,
+  - label: Control,
+  - ref=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - *data: Any = None*,
+  
+  - numeric: Optional[bool] = None,
+  - tooltip: Optional[str] = None,
+  - on_sort=None,
+
+### ft.DataCell이 받는 데이터
+  - self,
+  - *content: Control*,
+  - ref=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - data: Any = None,
+  
+  - on_double_tap=None,
+  - on_long_press=None,
+  - *on_tap=None*,
+  - on_tap_cancel=None,
+  - on_tap_down=None,
+  - placeholder: Optional[bool] = None,
+  - show_edit_icon: Optional[bool] = None,
+
 ### ft.Column이 받는 데이터
   - self,
   - *controls: Optional[List[Control]] = None*,
