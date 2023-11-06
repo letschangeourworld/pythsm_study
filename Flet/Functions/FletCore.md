@@ -29,6 +29,38 @@
   - Control 이나 List[Control] 형식의 데이터를 값으로 받는다.
 
 
+### ft.Stack이 받는 데이터
+
+  - ft.ConstrainedControl
+  - self,
+  - *controls: Optional[List[Control]] = None*,
+  - ref: Optional[Ref] = None,
+  - key: Optional[str] = None,
+  - width: OptionalNumber = None,
+  - height: OptionalNumber = None,
+  - left: OptionalNumber = None,
+  - top: OptionalNumber = None,
+  - right: OptionalNumber = None,
+  - bottom: OptionalNumber = None,
+  - expand: Union[None, bool, int] = None,
+  - col: Optional[ResponsiveNumber] = None,
+  - opacity: OptionalNumber = None,
+  - rotate: RotateValue = None,
+  - scale: ScaleValue = None,
+  - offset: OffsetValue = None,
+  - aspect_ratio: OptionalNumber = None,
+  - animate_opacity: AnimationValue = None,
+  - animate_size: AnimationValue = None,
+  - animate_position: AnimationValue = None,
+  - animate_rotation: AnimationValue = None,
+  - animate_scale: AnimationValue = None,
+  - animate_offset: AnimationValue = None,
+  - on_animation_end=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - *data: Any = None*,
+  - clip_behavior: Optional[ClipBehavior] = None,
+
 ### ft.Control이 받는 데이터
   - self,
   - ref: Optional[Ref] = None,
@@ -38,7 +70,7 @@
   - tooltip: Optional[str] = None,
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
-  - **data: Any = None**,
+  - *data: Any = None*,
 
 ### ft.ConstrainedControl이 받는 데이터
    - self,
@@ -49,7 +81,7 @@
    - tooltip: Optional[str] = None,
    - visible: Optional[bool] = None,
    - disabled: Optional[bool] = None,
-   - **data: Any = None**
+   - *data: Any = None*
    - key: Optional[str] = None,
    - width: OptionalNumber = None,
    - height: OptionalNumber = None,
@@ -73,7 +105,7 @@
 
 공통항목
   - self,
-  - **content: Optional[Control] = None**,
+  - *content: Optional[Control] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
   - width: OptionalNumber = None,
@@ -99,23 +131,23 @@
   - tooltip: Optional[str] = None,
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
-  - **data: Any = None**,
+  - *data: Any = None*,
 
 특화항목
-  - **padding: PaddingValue = None**,
-  - **margin: MarginValue = None**,
-  - **alignment: Optional[Alignment] = None**,
+  - *padding: PaddingValue = None*,
+  - *margin: MarginValue = None*,
+  - *alignment: Optional[Alignment] = None*,
   - bgcolor: Optional[str] = None,
   - gradient: Optional[Gradient] = None,
   - blend_mode: BlendMode = BlendMode.NONE,
-  - **border: Optional[Border] = None**,
-  - **border_radius: BorderRadiusValue = None**,
+  - *border: Optional[Border] = None**,
+  - *border_radius: BorderRadiusValue = None**,
   - image_src: Optional[str] = None,
   - image_src_base64: Optional[str] = None,
   - image_repeat: Optional[ImageRepeat] = None,
   - image_fit: Optional[ImageFit] = None,
   - image_opacity: OptionalNumber = None,
-  - **shape: Optional[BoxShape] = None**,
+  - *shape: Optional[BoxShape] = None**,
   - clip_behavior: Optional[ClipBehavior] = None,
   - ink: Optional[bool] = None,
   - animate: AnimationValue = None,
@@ -127,7 +159,7 @@
   - url_target: Optional[str] = None,
   - theme: Optional[Theme] = None,
   - theme_mode: Optional[ThemeMode] = None,
-  - **on_click=None**,
+  - *on_click=None*,
   - on_long_press=None,
   - on_hover=None,
 
@@ -141,14 +173,14 @@
   - self,
   - target: str, 
   - name: str, 
-  - **data: str**, 
-  - **control**, 
-  - **page**
+  - *data: str**, 
+  - *control**, 
+  - *page**
 
 ### ft.FilledButton이 받는 데이터 <- ft.ElevatedButton
   공통항목
   - self,
-  - **text: Optional[str] = None**,
+  - *text: Optional[str] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
   - width: OptionalNumber = None,
@@ -159,7 +191,7 @@
   - tooltip: Optional[str] = None,
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
-  - **data: Any = None**,
+  - *data: Any = None*,
   특화항목
   - icon: Optional[str] = None,
   - icon_color: Optional[str] = None,
@@ -175,7 +207,7 @@
 ### ft.ElevatedButton이 받는 데이터
   공통항목
   - self,
-  - **text: Optional[str] = None**,
+  - *text: Optional[str] = None*
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
   - width: OptionalNumber = None,
@@ -206,15 +238,15 @@
 특화항목
   - color: Optional[str] = None,
   - bgcolor: Optional[str] = None,
-  - **elevation: OptionalNumber = None**,
+  - *elevation: OptionalNumber = None*,
   - **style: Optional[ButtonStyle] = None**,
   - icon: Optional[str] = None,
   - icon_color: Optional[str] = None,
-  - **content: Optional[Control] = None**,
+  - *content: Optional[Control] = None*,
   - autofocus: Optional[bool] = None,
   - url: Optional[str] = None,
   - url_target: Optional[str] = None,
-  - **on_click=None**,
+  - *on_click=None*,
   - on_long_press=None,
   - on_hover=None,
   - on_focus=None,
@@ -227,9 +259,9 @@
 특화항목
    - icon: Optional[str] = None,
    - bgcolor: Optional[str] = None,
-   - **content: Optional[Control] = None**,
+   - *content: Optional[Control] = None*,
    - autofocus: Optional[bool] = None,
-   - **shape: Optional[OutlinedBorder] = None**,
+   - *shape: Optional[OutlinedBorder] = None*,
    - mini: Optional[bool] = None,
    - url: Optional[str] = None,
    - url_target: Optional[str] = None,
@@ -240,15 +272,15 @@
    - ft.ConstrainedControl와 데이터 공통
 
 특화항목
-   - **text_size: OptionalNumber = None**,
-   - **text_style: Optional[TextStyle] = None**,
-   - **label: Optional[str] = None**,
+   - *text_size: OptionalNumber = None*,
+   - *text_style: Optional[TextStyle] = None*,
+   - *label: Optional[str] = None*,
    - label_style: Optional[TextStyle] = None,
    - icon: Optional[str] = None,
-   - **border: Optional[InputBorder] = None**,
+   - *border: Optional[InputBorder] = None*,
    - color: Optional[str] = None,
    - bgcolor: Optional[str] = None,
-   - **border_radius: BorderRadiusValue = None**,
+   - *border_radius: BorderRadiusValue = None*,
    - border_width: OptionalNumber = None,
    - border_color: Optional[str] = None,
    - focused_color: Optional[str] = None,
@@ -258,7 +290,7 @@
    - content_padding: PaddingValue = None,
    - dense: Optional[bool] = None,
    - filled: Optional[bool] = None,
-   - **hint_text: Optional[str] = None**,
+   - *hint_text: Optional[str] = None*,
    - hint_style: Optional[TextStyle] = None,
    - helper_text: Optional[str] = None,
    - helper_style: Optional[TextStyle] = None,
@@ -280,10 +312,10 @@
    - ft.ConstraindControl
      
 특화항목
-   - **tabs: Optional[List[Tab]] = None**,
-   - **selected_index: Optional[int] = None**,
-   - **scrollable: Optional[bool] = None**,
-   - **animation_duration: Optional[int] = None**,
+   - *tabs: Optional[List[Tab]] = None*,
+   - *selected_index: Optional[int] = None*,
+   - *scrollable: Optional[bool] = None*,
+   - *animation_duration: Optional[int] = None*,
    - divider_color: Optional[str] = None,
    - indicator_color: Optional[str] = None,
    - indicator_border_radius: BorderRadiusValue = None,
@@ -293,7 +325,7 @@
    - label_color: Optional[str] = None,
    - unselected_label_color: Optional[str] = None,
    - overlay_color: Union[None, str, Dict[MaterialState, str]] = None,
-   - **on_change=None**,
+   - *on_change=None*,
 
 
 
