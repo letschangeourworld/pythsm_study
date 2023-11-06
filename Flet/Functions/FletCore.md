@@ -24,6 +24,48 @@
   - ft.GestureDetector
   - ft.Tabs
 
+### ft.Column이 받는 데이터
+  - self,
+  - *controls: Optional[List[Control]] = None*,
+  - ref: Optional[Ref] = None,
+  - key: Optional[str] = None,
+  - width: OptionalNumber = None,
+  - height: OptionalNumber = None,
+  - left: OptionalNumber = None,
+  - top: OptionalNumber = None,
+  - right: OptionalNumber = None,
+  - bottom: OptionalNumber = None,
+  - expand: Union[None, bool, int] = None,
+  - col: Optional[ResponsiveNumber] = None,
+  - opacity: OptionalNumber = None,
+  - rotate: RotateValue = None,
+  - scale: ScaleValue = None,
+  - offset: OffsetValue = None,
+  - aspect_ratio: OptionalNumber = None,
+  - animate_opacity: AnimationValue = None,
+  - animate_size: AnimationValue = None,
+  - animate_position: AnimationValue = None,
+  - animate_rotation: AnimationValue = None,
+  - animate_scale: AnimationValue = None,
+  - animate_offset: AnimationValue = None,
+  - on_animation_end=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - data: Any = None,
+        
+  - scroll: Optional[ScrollMode] = None,
+  - auto_scroll: Optional[bool] = None,
+  - on_scroll_interval: OptionalNumber = None,
+  - on_scroll: Any = None,
+  
+  - alignment: MainAxisAlignment = MainAxisAlignment.NONE,
+  - horizontal_alignment: CrossAxisAlignment = CrossAxisAlignment.NONE,
+  - spacing: OptionalNumber = None,
+  - tight: Optional[bool] = None,
+  - wrap: Optional[bool] = None,
+  - run_spacing: OptionalNumber = None,
+
+
 ### ft.UserControl이 받는 데이터
   - ft.Stack
   - Control 이나 List[Control] 형식의 데이터를 값으로 받는다.
