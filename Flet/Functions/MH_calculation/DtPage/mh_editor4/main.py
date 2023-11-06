@@ -746,7 +746,7 @@ class TabMenu(ft.UserControl):
         )
 
 def main(page: ft.Page):
-    page.title = "Paint Manufacturing Engineering"
+    page.title = ""
     font = nd.font_path
     font_values = list(font.values())
     page.fonts = { "HDText" : f"{font_values[0]}" }
