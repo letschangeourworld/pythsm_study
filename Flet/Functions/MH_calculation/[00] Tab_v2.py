@@ -4,7 +4,7 @@ def main(page: ft.Page):
     page.fonts = {
         "HDSansText":"<font file path>"
     }
-    page.title = "Paint Manufacturing Engineering Team 1"
+    page.title = ""
     page.window_width = 1160
     page.window_height = 700
     page.padding = 0
