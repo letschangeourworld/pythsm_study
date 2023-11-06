@@ -214,6 +214,8 @@
 
 ### ft.FloatingActionButton
 공통항목
+   - ft.ElevatedButton 공통항목
+
 특화항목
    - icon: Optional[str] = None,
    - bgcolor: Optional[str] = None,
