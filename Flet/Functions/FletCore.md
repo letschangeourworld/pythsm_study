@@ -25,7 +25,7 @@
   - ft.Tabs
 
 ### ft.DataColumn이 받는 데이터
-  - self,
+  - self
   - label: Control,
   - ref=None,
   - visible: Optional[bool] = None,
