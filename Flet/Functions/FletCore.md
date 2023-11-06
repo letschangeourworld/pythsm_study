@@ -51,7 +51,7 @@
   - show_edit_icon: Optional[bool] = None,
 
 ### ft.Column이 받는 데이터
-  - self,
+  - self
   - *controls: Optional[List[Control]] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
