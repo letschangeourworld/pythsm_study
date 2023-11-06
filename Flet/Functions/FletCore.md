@@ -10,6 +10,7 @@
   - ft.DataColumn
   - ft.DataCell
   - ft.Page
+  - ft.Tab
 
 ### ft.ConstrainedControl을 데이터로 받는 클래스
   - ft.Stack
@@ -21,6 +22,7 @@
   - ft.FloatingActionButton
   - ft.FoamFieldControl
   - ft.GestureDetector
+  - ft.Tabs
 
 ### ft.Control이 받는 데이터
   - self,
@@ -268,7 +270,25 @@
    - suffix_text: Optional[str] = None,
    - suffix_style: Optional[TextStyle] = None,
 
-
+### ft.Tabs
+공통항목
+   - ft.ConstraindControl
+     
+특화항목
+   - tabs: Optional[List[Tab]] = None,
+   - selected_index: Optional[int] = None,
+   - scrollable: Optional[bool] = None,
+   - animation_duration: Optional[int] = None,
+   - divider_color: Optional[str] = None,
+   - indicator_color: Optional[str] = None,
+   - indicator_border_radius: BorderRadiusValue = None,
+   - indicator_border_side: Optional[BorderSide] = None,
+   - indicator_padding: PaddingValue = None,
+   - indicator_tab_size: Optional[bool] = None,
+   - label_color: Optional[str] = None,
+   - unselected_label_color: Optional[str] = None,
+   - overlay_color: Union[None, str, Dict[MaterialState, str]] = None,
+   - on_change=None,
 
 
 
