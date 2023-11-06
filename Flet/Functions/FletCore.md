@@ -210,8 +210,8 @@ ft.ElevatedButton이 받는 데이터
   - on_blur=None,
 
 ft.FloatingActionButton
-  공통항목
-  특화항목
+  - 공통항목
+  - 특화항목 -
    - icon: Optional[str] = None,
    - bgcolor: Optional[str] = None,
    - content: Optional[Control] = None,
