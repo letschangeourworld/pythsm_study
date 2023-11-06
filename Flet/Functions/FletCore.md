@@ -226,7 +226,7 @@
    - on_click=None,
 
 ### ft.FoamFieldControl
-ft.ConstrainedControl와 데이터 공통
+ft.ConstrainedControl와 데이터 공통 <br>
 특화항목
    - text_size: OptionalNumber = None,
    - text_style: Optional[TextStyle] = None,
