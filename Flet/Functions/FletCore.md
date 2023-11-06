@@ -62,7 +62,8 @@ ft.ConstrainedControl이 받는 데이터
    - on_animation_end=None,
 
 ft.Container가 받는 데이터
- 공통항목
+
+공통항목
   - self,
   - content: Optional[Control] = None,
   - ref: Optional[Ref] = None,
@@ -91,6 +92,7 @@ ft.Container가 받는 데이터
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - data: Any = None,
+
     특화항목
   - padding: PaddingValue = None,
   - margin: MarginValue = None,
