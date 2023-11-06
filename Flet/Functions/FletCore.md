@@ -1,9 +1,9 @@
 
 
-ft.Stack을 데이터로 받는 클래스
+### ft.Stack을 데이터로 받는 클래스
   - ft.UserControl
 
-ft.Control을 데이터로 받는 클래스
+### ft.Control을 데이터로 받는 클래스
   - ft.AlertDialog
   - ft.AppBar
   - ft.ConstrainedControl
@@ -11,7 +11,7 @@ ft.Control을 데이터로 받는 클래스
   - ft.DataCell
   - ft.Page
 
-ft.ConstrainedControl을 데이터로 받는 클래스
+### ft.ConstrainedControl을 데이터로 받는 클래스
   - ft.Card
   - ft.Column <- ScrollableControl을 데이터로도 받음
   - ft.Container
@@ -21,7 +21,7 @@ ft.ConstrainedControl을 데이터로 받는 클래스
   - ft.FoamFieldControl
   - ft.GestureDetector
 
-ft.Control이 받는 데이터
+### ft.Control이 받는 데이터
   - self,
   - ref: Optional[Ref] = None,
   - expand: Union[None, bool, int] = None,
@@ -32,7 +32,7 @@ ft.Control이 받는 데이터
   - disabled: Optional[bool] = None,
   - data: Any = None,
 
-ft.ConstrainedControl이 받는 데이터
+### ft.ConstrainedControl이 받는 데이터
    - self,
    - ref: Optional[Ref] = None,
    - expand: Union[None, bool, int] = None,
@@ -61,7 +61,7 @@ ft.ConstrainedControl이 받는 데이터
    - animate_offset: AnimationValue = None,
    - on_animation_end=None,
 
-ft.Container가 받는 데이터
+### ft.Container가 받는 데이터
 
 공통항목
   - self,
@@ -93,7 +93,7 @@ ft.Container가 받는 데이터
   - disabled: Optional[bool] = None,
   - data: Any = None,
 
-    특화항목
+특화항목
   - padding: PaddingValue = None,
   - margin: MarginValue = None,
   - alignment: Optional[Alignment] = None,
@@ -123,13 +123,13 @@ ft.Container가 받는 데이터
   - on_long_press=None,
   - on_hover=None,
 
-ft.Event 가 받는 데이터
+### ft.Event 가 받는 데이터
   - self,
   - target: str, 
   - name: str, 
   - data: str
 
-ft.ControlEvent가 받는 데이터 <- ft.Event
+### ft.ControlEvent가 받는 데이터 <- ft.Event
   - self,
   - target: str, 
   - name: str, 
@@ -137,7 +137,7 @@ ft.ControlEvent가 받는 데이터 <- ft.Event
   - control, 
   - page
 
-ft.FilledButton이 받는 데이터 <- ft.ElevatedButton
+### ft.FilledButton이 받는 데이터 <- ft.ElevatedButton
   공통항목
   - self,
   - text: Optional[str] = None,
@@ -164,7 +164,7 @@ ft.FilledButton이 받는 데이터 <- ft.ElevatedButton
   - on_long_press=None,
   - on_hover=None,
 
-ft.ElevatedButton이 받는 데이터
+### ft.ElevatedButton이 받는 데이터
   공통항목
   - self,
   - text: Optional[str] = None,
@@ -194,7 +194,8 @@ ft.ElevatedButton이 받는 데이터
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - data: Any = None,
-  특화항목
+
+특화항목
   - color: Optional[str] = None,
   - bgcolor: Optional[str] = None,
   - elevation: OptionalNumber = None,
@@ -211,9 +212,9 @@ ft.ElevatedButton이 받는 데이터
   - on_focus=None,
   - on_blur=None,
 
-ft.FloatingActionButton
-  - 공통항목
-  - 특화항목 -
+### ft.FloatingActionButton
+공통항목
+특화항목
    - icon: Optional[str] = None,
    - bgcolor: Optional[str] = None,
    - content: Optional[Control] = None,
@@ -224,7 +225,7 @@ ft.FloatingActionButton
    - url_target: Optional[str] = None,
    - on_click=None,
 
-ft.FoamFieldControl
+### ft.FoamFieldControl
    - ft.ConstrainedControl 공통 데이터
   특화항목
    - text_size: OptionalNumber = None,
