@@ -1,9 +1,9 @@
 
 
-### ft.Stack을 데이터로 받는 클래스
+### ft.Stack을 받는 클래스
   - ft.UserControl
 
-### ft.Control을 데이터로 받는 클래스
+### ft.Control을 받는 클래스
   - ft.AlertDialog
   - ft.AppBar
   - ft.ConstrainedControl
@@ -12,10 +12,10 @@
   - ft.Page
   - ft.Tab
 
-### ft.ConstrainedControl을 데이터로 받는 클래스
+### ft.ConstrainedControl을 받는 클래스
   - ft.Stack
   - ft.Card
-  - ft.Column <- ScrollableControl을 데이터로도 받음
+  - ft.Column <- ScrollableControl도 받음
   - ft.Container
   - ft.ElevatedButton
   - ft.FletApp
@@ -24,7 +24,7 @@
   - ft.GestureDetector
   - ft.Tabs
 
-### ft.DataColumn이 받는 데이터
+### ft.DataColumn
   - self
   - label: Control,
   - ref=None,
@@ -35,7 +35,7 @@
   - tooltip: Optional[str] = None,
   - on_sort=None,
 
-### ft.DataCell이 받는 데이터
+### ft.DataCell
   - self,
   - *content: Control*,
   - ref=None,
@@ -50,7 +50,7 @@
   - placeholder: Optional[bool] = None,
   - show_edit_icon: Optional[bool] = None,
 
-### ft.Column이 받는 데이터
+### ft.Column
   - self
   - *controls: Optional[List[Control]] = None*,
   - ref: Optional[Ref] = None,
@@ -92,12 +92,12 @@
   - run_spacing: OptionalNumber = None,
 
 
-### ft.UserControl이 받는 데이터
+### ft.UserControl
   - ft.Stack
-  - Control 이나 List[Control] 형식의 데이터를 값으로 받는다.
+  - Control or List[Control]
 
 
-### ft.Stack이 받는 데이터
+### ft.Stack
 
   - ft.ConstrainedControl
   - self,
@@ -129,7 +129,7 @@
   - *data: Any = None*,
   - clip_behavior: Optional[ClipBehavior] = None,
 
-### ft.Control이 받는 데이터
+### ft.Control
   - self,
   - ref: Optional[Ref] = None,
   - expand: Union[None, bool, int] = None,
@@ -140,7 +140,6 @@
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
 
-상속데이터
   - self.__page: Optional[Page] = None
   - self.__attrs: Dict[str, Any] = {}
   - self.__previous_children = []
@@ -156,7 +155,7 @@
   - self.data = data
   - self.__event_handlers = {}
 
-### ft.ConstrainedControl이 받는 데이터
+### ft.ConstrainedControl
    - self,
    - ref: Optional[Ref] = None,
    - expand: Union[None, bool, int] = None,
@@ -185,9 +184,9 @@
    - animate_offset: AnimationValue = None,
    - on_animation_end=None,
 
-### ft.Container가 받는 데이터
+### ft.Container
 
-공통항목
+공통
   - self,
   - *content: Optional[Control] = None*,
   - ref: Optional[Ref] = None,
@@ -217,7 +216,7 @@
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
 
-특화항목
+특화
   - *padding: PaddingValue = None*,
   - *margin: MarginValue = None*,
   - *alignment: Optional[Alignment] = None*,
@@ -247,13 +246,13 @@
   - on_long_press=None,
   - on_hover=None,
 
-### ft.Event 가 받는 데이터
+### ft.Event
   - self,
   - target: str, 
   - name: str, 
   - **data: str**
 
-### ft.ControlEvent가 받는 데이터 <- ft.Event
+### ft.ControlEvent <- ft.Event
   - self,
   - target: str, 
   - name: str, 
@@ -261,8 +260,8 @@
   - *control**, 
   - *page**
 
-### ft.FilledButton이 받는 데이터 <- ft.ElevatedButton
-  공통항목
+### ft.FilledButton <- ft.ElevatedButton
+  공통
   - self,
   - *text: Optional[str] = None*,
   - ref: Optional[Ref] = None,
@@ -276,7 +275,7 @@
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
-  특화항목
+  특화
   - icon: Optional[str] = None,
   - icon_color: Optional[str] = None,
   - style: Optional[ButtonStyle] = None,
@@ -288,8 +287,8 @@
   - on_long_press=None,
   - on_hover=None,
 
-### ft.ElevatedButton이 받는 데이터
-  공통항목
+### ft.ElevatedButton
+  공통
   - self,
   - *text: Optional[str] = None*
   - ref: Optional[Ref] = None,
@@ -319,7 +318,7 @@
   - disabled: Optional[bool] = None,
   - **data: Any = None**,
 
-특화항목
+특화
   - color: Optional[str] = None,
   - bgcolor: Optional[str] = None,
   - *elevation: OptionalNumber = None*,
@@ -337,10 +336,10 @@
   - on_blur=None,
 
 ### ft.FloatingActionButton
-공통항목
-   - ft.ElevatedButton 공통항목
+공통
+   - ft.ElevatedButton 공통
 
-특화항목
+특화
    - icon: Optional[str] = None,
    - bgcolor: Optional[str] = None,
    - *content: Optional[Control] = None*,
@@ -352,10 +351,10 @@
    - **on_click=None**,
 
 ### ft.FoamFieldControl
-공통항목
-   - ft.ConstrainedControl와 데이터 공통
+공통
+   - ft.ConstrainedControl와 공통
 
-특화항목
+특화
    - *text_size: OptionalNumber = None*,
    - *text_style: Optional[TextStyle] = None*,
    - *label: Optional[str] = None*,
@@ -392,10 +391,10 @@
    - suffix_style: Optional[TextStyle] = None,
 
 ### ft.Tabs
-공통항목
+공통
    - ft.ConstraindControl
      
-특화항목
+특화
    - *tabs: Optional[List[Tab]] = None*,
    - *selected_index: Optional[int] = None*,
    - *scrollable: Optional[bool] = None*,
