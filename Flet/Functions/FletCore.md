@@ -77,13 +77,11 @@
   - on_animation_end=None,
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
-  - data: Any = None,
-        
+  - data: Any = None    
   - scroll: Optional[ScrollMode] = None,
   - auto_scroll: Optional[bool] = None,
   - on_scroll_interval: OptionalNumber = None,
   - on_scroll: Any = None,
-  
   - alignment: MainAxisAlignment = MainAxisAlignment.NONE,
   - horizontal_alignment: CrossAxisAlignment = CrossAxisAlignment.NONE,
   - spacing: OptionalNumber = None,
@@ -91,11 +89,9 @@
   - wrap: Optional[bool] = None,
   - run_spacing: OptionalNumber = None,
 
-
 ### ft.UserControl
   - ft.Stack
   - Control or List[Control]
-
 
 ### ft.Stack
 
