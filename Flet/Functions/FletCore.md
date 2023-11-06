@@ -11,8 +11,6 @@
   - ft.DataCell
   - ft.Page
   - ft.Tab
-    
-  
 
 ### ft.ConstrainedControl을 데이터로 받는 클래스
   - ft.Stack
@@ -33,7 +31,6 @@
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
-  
   - numeric: Optional[bool] = None,
   - tooltip: Optional[str] = None,
   - on_sort=None,
@@ -45,7 +42,6 @@
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - data: Any = None,
-  
   - on_double_tap=None,
   - on_long_press=None,
   - *on_tap=None*,
