@@ -192,7 +192,7 @@
 
 ### ft.Container
 
-공통
+
   - self,
   - *content: Optional[Control] = None*,
   - ref: Optional[Ref] = None,
@@ -222,7 +222,6 @@
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
 
-특화
   - *padding: PaddingValue = None*,
   - *margin: MarginValue = None*,
   - *alignment: Optional[Alignment] = None*,
@@ -267,7 +266,7 @@
   - *page**
 
 ### ft.FilledButton <- ft.ElevatedButton
-  공통
+  
   - self,
   - *text: Optional[str] = None*,
   - ref: Optional[Ref] = None,
@@ -281,7 +280,7 @@
   - visible: Optional[bool] = None,
   - disabled: Optional[bool] = None,
   - *data: Any = None*,
-  특화
+  
   - icon: Optional[str] = None,
   - icon_color: Optional[str] = None,
   - style: Optional[ButtonStyle] = None,
@@ -294,7 +293,7 @@
   - on_hover=None,
 
 ### ft.ElevatedButton
-  공통
+  
   - self,
   - *text: Optional[str] = None*
   - ref: Optional[Ref] = None,
@@ -324,7 +323,6 @@
   - disabled: Optional[bool] = None,
   - **data: Any = None**,
 
-특화
   - color: Optional[str] = None,
   - bgcolor: Optional[str] = None,
   - *elevation: OptionalNumber = None*,
@@ -342,10 +340,8 @@
   - on_blur=None,
 
 ### ft.FloatingActionButton
-공통
-   - ft.ElevatedButton 공통
 
-특화
+   - ft.ElevatedButton
    - icon: Optional[str] = None,
    - bgcolor: Optional[str] = None,
    - *content: Optional[Control] = None*,
@@ -357,10 +353,8 @@
    - **on_click=None**,
 
 ### ft.Tabs
-공통
+
    - ft.ConstraindControl
-     
-특화
    - *tabs: Optional[List[Tab]] = None*,
    - *selected_index: Optional[int] = None*,
    - *scrollable: Optional[bool] = None*,
