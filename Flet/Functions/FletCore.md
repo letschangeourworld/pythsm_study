@@ -319,8 +319,6 @@
    - url_target: Optional[str] = None,
    - **on_click=None**,
 
-
-
 ### ft.Tabs
 공통
    - ft.ConstraindControl
@@ -340,6 +338,15 @@
    - unselected_label_color: Optional[str] = None,
    - overlay_color: Union[None, str, Dict[MaterialState, str]] = None,
    - *on_change=None*,
+
+### ft.Tab
+
+   - self,
+   - text: Optional[str] = None,
+   - content: Optional[Control] = None,
+   - tab_content: Optional[Control] = None,
+   - ref: Optional[Ref] = None,
+   - icon: Optional[str] = None,
 
 ### ft.DataTable
    - self,
@@ -671,6 +678,12 @@
    - on_change=None,
    - on_focus=None,
    - on_blur=None,
+
+
+
+
+
+
 
 
 
