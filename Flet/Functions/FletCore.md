@@ -26,7 +26,6 @@
 ### ft.Card
 
   - ft.ConstrainedControl
-  - self,
   - content: Optional[Control] = None,
   - ref: Optional[Ref] = None,
   - width: OptionalNumber = None,
@@ -61,7 +60,7 @@
   - surface_tint_color: Optional[str] = None,
 
 ### ft.Column
-  - self
+
   - *controls: Optional[List[Control]] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
@@ -106,7 +105,6 @@
 ### ft.Stack
 
   - ft.ConstrainedControl
-  - self,
   - *controls: Optional[List[Control]] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
@@ -137,7 +135,6 @@
 
 ### ft.Control
 
-  - self,
   - ref: Optional[Ref] = None,
   - expand: Union[None, bool, int] = None,
   - col: Optional[ResponsiveNumber] = None,
@@ -162,7 +159,7 @@
   - self.__event_handlers = {}
 
 ### ft.ConstrainedControl
-   - self,
+
    - ref: Optional[Ref] = None,
    - expand: Union[None, bool, int] = None,
    - col: Optional[ResponsiveNumber] = None,
@@ -192,8 +189,6 @@
 
 ### ft.Container
 
-
-  - self,
   - *content: Optional[Control] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
@@ -252,13 +247,13 @@
   - on_hover=None,
 
 ### ft.Event
-  - self,
+
   - target: str, 
   - name: str, 
   - **data: str**
 
 ### ft.ControlEvent <- ft.Event
-  - self,
+
   - target: str, 
   - name: str, 
   - *data: str**, 
@@ -266,8 +261,7 @@
   - *page**
 
 ### ft.FilledButton <- ft.ElevatedButton
-  
-  - self,
+
   - *text: Optional[str] = None*,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
@@ -293,8 +287,7 @@
   - on_hover=None,
 
 ### ft.ElevatedButton
-  
-  - self,
+
   - *text: Optional[str] = None*
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
@@ -372,7 +365,6 @@
 
 ### ft.Tab
 
-   - self,
    - text: Optional[str] = None,
    - content: Optional[Control] = None,
    - tab_content: Optional[Control] = None,
@@ -380,7 +372,7 @@
    - icon: Optional[str] = None,
 
 ### ft.DataTable
-   - self,
+
    - columns: Optional[List[DataColumn]] = None,
    - rows: Optional[List[DataRow]] = None,
    - ref: Optional[Ref] = None,
@@ -434,7 +426,7 @@
    - on_select_all=None,
 
 ### ft.DataColumn
-  - self
+
   - label: Control,
   - ref=None,
   - visible: Optional[bool] = None,
@@ -445,7 +437,7 @@
   - on_sort=None,
 
 ### ft.DataRow
-  - self,
+
   - cells: Optional[List[Control]] = None,
   - ref=None,
   - visible: Optional[bool] = None,
@@ -458,7 +450,6 @@
 
 ### ft.DataCell
 
-  - self,
   - *content: Control*,
   - ref=None,
   - visible: Optional[bool] = None,
@@ -474,7 +465,6 @@
 
 ### ft.Text
 
-  - self,
   - value: Optional[str] = None,
   - ref: Optional[Ref] = None,
   - key: Optional[str] = None,
@@ -519,6 +509,7 @@
   - semantics_label: Optional[str] = None,
 
 ### ft.FoamFieldControl
+   
    - ft.ConstrainedControl와 공통
    - *text_size: OptionalNumber = None*,
    - *text_style: Optional[TextStyle] = None*,
@@ -556,6 +547,7 @@
    - suffix_style: Optional[TextStyle] = None,
 
 ### ft.TextField
+   
    - ft.FoamFieldControl
    - self,
    - ref: Optional[Ref] = None,
@@ -644,7 +636,6 @@
 ### ft.DropDown
    
    - ft.FoamFieldControl
-   - self,
    - ref: Optional[Ref] = None,
    - key: Optional[str] = None,
    - width: OptionalNumber = None,
