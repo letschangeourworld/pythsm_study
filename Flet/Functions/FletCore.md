@@ -1,5 +1,4 @@
 
-
 ### ft.Stack을 받는 클래스
   - ft.UserControl
 
@@ -23,32 +22,6 @@
   - ft.FoamFieldControl
   - ft.GestureDetector
   - ft.Tabs
-
-### ft.DataColumn
-  - self
-  - label: Control,
-  - ref=None,
-  - visible: Optional[bool] = None,
-  - disabled: Optional[bool] = None,
-  - *data: Any = None*,
-  - numeric: Optional[bool] = None,
-  - tooltip: Optional[str] = None,
-  - on_sort=None,
-
-### ft.DataCell
-  - self,
-  - *content: Control*,
-  - ref=None,
-  - visible: Optional[bool] = None,
-  - disabled: Optional[bool] = None,
-  - data: Any = None,
-  - on_double_tap=None,
-  - on_long_press=None,
-  - *on_tap=None*,
-  - on_tap_cancel=None,
-  - on_tap_down=None,
-  - placeholder: Optional[bool] = None,
-  - show_edit_icon: Optional[bool] = None,
 
 ### ft.Column
   - self
@@ -405,6 +378,102 @@
    - unselected_label_color: Optional[str] = None,
    - overlay_color: Union[None, str, Dict[MaterialState, str]] = None,
    - *on_change=None*,
+
+### ft.DataTable
+   - self,
+   - columns: Optional[List[DataColumn]] = None,
+   - rows: Optional[List[DataRow]] = None,
+   - ref: Optional[Ref] = None,
+   - key: Optional[str] = None,
+   - width: OptionalNumber = None,
+   - height: OptionalNumber = None,
+   - left: OptionalNumber = None,
+   - top: OptionalNumber = None,
+   - right: OptionalNumber = None,
+   - bottom: OptionalNumber = None,
+   - expand: Union[None, bool, int] = None,
+   - col: Optional[ResponsiveNumber] = None,
+   - opacity: OptionalNumber = None,
+   - rotate: RotateValue = None,
+   - scale: ScaleValue = None,
+   - offset: OffsetValue = None,
+   - aspect_ratio: OptionalNumber = None,
+   - animate_opacity: AnimationValue = None,
+   - animate_size: AnimationValue = None,
+   - animate_position: AnimationValue = None,
+   - animate_rotation: AnimationValue = None,
+   - animate_scale: AnimationValue = None,
+   - animate_offset: AnimationValue = None,
+   - on_animation_end=None,
+   - tooltip: Optional[str] = None,
+   - visible: Optional[bool] = None,
+   - disabled: Optional[bool] = None,
+   - data: Any = None,
+
+   - border: Optional[Border] = None,
+   - border_radius: BorderRadiusValue = None,
+   - horizontal_lines: Optional[BorderSide] = None,
+   - vertical_lines: Optional[BorderSide] = None,
+   - checkbox_horizontal_margin: OptionalNumber = None,
+   - column_spacing: OptionalNumber = None,
+   - data_row_color: Union[None, str, Dict[MaterialState, str]] = None,
+   - data_row_min_height: OptionalNumber = None,
+   - data_row_max_height: OptionalNumber = None,
+   - data_text_style: Optional[TextStyle] = None,
+   - bgcolor: Optional[str] = None,
+   - gradient: Optional[Gradient] = None,
+   - divider_thickness: OptionalNumber = None,
+   - heading_row_color: Union[None, str, Dict[MaterialState, str]] = None,
+   - heading_row_height: OptionalNumber = None,
+   - heading_text_style: Optional[TextStyle] = None,
+   - horizontal_margin: OptionalNumber = None,
+   - show_bottom_border: Optional[bool] = None,
+   - show_checkbox_column: Optional[bool] = None,
+   - sort_ascending: Optional[bool] = None,
+   - sort_column_index: Optional[int] = None,
+   - on_select_all=None,
+
+### ft.DataColumn
+  - self
+  - label: Control,
+  - ref=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - *data: Any = None*,
+  - numeric: Optional[bool] = None,
+  - tooltip: Optional[str] = None,
+  - on_sort=None,
+
+### ft.DataRow
+  - self,
+  - cells: Optional[List[Control]] = None,
+  - ref=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - data: Any = None,
+  - color: Union[None, str, Dict[MaterialState, str]] = None,
+  - selected: Optional[bool] = None,
+  - on_long_press=None,
+  - on_select_changed=None,
+
+### ft.DataCell
+  - self,
+  - *content: Control*,
+  - ref=None,
+  - visible: Optional[bool] = None,
+  - disabled: Optional[bool] = None,
+  - data: Any = None,
+  - on_double_tap=None,
+  - on_long_press=None,
+  - *on_tap=None*,
+  - on_tap_cancel=None,
+  - on_tap_down=None,
+  - placeholder: Optional[bool] = None,
+  - show_edit_icon: Optional[bool] = None,
+
+
+
+
 
 
 
