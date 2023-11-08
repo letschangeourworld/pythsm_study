@@ -8,7 +8,7 @@ import code_ref as cr
 # font
 font_style: dict = {
     "main": {
-        "HDText" : "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\Windows\\Fonts\\HyundaiSansTextKRRegular.ttf"
+        "HDText" : ""
     }
 }
 
