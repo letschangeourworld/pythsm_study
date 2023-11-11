@@ -1,5 +1,6 @@
 
 '''
+
 [Basic Functions Reference]
 □ page     : - Whole page of window
              - padding,window_width,window_height,appbar,
