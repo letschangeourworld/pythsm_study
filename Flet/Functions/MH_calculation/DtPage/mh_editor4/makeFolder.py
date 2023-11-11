@@ -10,4 +10,15 @@ def createFolder(directory):
         print('Error: Creating directory. ' +  directory) 
     
 
-createFolder('/aaa')
+###############
+
+
+import os
+
+path = './projects'
+
+try:
+    os.mkdir(path)
+    print("Folder %s created!" % path)
+except FileExistsError:
+    print("Folder %s already exists" % path)
