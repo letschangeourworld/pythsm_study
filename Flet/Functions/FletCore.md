@@ -26,7 +26,7 @@
 ### ft.Card
 
   - ft.ConstrainedControl
-  - <u><b>content</b></u>: Optional[Control] = None,
+  - <b><u>content</u></b>: Optional[Control] = None,
   - ref: Optional[Ref] = None,
   - width: OptionalNumber = None,
   - height: OptionalNumber = None,
