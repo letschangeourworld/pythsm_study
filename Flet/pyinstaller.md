@@ -18,7 +18,7 @@
      - pyinstaller -w  or pyinstaller -noconsole : 실행파일 실행시 콘솔창이 뜨는 경우에 사용 (요즘엔 안 뜸)
         → 프롬프트에서 pyinstaller -w -F aaa.py 과 같이 입력실행
 8. 이름지정방법
-     - -n NAME 으로 실행 → pyinstaller -w -F -n beautifulApp.exe
+     - -n NAME 으로 실행 → pyinstaller -w -F -n beautifulApp.exe aaa.py
      - 맨 위에서 기본실행시 파일이름은 aaa로 됨
 9. 아이콘 설정방법 : 탐색창에서 보여지는 아이콘 설정하는 방법
      - pyinstaller -w -F --icon=img.ico aaa.py  (이미지 아이콘 파일명 : img.ico)
