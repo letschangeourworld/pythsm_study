@@ -4,10 +4,10 @@
 2. Windows 8 이상, Mac OS X 10.7 이상, Linux
 3. 각 운영체제에서 compile된 실행파일은 그 운영체제에서만 사용가능
 
-사용진행과정
-1. pip install pyinstaller
-2. pyinstaller --version
-3. pip install --upgrade pyinstaller
+사용법
+1. 설치 : pip install pyinstaller
+2. 버전확인 : pyinstaller --version
+3. 버전업그레이드 : pip install --upgrade pyinstaller
 4. 명령프롬프트에서 pyinstaller aaa.py 로 실행
 5. 해당폴더에 다음 폴더와 파일 생성됨
      - folders : build, dist
