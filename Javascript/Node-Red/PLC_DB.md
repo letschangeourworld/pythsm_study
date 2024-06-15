@@ -18,14 +18,14 @@ node-red-node-mysql (for MySQL database interaction)
 
 Here’s an example Node-RED flow that accomplishes this:
 
-1.Install required Node-RED nodes: Run the following commands in your Node-RED directory:
+1. Install required Node-RED nodes: Run the following commands in your Node-RED directory:
 
 ```
 npm install node-red-contrib-modbustcp
 npm install node-red-node-mysql
 ```
 
-2.MySQL table creation:
+2. MySQL table creation:
 
 ```
 CREATE DATABASE plc_data;
@@ -37,7 +37,7 @@ CREATE TABLE readings (
 );
 ```
 
-3.	Node-RED Flow:
+3. Node-RED Flow:
 
 ```
 [
@@ -148,22 +148,22 @@ CREATE TABLE readings (
 
 Explanation:
 
-1.modbustcp-read node:
+1. modbustcp-read node:
 
   ▶️ Reads data from the PLC at specified intervals (every 5 seconds in this example).<br>
   ▶️ The server configuration node (modbustcp-server) specifies the PLC IP address and port.
 
-2.Function node (Format Data):
+2. Function node (Format Data):
 
   ▶️ Prepares the SQL query for inserting data into the MySQL database.<br>
   ▶️ Formats the payload to match the query parameters.
 
-3.MySQL node:
+3. MySQL node:
 
   ▶️ Executes the SQL query to insert the data into the MySQL database.<br>
   ▶️ The mydb configuration node specifies the MySQL database connection details.
 
-4.Debug node:
+4. Debug node:
 
   ▶️ Displays the data read from the PLC in the debug pane of Node-RED, allowing you to verify that data is being collected correctly.
 
@@ -333,24 +333,24 @@ Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQ
 
 Explanation of the Flow:
 
-📌 MC Protocol Node (mcprotocol in):<br>
+1. MC Protocol Node (mcprotocol in):<br>
    ▶️ This node connects to the MELSEC PLC and reads data from address D0.<br>
    ▶️ Configuration for connection (host, port, protocol) should match your PLC settings.<br>
 
-📌 Debug Node (debug - PLC Data):<br>
+2. Debug Node (debug - PLC Data):<br>
 	  ▶️ Used to display the incoming data from the PLC for debugging purposes.<br>
 
-📌 Function Node (function - Format Data):<br>
+3. Function Node (function - Format Data):<br>
 	  ▶️ Formats the incoming PLC data into an SQL INSERT statement.<br>
 
-📌 Debug Node (debug - SQL Query):<br>
+4. Debug Node (debug - SQL Query):<br>
 	  ▶️ Displays the formatted SQL query to verify its correctness before insertion into the database.<br>
 
-📌 MySQL Node (mysql):<br>
+5. MySQL Node (mysql):<br>
 	  ▶️ Executes the SQL query to insert data into the MySQL table.<br>
 	  ▶️ Configured with your MySQL connection details.
 
-📌 Debug Node (debug - MySQL Response):<br>
+6. Debug Node (debug - MySQL Response):<br>
   	▶️ Displays the response from the MySQL database to verify if the data was inserted successfully.
 
 Setting Up the Flow:
