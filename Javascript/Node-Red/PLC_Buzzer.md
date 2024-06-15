@@ -2,15 +2,19 @@
 To create a Node-RED flow for connecting a Mitsubishi MELSEC PLC and sending bit data to a buzzer and a 7-segment display on a PC running Windows OS, follow these steps. This example assumes you have the necessary Node-RED nodes installed for Mitsubishi MELSEC PLC communication and the appropriate hardware setup.
 
 1.	Install Necessary Nodes:
+```
+	•	node-red-contrib-melsec 
+for Mitsubishi MELSEC PLC communication.
 
-	•	node-red-contrib-melsec for Mitsubishi MELSEC PLC communication.
+	•	node-red-dashboard 
+for creating a UI to display data.
 
-	•	node-red-dashboard for creating a UI to display data.
+	•	node-red-contrib-buzzer 
+for controlling the buzzer (if available).
 
-	•	node-red-contrib-buzzer for controlling the buzzer (if available).
-
-	•	node-red-contrib-7segment for 7-segment display (if available).
-
+	•	node-red-contrib-7segment 
+for 7-segment display (if available).
+```
 2.	Node-RED Flow:
 The flow will have nodes to:
 
