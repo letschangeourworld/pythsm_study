@@ -3,12 +3,14 @@ To connect a Mitsubishi MELSEC PLC to a MySQL database using Node-RED, we need t
 1.	Set up Node-RED environment: Ensure you have Node-RED installed and running.
 
 2.	Install necessary Node-RED nodes:
-	• node-red-contrib-modbustcp (for communicating with the PLC)
-	• node-red-node-mysql (for MySQL database interaction)
+
+  	• node-red-contrib-modbustcp (for communicating with the PLC)
+	  • node-red-node-mysql (for MySQL database interaction)
 
 3.	Create MySQL table: We need to create a table in the MySQL database to store the PLC data.
 
 4.	Design the Node-RED flow:
+
 	• Connect to the PLC and read data.
 	• Format the data and insert it into the MySQL database.
 	• Include a debug node to verify data collection.
@@ -33,6 +35,7 @@ CREATE TABLE readings (
 
 3.	Node-RED Flow:
 
+'''
 [
     {
         "id": "a1d1b77c.b5c208",
@@ -137,22 +140,27 @@ CREATE TABLE readings (
         "charset": "UTF8"
     }
 ]
+'''
 
 Explanation:
 
 1.modbustcp-read node:
+
   • Reads data from the PLC at specified intervals (every 5 seconds in this example).
   • The server configuration node (modbustcp-server) specifies the PLC IP address and port.
 
 2.Function node (Format Data):
+
   • Prepares the SQL query for inserting data into the MySQL database.
   • Formats the payload to match the query parameters.
 
 3.MySQL node:
+
   • Executes the SQL query to insert the data into the MySQL database.
   • The mydb configuration node specifies the MySQL database connection details.
 
 4.Debug node:
+
   • Displays the data read from the PLC in the debug pane of Node-RED, allowing you to verify that data is being collected correctly.
 
 This flow continuously reads data from the PLC and stores it into a MySQL database. The debug node helps ensure that the data is being collected correctly from the PLC.
@@ -162,6 +170,7 @@ This flow continuously reads data from the PLC and stores it into a MySQL databa
 To connect a Mitsubishi Electric PLC (MELSEC) to a MySQL database using Node-RED, and to store data into the MySQL database while including debugging steps, follow the flow and steps below:
 
 Prerequisites:
+
 	1.	Node-RED installed on your system.
 	2.	MySQL server set up and running.
 	3.	Node-RED nodes installed for MySQL (node-red-node-mysql) and MELSEC PLC (node-red-contrib-mcprotocol).
@@ -176,6 +185,7 @@ npm install node-red-contrib-mcprotocol
 2.	Create the MySQL table:
 You need to create a table in your MySQL database to store the PLC data. Below is an example SQL command to create a table:
 
+'''
 CREATE DATABASE IF NOT EXISTS plc_data;
 USE plc_data;
 
@@ -184,10 +194,12 @@ CREATE TABLE IF NOT EXISTS melsec_data (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     plc_value VARCHAR(255)
 );
+'''
 
 3.	Node-RED Flow:
 Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQL database, and includes debug nodes to check the data:
 
+'''
 [
     {
         "id": "d5e9a68a.f72ac8",
@@ -312,11 +324,12 @@ Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQ
         "charset": "UTF8"
     }
 ]
+'''
 
 Explanation of the Flow:
 
-	•	MC Protocol Node (mcprotocol in):
-	•	This node connects to the MELSEC PLC and reads data from address D0.
+•	MC Protocol Node (mcprotocol in):
+•	This node connects to the MELSEC PLC and reads data from address D0.
 	•	Configuration for connection (host, port, protocol) should match your PLC settings.
 	•	Debug Node (debug - PLC Data):
 	•	Used to display the incoming data from the PLC for debugging purposes.
