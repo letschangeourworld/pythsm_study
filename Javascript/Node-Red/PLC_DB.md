@@ -25,6 +25,7 @@ npm install node-red-node-mysql
 
 2.MySQL table creation:
 
+```
 CREATE DATABASE plc_data;
 USE plc_data;
 CREATE TABLE readings (
@@ -32,10 +33,12 @@ CREATE TABLE readings (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     plc_value INT
 );
+```
 
 3.	Node-RED Flow:
 
-'''[
+```
+[
     {
         "id": "a1d1b77c.b5c208",
         "type": "tab",
@@ -139,7 +142,7 @@ CREATE TABLE readings (
         "charset": "UTF8"
     }
 ]
-'''
+```
 
 Explanation:
 
@@ -184,7 +187,7 @@ npm install node-red-contrib-mcprotocol
 2.	Create the MySQL table:
 You need to create a table in your MySQL database to store the PLC data. Below is an example SQL command to create a table:
 
-'''
+```
 CREATE DATABASE IF NOT EXISTS plc_data;
 USE plc_data;
 
@@ -193,12 +196,12 @@ CREATE TABLE IF NOT EXISTS melsec_data (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     plc_value VARCHAR(255)
 );
-'''
+```
 
 3.	Node-RED Flow:
 Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQL database, and includes debug nodes to check the data:
 
-'''
+```
 [
     {
         "id": "d5e9a68a.f72ac8",
@@ -323,7 +326,7 @@ Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQ
         "charset": "UTF8"
     }
 ]
-'''
+```
 
 Explanation of the Flow:
 
