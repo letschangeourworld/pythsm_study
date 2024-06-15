@@ -5,16 +5,16 @@ To connect a Mitsubishi MELSEC PLC to a MySQL database using Node-RED, we need t
 
 2.	Install necessary Node-RED nodes:
 
- • node-red-contrib-modbustcp (for communicating with the PLC) <br>
-	• node-red-node-mysql (for MySQL database interaction)
+  • node-red-contrib-modbustcp (for communicating with the PLC) <br>
+	 • node-red-node-mysql (for MySQL database interaction)
 
 3.	Create MySQL table: We need to create a table in the MySQL database to store the PLC data.
 
 4.	Design the Node-RED flow:
 
-	• Connect to the PLC and read data.<br>
-	• Format the data and insert it into the MySQL database.<br>
-	• Include a debug node to verify data collection.
+ 	• Connect to the PLC and read data.<br>
+	 • Format the data and insert it into the MySQL database.<br>
+	 • Include a debug node to verify data collection.
 
 
 Here’s an example Node-RED flow that accomplishes this:
