@@ -1,27 +1,29 @@
+
 To connect a Mitsubishi MELSEC PLC to a MySQL database using Node-RED, we need to go through the following steps:
 
 1.	Set up Node-RED environment: Ensure you have Node-RED installed and running.
 
 2.	Install necessary Node-RED nodes:
 
-  	• node-red-contrib-modbustcp (for communicating with the PLC)
+  	• node-red-contrib-modbustcp (for communicating with the PLC) <br>
 	  • node-red-node-mysql (for MySQL database interaction)
 
 3.	Create MySQL table: We need to create a table in the MySQL database to store the PLC data.
 
 4.	Design the Node-RED flow:
 
-	• Connect to the PLC and read data.
-	• Format the data and insert it into the MySQL database.
+	• Connect to the PLC and read data.<br>
+	• Format the data and insert it into the MySQL database.<br>
 	• Include a debug node to verify data collection.
 
 
 Here’s an example Node-RED flow that accomplishes this:
 
 1.Install required Node-RED nodes: Run the following commands in your Node-RED directory:
-
+```
 npm install node-red-contrib-modbustcp
 npm install node-red-node-mysql
+```
 
 2.MySQL table creation:
 
@@ -148,17 +150,17 @@ Explanation:
 
 1.modbustcp-read node:
 
-  • Reads data from the PLC at specified intervals (every 5 seconds in this example).
+  • Reads data from the PLC at specified intervals (every 5 seconds in this example).<br>
   • The server configuration node (modbustcp-server) specifies the PLC IP address and port.
 
 2.Function node (Format Data):
 
-  • Prepares the SQL query for inserting data into the MySQL database.
+  • Prepares the SQL query for inserting data into the MySQL database.<br>
   • Formats the payload to match the query parameters.
 
 3.MySQL node:
 
-  • Executes the SQL query to insert the data into the MySQL database.
+  • Executes the SQL query to insert the data into the MySQL database.<br>
   • The mydb configuration node specifies the MySQL database connection details.
 
 4.Debug node:
@@ -173,9 +175,9 @@ To connect a Mitsubishi Electric PLC (MELSEC) to a MySQL database using Node-RED
 
 Prerequisites:
 
-	1.	Node-RED installed on your system.
-	2.	MySQL server set up and running.
-	3.	Node-RED nodes installed for MySQL (node-red-node-mysql) and MELSEC PLC (node-red-contrib-mcprotocol).
+1.	Node-RED installed on your system.<br>
+2.	MySQL server set up and running.<br>
+3.	Node-RED nodes installed for MySQL (node-red-node-mysql) and MELSEC PLC (node-red-contrib-mcprotocol).
 
 Step-by-Step Node-RED Flow
 
@@ -330,26 +332,33 @@ Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQ
 
 Explanation of the Flow:
 
-•	MC Protocol Node (mcprotocol in):
-•	This node connects to the MELSEC PLC and reads data from address D0.
-	•	Configuration for connection (host, port, protocol) should match your PLC settings.
-	•	Debug Node (debug - PLC Data):
-	•	Used to display the incoming data from the PLC for debugging purposes.
-	•	Function Node (function - Format Data):
-	•	Formats the incoming PLC data into an SQL INSERT statement.
-	•	Debug Node (debug - SQL Query):
-	•	Displays the formatted SQL query to verify its correctness before insertion into the database.
-	•	MySQL Node (mysql):
-	•	Executes the SQL query to insert data into the MySQL table.
-	•	Configured with your MySQL connection details.
-	•	Debug Node (debug - MySQL Response):
-	•	Displays the response from the MySQL database to verify if the data was inserted successfully.
+•	MC Protocol Node (mcprotocol in):<br>
+  •	This node connects to the MELSEC PLC and reads data from address D0.<br>
+  •	Configuration for connection (host, port, protocol) should match your PLC settings.<br>
+
+•	Debug Node (debug - PLC Data):<br>
+	  •	Used to display the incoming data from the PLC for debugging purposes.<br>
+
+•	Function Node (function - Format Data):<br>
+	  •	Formats the incoming PLC data into an SQL INSERT statement.<br>
+
+•	Debug Node (debug - SQL Query):<br>
+	  •	Displays the formatted SQL query to verify its correctness before insertion into the database.<br>
+
+•	MySQL Node (mysql):<br>
+	  •	Executes the SQL query to insert data into the MySQL table.<br>
+	  •	Configured with your MySQL connection details.
+
+•	Debug Node (debug - MySQL Response):<br>
+  	•	Displays the response from the MySQL database to verify if the data was inserted successfully.
 
 Setting Up the Flow:
 
-	1.	Configure the PLC connection: Update the IP address and port in the mcprotocol-connection configuration.
-	2.	Configure the MySQL connection: Update the host, port, and database name in the MySQLdatabase configuration.
-	3.	Deploy the flow: Once all nodes are configured, deploy the flow to start collecting and storing data.
+1.	Configure the PLC connection: Update the IP address and port in the mcprotocol-connection configuration.
+
+2.	Configure the MySQL connection: Update the host, port, and database name in the MySQLdatabase configuration.
+
+3.	Deploy the flow: Once all nodes are configured, deploy the flow to start collecting and storing data.
 
 This setup will help you collect data from a MELSEC PLC and store it in a MySQL database while allowing you to debug the data at various stages of the flow.
 
