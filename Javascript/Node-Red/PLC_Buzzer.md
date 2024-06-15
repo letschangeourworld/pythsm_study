@@ -109,17 +109,18 @@ Step-by-Step Explanation:
 
 Additional Tips:
 ```
-📌 Install nodes: Use the Node-RED palette manager
+# Install nodes: Use the Node-RED palette manager
+
 node-red-contrib-melsec
 node-red-dashboard
 node-red-contrib-buzzer
 node-red-contrib-7segment
 
-📌 PLC Setup: 
+# PLC Setup: 
 Ensure that your Mitsubishi MELSEC PLC is correctly 
 configured to communicate over the network.
 
-📌 Debugging: 
+# Debugging: 
 Use the debug node to verify the data received 
 from the PLC. This helps in ensuring that the 
 communication is set up correctly.
@@ -159,10 +160,10 @@ Step-by-Step Node-RED Flow
 Open Node-RED and go to the palette manager.
 
 ```
-Installation for Mitsubishi Melsec PLC communication.
+# for Mitsubishi Melsec PLC communication.
 node-red-contrib-mcprotocol
 
-Installation for UI elements (e.g., 7-segment display)
+# for UI elements (e.g.,7-segment display)
 node-red-dashboard 
 ```
 
