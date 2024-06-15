@@ -109,7 +109,11 @@ Step-by-Step Explanation:
 
 Additional Tips:
 ```
-📌 Install nodes: Use the Node-RED palette manager to install node-red-contrib-melsec, node-red-dashboard, node-red-contrib-buzzer, and node-red-contrib-7segment if not already installed.
+📌 Install nodes: Use the Node-RED palette manager to install 
+node-red-contrib-melsec
+node-red-dashboard
+node-red-contrib-buzzer
+node-red-contrib-7segment
 
 📌 PLC Setup: Ensure that your Mitsubishi MELSEC PLC is correctly configured to communicate over the network.
 
