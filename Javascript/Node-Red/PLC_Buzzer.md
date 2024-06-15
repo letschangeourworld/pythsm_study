@@ -146,19 +146,23 @@ node-red-dashboard
 ```
 2. Configure PLC Communication:
 
-  Add an mcprotocol read node to read data from the PLC.
-  Configure the node with your PLC’s IP address, port, and the memory address you want to read.
+Add an mcprotocol read node to read data from the PLC.
+
+Configure the node with your PLC’s IP address, port, and the memory address you want to read.
 
 3. Process PLC Data:
-  Use function nodes to process the bit data from the PLC.
+
+Use function nodes to process the bit data from the PLC.
 
 4. Send Data to Buzzer and 7-Segment Display:
 
-  Use the GPIO nodes for the buzzer (if connected via GPIO on a PC) or other nodes suitable for your buzzer’s connection method.
-  Use node-red-dashboard to display the data on a UI element like a 7-segment display.
+Use the GPIO nodes for the buzzer (if connected via GPIO on a PC) or other nodes suitable for your buzzer’s connection method.
+
+Use node-red-dashboard to display the data on a UI element like a 7-segment display.
 
 5. Add Debug Nodes:
-  Add debug nodes to monitor the data at various stages in your flow.
+
+Add debug nodes to monitor the data at various stages in your flow.
 
 Example Node-RED Flow:
 Here’s an example flow to achieve this:
@@ -271,22 +275,26 @@ Here’s an example flow to achieve this:
 
 Explanation:
 
-mcprotocol read Node: Reads bit data from the PLC at address D0.
+📌 mcprotocol read Node: Reads bit data from the PLC at address D0.
 
-Debug Node: Outputs the raw data from the PLC to the debug sidebar for verification.
+📌 Debug Node: Outputs the raw data from the PLC to the debug sidebar for verification.
 
-Function Node: Processes the PLC data to determine the buzzer state and 7-segment display value.
+📌 Function Node: Processes the PLC data to determine the buzzer state and 7-segment display value.
 
-GPIO Out Node: Controls the buzzer.
+📌 GPIO Out Node: Controls the buzzer.
 
-UI Text Node: Displays the processed data on a 7-segment display in the dashboard.
+📌 UI Text Node: Displays the processed data on a 7-segment display in the dashboard.
 
 Steps to Deploy:
 
 1.Import the JSON flow into your Node-RED editor.
+
 2.Configure the mcprotocol read node with your PLC’s IP address.
+
 3.Deploy the flow.
+
 4.Open the Node-RED dashboard to view the 7-segment display.
+
 5.Check the debug tab to see the raw data from the PLC and verify correct data collection.
 
 With this setup, you can monitor and control your PLC data, visualize it on a dashboard, and trigger a buzzer based on the PLC’s bit data.
