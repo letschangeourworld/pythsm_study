@@ -35,8 +35,7 @@ CREATE TABLE readings (
 
 3.	Node-RED Flow:
 
-'''
-[
+'''[
     {
         "id": "a1d1b77c.b5c208",
         "type": "tab",
