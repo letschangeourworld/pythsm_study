@@ -14,18 +14,16 @@ node-red-contrib-buzzer
 
 # for 7-segment display (if available)
 node-red-contrib-7segment 
-
 ```
+
 2.	Node-RED Flow:
 The flow will have nodes to:
-
-	•	Read bit data from the Mitsubishi MELSEC PLC.
-
-	•	Send this data to a buzzer.
-
-	•	Send this data to a 7-segment display.
-
-	•	Debug the data to ensure it is being received correctly.
+```
+Read bit data from the Mitsubishi MELSEC PLC.
+Send this data to a buzzer.
+Send this data to a 7-segment display.
+Debug the data to ensure it is being received correctly.
+```
 
 Here is a sample Node-RED flow:
 ```
