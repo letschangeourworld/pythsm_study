@@ -4,22 +4,22 @@ To connect a Mitsubishi MELSEC PLC to a MySQL database using Node-RED, we need t
 1.	Set up Node-RED environment: Ensure you have Node-RED installed and running.
 
 2.	Install necessary Node-RED nodes:
-
-  • node-red-contrib-modbustcp (for communicating with the PLC) <br>
-	 • node-red-node-mysql (for MySQL database interaction)
-
+```
+node-red-contrib-modbustcp (for communicating with the PLC)
+node-red-node-mysql (for MySQL database interaction)
+```
 3.	Create MySQL table: We need to create a table in the MySQL database to store the PLC data.
 
 4.	Design the Node-RED flow:
 
- 	• Connect to the PLC and read data.<br>
-	 • Format the data and insert it into the MySQL database.<br>
-	 • Include a debug node to verify data collection.
-
+ 1️⃣ Connect to the PLC and read data.<br>
+	2️⃣ Format the data and insert it into the MySQL database.<br>
+	3️⃣ Include a debug node to verify data collection.
 
 Here’s an example Node-RED flow that accomplishes this:
 
 1.Install required Node-RED nodes: Run the following commands in your Node-RED directory:
+
 ```
 npm install node-red-contrib-modbustcp
 npm install node-red-node-mysql
@@ -150,22 +150,22 @@ Explanation:
 
 1.modbustcp-read node:
 
-  • Reads data from the PLC at specified intervals (every 5 seconds in this example).<br>
-  • The server configuration node (modbustcp-server) specifies the PLC IP address and port.
+  ▶️ Reads data from the PLC at specified intervals (every 5 seconds in this example).<br>
+  ▶️ The server configuration node (modbustcp-server) specifies the PLC IP address and port.
 
 2.Function node (Format Data):
 
-  • Prepares the SQL query for inserting data into the MySQL database.<br>
-  • Formats the payload to match the query parameters.
+  ▶️ Prepares the SQL query for inserting data into the MySQL database.<br>
+  ▶️ Formats the payload to match the query parameters.
 
 3.MySQL node:
 
-  • Executes the SQL query to insert the data into the MySQL database.<br>
-  • The mydb configuration node specifies the MySQL database connection details.
+  ▶️ Executes the SQL query to insert the data into the MySQL database.<br>
+  ▶️ The mydb configuration node specifies the MySQL database connection details.
 
 4.Debug node:
 
-  • Displays the data read from the PLC in the debug pane of Node-RED, allowing you to verify that data is being collected correctly.
+  ▶️ Displays the data read from the PLC in the debug pane of Node-RED, allowing you to verify that data is being collected correctly.
 
 This flow continuously reads data from the PLC and stores it into a MySQL database. The debug node helps ensure that the data is being collected correctly from the PLC.
 
@@ -334,24 +334,24 @@ Here is a Node-RED flow that reads data from the MELSEC PLC, stores it in a MySQ
 Explanation of the Flow:
 
 📌 MC Protocol Node (mcprotocol in):<br>
-   •	This node connects to the MELSEC PLC and reads data from address D0.<br>
-   •	Configuration for connection (host, port, protocol) should match your PLC settings.<br>
+   ▶️ This node connects to the MELSEC PLC and reads data from address D0.<br>
+   ▶️ Configuration for connection (host, port, protocol) should match your PLC settings.<br>
 
 📌 Debug Node (debug - PLC Data):<br>
-	  •	Used to display the incoming data from the PLC for debugging purposes.<br>
+	  ▶️ Used to display the incoming data from the PLC for debugging purposes.<br>
 
 📌 Function Node (function - Format Data):<br>
-	  •	Formats the incoming PLC data into an SQL INSERT statement.<br>
+	  ▶️ Formats the incoming PLC data into an SQL INSERT statement.<br>
 
 📌 Debug Node (debug - SQL Query):<br>
-	  •	Displays the formatted SQL query to verify its correctness before insertion into the database.<br>
+	  ▶️ Displays the formatted SQL query to verify its correctness before insertion into the database.<br>
 
 📌 MySQL Node (mysql):<br>
-	  •	Executes the SQL query to insert data into the MySQL table.<br>
-	  •	Configured with your MySQL connection details.
+	  ▶️ Executes the SQL query to insert data into the MySQL table.<br>
+	  ▶️ Configured with your MySQL connection details.
 
 📌 Debug Node (debug - MySQL Response):<br>
-  	•	Displays the response from the MySQL database to verify if the data was inserted successfully.
+  	▶️ Displays the response from the MySQL database to verify if the data was inserted successfully.
 
 Setting Up the Flow:
 
