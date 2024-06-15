@@ -293,12 +293,17 @@ Here’s an example flow to achieve this:
 Explanation:
 
 📌 mcprotocol read Node: Reads bit data from the PLC at address D0.<br>
+
 📌 Debug Node: Outputs the raw data from the PLC to the debug sidebar for verification.<br>
+
 📌 Function Node: Processes the PLC data to determine the buzzer state and 7-segment display value.<br>
+
 📌 GPIO Out Node: Controls the buzzer.<br>
+
 📌 UI Text Node: Displays the processed data on a 7-segment display in the dashboard.
 
 Steps to Deploy:<br>
+
 1.Import the JSON flow into your Node-RED editor.<br>
 2.Configure the mcprotocol read node with your PLC’s IP address.<br>
 3.Deploy the flow.<br>
