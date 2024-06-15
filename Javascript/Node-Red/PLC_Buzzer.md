@@ -81,33 +81,40 @@ Here is a sample Node-RED flow:
 
 Step-by-Step Explanation:
 
-	1.	PLC Read Node:
-	•	Node Type: melsec read
-	•	Properties:
-	•	host: IP address of the Mitsubishi MELSEC PLC.
-	•	port: Port number (default is 5007 for MELSEC).
-	•	plcType: Type of PLC (e.g., Q series).
-	•	protocol: Communication protocol (TCP/UDP).
-	•	address: Memory address to read (e.g., M0 for bit memory).
-	•	length: Number of bits to read (e.g., 1).
-	•	pollInterval: Interval in milliseconds to poll the PLC (e.g., 1000ms).
-	2.	Debug Node:
-	•	Node Type: debug
-	•	Properties:
-	•	complete: Set to msg.payload to display the received bit data.
-	3.	Buzzer Node:
-	•	Node Type: buzzer
-	•	Properties: Default settings should work if the hardware is connected correctly.
-	4.	7-Segment Display Node:
-	•	Node Type: 7segment
-	•	Properties: Configure according to your 7-segment display setup.
+```
+1.	PLC Read Node:
+	Node Type: melsec read
+	Properties:
+	host: IP address of the Mitsubishi MELSEC PLC.
+	port: Port number (default is 5007 for MELSEC).
+	plcType: Type of PLC (e.g., Q series).
+	protocol: Communication protocol (TCP/UDP).
+	address: Memory address to read (e.g., M0 for bit memory).
+	length: Number of bits to read (e.g., 1).
+	pollInterval: Interval in milliseconds to poll the PLC (e.g., 1000ms).
+
+2.	Debug Node:
+	Node Type: debug
+	Properties:
+	complete: Set to msg.payload to display the received bit data.
+
+3.	Buzzer Node:
+	Node Type: buzzer
+	Properties: Default settings should work if the hardware is connected correctly.
+
+4.	7-Segment Display Node:
+	Node Type: 7segment
+	Properties: Configure according to your 7-segment display setup.
+```
 
 Additional Tips:
+```
+Install nodes: Use the Node-RED palette manager to install node-red-contrib-melsec, node-red-dashboard, node-red-contrib-buzzer, and node-red-contrib-7segment if not already installed.
 
-	•	Install nodes: Use the Node-RED palette manager to install node-red-contrib-melsec, node-red-dashboard, node-red-contrib-buzzer, and node-red-contrib-7segment if not already installed.
-	•	PLC Setup: Ensure that your Mitsubishi MELSEC PLC is correctly configured to communicate over the network.
-	•	Debugging: Use the debug node to verify the data received from the PLC. This helps in ensuring that the communication is set up correctly.
+PLC Setup: Ensure that your Mitsubishi MELSEC PLC is correctly configured to communicate over the network.
 
+Debugging: Use the debug node to verify the data received from the PLC. This helps in ensuring that the communication is set up correctly.
+```
 Deployment:
 
 Deploy the flow in Node-RED and monitor the debug window to check the incoming data from the PLC. Ensure the buzzer and 7-segment display react according to the received bit data.
