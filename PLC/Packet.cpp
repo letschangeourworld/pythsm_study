@@ -3,10 +3,31 @@
 
 // Generate the packet of SEND command for reading data in PlC
 
+[Serializable]
+    [StructLayout(LayoutKind.Sequential, Pack=1)]
+    struct _3E_BIN_REQUEST_COMMAND
+    {
+        public ushort wSubHeader;     // 서브 머리글
+        public byte byNetworkNo;      // 네트워크 번호
+        public byte byPlcNo;          // PLC 번호
+        public ushort wModuleIONo;    // 요구 상대 모듈 I/O 번호	
+        public byte byModuleStateNo;  // 요구 상대 모듈 국번호
+        public ushort wDataLength;    // 요구 데이터 길이
+        public ushort wCpuTimer;      // CPU 감시 타이머
+        public ushort wCommand;       // Command(Read)
+        public ushort wSubCommand;    // Sub Command
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        public byte[] byDeviceAddr;   // 선두 Device Addr
+        public byte byDeviceCode;     // Device 코드
+        public ushort wCount;         // 읽기/쓰기 점수
+    };
+
+
 3E_BIN_REQUEST_COMMAND _Request_Header = new _3E_BIN_REQUEST_COMMAND();
             _Request_Header.byDeviceAddr = new byte[3];
 
-            int dwTemp = 0x64; // 주소
+            int dwTemp = 0x64;   // 주소
 
 	        _Request_Header.wSubHeader			= 0x0050;// 바이너리 50 Subheader			
 	        _Request_Header.byNetworkNo			= 0x00;				
