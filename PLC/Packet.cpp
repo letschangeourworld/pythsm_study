@@ -1,3 +1,8 @@
+// Mitsubishi Melsec Q series PLC 
+// C#, converting data into a packet
+
+// Generate the packet of SEND command for reading data in PlC
+
 3E_BIN_REQUEST_COMMAND _Request_Header = new _3E_BIN_REQUEST_COMMAND();
             _Request_Header.byDeviceAddr = new byte[3];
 
@@ -29,4 +34,3 @@
                 }
             }
 
-출처: https://jeong-f.tistory.com/99 [FA 프로그래머로 살아 남기:티스토리]
