@@ -597,9 +597,9 @@ JSON 파일 예시
 1.  Whisper 동적 모델 선택:<br>
 	•  기준: 오디오 길이(초), tiny(<120초), base(120~300초), small(>300초).<br>
 	•  성능:<br>
-		  - tiny: ~ 39MB, CPU에서 5분 오디오 약 1~2분 처리.<br>
-		  - base: ~ 74MB, CPU에서 5분 오디오 약 2~3분.<br>
-		  - small: ~ 244MB, GPU 권장, 5분 오디오 약 30~40초(GPU T4).<br>
+		   tiny: ~39MB, CPU에서 5분 오디오 약 1-2분 처리.<br>
+		   base: ~74MB, CPU에서 5분 오디오 약 2-3분.<br>
+		   small: ~244MB, GPU 권장, 5분 오디오 약 30-40초(GPU T4).<br>
 	•  캐싱: cache/transcription_<hash>.srt로 전사 결과 저장, 재처리 시간 0초.<br>
 	•  세그먼트: 30초 단위 처리, 메모리 사용량 최대 1GB 미만(base 기준).<br>
 2.  M2M100 번역 최적화:<br>
