@@ -29,9 +29,31 @@
 	•  YouTube Data API에 자막 업로드 권한 추가 (https://www.googleapis.com/auth/youtube.force-ssl).
 	•  이전 답변의 API 설정(Google Cloud, ElevenLabs, Stable Diffusion 등) 필요.
 
-```python
-# pip install newspaper3k requests beautifulsoup4 transformers diffusers torch elevenlabs pysrt speechrecognition moviepy google-api-python-client google-auth-oauthlib yt_dlp pydub
+```bash
+pip install newspaper3k \
+            requests \
+												beautifulsoup4 \
+												transformers \
+												diffusers \
+												torch \
+												elevenlabs \
+												pysrt \
+												speechrecognition \
+												moviepy \
+												google-api-python-client \
+												google-auth-oauthlib \
+												yt_dlp \
+												pydub
+```
 
+API 설정 추가
+•  YouTube Data API:
+	•  client_secrets.json에 스코프 추가: https://www.googleapis.com/auth/youtube.force-ssl.
+	•  자막 업로드는 captions.insert API 사용(쿼터 소모: 약 200 포인트/자막).
+•  번역 모델:
+	•  Hugging Face Helsinki-NLP/opus-mt-ko-en 모델 사용.
+
+```python
 import os
 import sys
 import json
@@ -512,8 +534,7 @@ if __name__ == "__main__":
 JSON 파일 예시
 raw_prompts/prompt_2025-08-03.json:
 
-<pre><code>
-// JSON
+```JSON
 {
   "intro": "Today, we bring you the latest updates on technology.",
   "body": [
@@ -523,7 +544,13 @@ raw_prompts/prompt_2025-08-03.json:
   "conclusion": "That's all for today's tech news. Stay tuned for more updates!",
   "youtube_video_count": 12345
 }
-</code></pre>
+```
+
+uploaded_videos.txt 예시
+```
+Daily Technology News - 2025-08-02
+Daily Technology News - 2025-08-03
+```
 
 Windows 작업 스케줄러 설정
 
