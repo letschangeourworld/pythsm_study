@@ -652,8 +652,8 @@ Windows 작업 스케줄러 설정
 
 •  배경음악/영상: background_music.mp3, stock_footage.mp4는 실제 파일로 대체.
 
-Windows 작업 스케줄러
-•  python path/to/your_script.py, 매일 08:00 AM (KST).
+Windows 작업 스케줄러<br>
+•  python path/to/your_script.py, 매일 08:00 AM (KST).<br>
 주의 사항 <br>
 •  Whisper:<br>
 	•  FFmpeg 필수.<br>
