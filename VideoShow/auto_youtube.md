@@ -61,6 +61,7 @@ raw_prompts/prompt_2025-08-03.json:
 </code></pre>
 
 Windows 작업 스케줄러 설정
+
 •  이전과 동일: python path/to/your_script.py, 매일 08:00 AM 실행.
 주의 사항
 •  파일명 규칙: 사용자가 pending_videos/video_YYYY-MM-DD.mp4를 checked_videos/checked_YYYY-MM-DD.mp4로 정확히 이름 변경해야 함.
