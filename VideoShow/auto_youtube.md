@@ -29,8 +29,7 @@
 	•  YouTube Data API에 자막 업로드 권한 추가 (https://www.googleapis.com/auth/youtube.force-ssl).
 	•  이전 답변의 API 설정(Google Cloud, ElevenLabs, Stable Diffusion 등) 필요.
 
-<pre><code>
-	
+```python
 # pip install newspaper3k requests beautifulsoup4 transformers diffusers torch elevenlabs pysrt speechrecognition moviepy google-api-python-client google-auth-oauthlib yt_dlp pydub
 
 import os
@@ -494,8 +493,8 @@ def main():
 
 if __name__ == "__main__":
     main()
-</code></pre>
 
+```
 동작 방식
 1.  영상 저장 및 확인:
 	•  최종 영상은 pending_videos/video_YYYY-MM-DD.mp4로 저장.
