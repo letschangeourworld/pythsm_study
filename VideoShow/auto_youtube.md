@@ -30,20 +30,7 @@
 	•  이전 답변의 API 설정(Google Cloud, ElevenLabs, Stable Diffusion 등) 필요.
 
 ```bash
-pip install newspaper3k \
-            requests \
-												beautifulsoup4 \
-												transformers \
-												diffusers \
-												torch \
-												elevenlabs \
-												pysrt \
-												speechrecognition \
-												moviepy \
-												google-api-python-client \
-												google-auth-oauthlib \
-												yt_dlp \
-												pydub
+pip install newspaper3k requests beautifulsoup4 transformers diffusers torch elevenlabs pysrt speechrecognition moviepy google-api-python-client google-auth-oauthlib yt_dlp pydub
 ```
 
 API 설정 추가
