@@ -654,19 +654,19 @@ Windows 작업 스케줄러 설정
 
 Windows 작업 스케줄러
 •  python path/to/your_script.py, 매일 08:00 AM (KST).
-주의 사항
-•  Whisper:
-	•  FFmpeg 필수.
-	•  tiny/base는 CPU 적합, small은 GPU 선호.
-	•  캐시 폴더(cache/) 주기적 정리 권장.
-•  번역:
-	•  M2M100_418M은 약 1~2GB RAM 필요.
-	•  긴 텍스트는 1000자 단위로 자동 분할.
-•  파일명:
-	•  pending_videos/video_YYYY-MM-DD.mp4 → checked_videos/checked_YYYY-MM-DD.mp4.
-•  API 쿼터:
-	•  YouTube: 영상(1,600) + 자막(2x200) = ~2,000 포인트/일.
-•  자막 동기화:
+주의 사항 <br>
+•  Whisper:<br>
+	•  FFmpeg 필수.<br>
+	•  tiny/base는 CPU 적합, small은 GPU 선호.<br>
+	•  캐시 폴더(cache/) 주기적 정리 권장.<br>
+•  번역:<br>
+	•  M2M100_418M은 약 1~2GB RAM 필요.<br>
+	•  긴 텍스트는 1000자 단위로 자동 분할.<br>
+•  파일명:<br>
+	•  pending_videos/video_YYYY-MM-DD.mp4 → checked_videos/checked_YYYY-MM-DD.mp4.<br>
+•  API 쿼터:<br>
+	•  YouTube: 영상(1,600) + 자막(2x200) = ~2,000 포인트/일.<br>
+•  자막 동기화:<br>
 	•  영어 자막은 번역 텍스트 길이로 인해 약간의 텍스트 잘림 가능(최대 50자).
 
 
