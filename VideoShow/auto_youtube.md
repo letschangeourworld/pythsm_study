@@ -17,7 +17,7 @@
 JSON 파일 예시
 raw_prompts/prompt_2025-08-03.json:
 
-<code>
+'''JSON
 {
   "intro": "Today, we bring you the latest updates on technology.",
   "body": [
@@ -27,4 +27,7 @@ raw_prompts/prompt_2025-08-03.json:
   "conclusion": "That's all for today's tech news. Stay tuned for more updates!",
   "youtube_video_count": 12345
 }
-</code>
+'''
+
+
+
