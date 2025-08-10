@@ -1,9 +1,8 @@
-
-
-1.  영상 저장 및 확인:
+1.  영상 저장 및 확인
 	•  최종 생성된 영상을 유튜브에 업로드하기 전에 pending_videos 폴더에 저장.
 	•  사용자가 확인 후 영상 파일명을 checked_YYYY-MM-DD 형식으로 변경하여 checked_videos 폴더에 저장.
 	•  checked_videos 폴더에서 checked가 포함된 가장 최근 영상만 유튜브에 업로드.
+
 2.  중복 제목 확인:
 	•  유튜브 업로드 전 uploaded_videos.txt 파일을 확인하여 동일한 제목의 영상이 이미 업로드되었는지 확인.
 	•  중복 제목이 없으면 업로드 진행, 업로드 후 제목을 uploaded_videos.txt에 기록.
