@@ -1,35 +1,35 @@
-1.  영상 저장 및 확인
-	•  최종 생성된 영상을 유튜브에 업로드하기 전에 pending_videos 폴더에 저장.
-	•  사용자가 확인 후 영상 파일명을 checked_YYYY-MM-DD 형식으로 변경하여 checked_videos 폴더에 저장.
-	•  checked_videos 폴더에서 checked가 포함된 가장 최근 영상만 유튜브에 업로드.
+1.  영상 저장 및 확인 <br>
+	•  최종 생성된 영상을 유튜브에 업로드하기 전에 pending_videos 폴더에 저장.<br>
+	•  사용자가 확인 후 영상 파일명을 checked_YYYY-MM-DD 형식으로 변경하여 checked_videos 폴더에 저장.<br>
+	•  checked_videos 폴더에서 checked가 포함된 가장 최근 영상만 유튜브에 업로드.<br>
 
-2.  중복 제목 확인:
-	•  유튜브 업로드 전 uploaded_videos.txt 파일을 확인하여 동일한 제목의 영상이 이미 업로드되었는지 확인.
-	•  중복 제목이 없으면 업로드 진행, 업로드 후 제목을 uploaded_videos.txt에 기록.
-3.  이메일 알림 개선:
-	•  이메일에 유튜브 영상 링크와 함께 업로드된 영상 파일명을 포함.
-4.  다국어 자막:
-	•  자막을 한국어와 영어로 생성 (subtitles_ko.srt, subtitles_en.srt).
-	•  한국어는 TTS 텍스트를 기반으로, 영어는 Hugging Face 번역 모델(Helsinki-NLP/opus-mt-ko-en)을 사용해 번역.
-	•  유튜브 업로드 시 두 자막 파일을 함께 업로드.
-5.  기존 기능 유지:
-	•  프롬프트 유효성 검사, 로그 파일 생성, 다중 파일 처리, 유튜브 검색 기능 등은 이전 코드에서 유지.
-요구 사항
-•  추가 라이브러리:
-	•  번역을 위해 transformers의 Helsinki-NLP/opus-mt-ko-en 모델 사용.
-	•  기존 라이브러리: newspaper3k, requests, beautifulsoup4, transformers, diffusers, elevenlabs, pysrt, speechrecognition, moviepy, google-api-python-client, google-auth-oauthlib, yt_dlp, pydub.
-•  폴더 구조:
-	•  pending_videos/: 업로드 전 영상 저장.
-	•  checked_videos/: 확인 후 checked로 이름 변경된 영상 저장.
-	•  raw_prompts/, modified_prompts/, output/, logs/: 기존과 동일.
-•  파일:
-	•  uploaded_videos.txt: 업로드된 영상 제목 기록.
-•  API 설정:
-	•  YouTube Data API에 자막 업로드 권한 추가 (https://www.googleapis.com/auth/youtube.force-ssl).
-	•  이전 답변의 API 설정(Google Cloud, ElevenLabs, Stable Diffusion 등) 필요.
+2.  중복 제목 확인:<br>
+	•  유튜브 업로드 전 uploaded_videos.txt 파일을 확인하여 동일한 제목의 영상이 이미 업로드되었는지 확인.<br>
+	•  중복 제목이 없으면 업로드 진행, 업로드 후 제목을 uploaded_videos.txt에 기록.<br>
+3.  이메일 알림 개선:<br>
+	•  이메일에 유튜브 영상 링크와 함께 업로드된 영상 파일명을 포함.<br>
+4.  다국어 자막:<br>
+	•  자막을 한국어와 영어로 생성 (subtitles_ko.srt, subtitles_en.srt).<br>
+	•  한국어는 TTS 텍스트를 기반으로, 영어는 Hugging Face 번역 모델(Helsinki-NLP/opus-mt-ko-en)을 사용해 번역.<br>
+	•  유튜브 업로드 시 두 자막 파일을 함께 업로드.<br>
+5.  기존 기능 유지:<br>
+	•  프롬프트 유효성 검사, 로그 파일 생성, 다중 파일 처리, 유튜브 검색 기능 등은 이전 코드에서 유지.<br>
+요구 사항<br>
+•  추가 라이브러리:<br>
+	•  번역을 위해 transformers의 Helsinki-NLP/opus-mt-ko-en 모델 사용.<br>
+	•  기존 라이브러리: newspaper3k, requests, beautifulsoup4, transformers, diffusers, elevenlabs, pysrt, speechrecognition, moviepy, google-api-python-client, google-auth-oauthlib, yt_dlp, pydub.<br>
+•  폴더 구조:<br>
+	•  pending_videos/: 업로드 전 영상 저장.<br>
+	•  checked_videos/: 확인 후 checked로 이름 변경된 영상 저장.<br>
+	•  raw_prompts/, modified_prompts/, output/, logs/: 기존과 동일.<br>
+•  파일:<br>
+	•  uploaded_videos.txt: 업로드된 영상 제목 기록.<br>
+•  API 설정:<br>
+	•  YouTube Data API에 자막 업로드 권한 추가 (https://www.googleapis.com/auth/youtube.force-ssl).<br>
+	•  이전 답변의 API 설정(Google Cloud, ElevenLabs, Stable Diffusion 등) 필요.<br><br>
 
-주요 최적화 및 개선 사항
-1.  로컬 Whisper 동적 모델 선택:
+주요 최적화 및 개선 사항<br>
+1.  로컬 Whisper 동적 모델 선택:<br>
 	•  오디오 길이에 따라 모델 선택: 2분 미만 → tiny, 2~5분 → base, 5분 초과 → small.
 	•  메모리 효율성: torch.inference_mode(), GPU/CPU 자동 전환, 메모리 정리(torch.cuda.empty_cache(), gc.collect()).
 	•  세그먼트 처리: 30초 단위로 오디오 분할, 메모리 사용량 감소.
