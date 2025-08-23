@@ -475,4 +475,79 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+import feedparser
+from transformers import pipeline
+from gtts import gTTS
+import moviepy.editor as mp
+import os
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google.oauth2.credentials import Credentials
+
+# 1. 뉴스 가져오기 (BBC RSS 예시)
+def get_news():
+    feed = feedparser.parse("http://feeds.bbci.co.uk/news/rss.xml")
+    news_items = [entry.title + " - " + entry.summary for entry in feed.entries[:2]]
+    return " ".join(news_items)
+
+# 2. 뉴스 요약 (Hugging Face 무료 모델 사용)
+def summarize_news(news_text):
+    summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    summary = summarizer(news_text, max_length=80, min_length=30, do_sample=False)
+    return summary[0]['summary_text']
+
+# 3. 텍스트를 TTS로 변환 (gTTS 사용)
+def text_to_speech(script, filename="voice.mp3"):
+    tts = gTTS(text=script, lang="en")  # 한국어는 lang="ko"
+    tts.save(filename)
+    return filename
+
+# 4. 영상 생성 (임시 이미지 + 오디오 결합)
+def create_video(script, audio_file, output="shorts.mp4"):
+    audio_clip = mp.AudioFileClip(audio_file)
+    image_clip = mp.ImageClip("placeholder.jpg").set_duration(audio_clip.duration)
+    final_clip = image_clip.set_audio(audio_clip)
+    final_clip.write_videofile(output, fps=24)
+    return output
+
+# 5. 유튜브 업로드
+def upload_to_youtube(video_file, title, description):
+    creds = Credentials.from_authorized_user_file("token.json", ["https://www.googleapis.com/auth/youtube.upload"])
+    youtube = build("youtube", "v3", credentials=creds)
+
+    request = youtube.videos().insert(
+        part="snippet,status",
+        body={
+            "snippet": {
+                "title": title,
+                "description": description,
+                "tags": ["news", "AI", "shorts"],
+                "categoryId": "25"  # News & Politics
+            },
+            "status": {"privacyStatus": "public"}
+        },
+        media_body=MediaFileUpload(video_file, chunksize=-1, resumable=True)
+    )
+    response = request.execute()
+    print("✅ Uploaded to YouTube:", response["id"])
+
+if __name__ == "__main__":
+    # Step 1 뉴스 가져오기
+    news = get_news()
+    print("뉴스 원문:", news[:200], "...")
+    
+    # Step 2 뉴스 요약
+    script = summarize_news(news)
+    print("🎬 요약 스크립트:", script)
+    
+    # Step 3 TTS 변환
+    audio = text_to_speech(script, "voice.mp3")
+    
+    # Step 4 영상 생성
+    video = create_video(script, audio, "shorts.mp4")
+    
+    # Step 5 유튜브 업로드
+    upload_to_youtube(video, "AI Shorts News", script)
     
