@@ -1,0 +1,109 @@
+# =============================================================
+#  RTLS System Configuration
+#  DWM3001CDK Real-Time Location System
+#  Version: 2.0.0
+# =============================================================
+
+system:
+  version: "2.0.0"
+  simulation_mode: false
+  log_dir: "./rtls_logs"
+  log_level: "DEBUG"          # DEBUG | INFO | WARNING | ERROR
+
+# ── 앵커 물리 배치 ────────────────────────────────────────────
+# x, y: 평면 좌표 (m), height: 설치 높이 (m)
+anchors:
+  A2:
+    x: 0.0
+    y: 12.5
+    height: 2.5
+    connection:
+      type: serial             # serial | tcp
+      port: /dev/ttyACM0
+      baud: 115200
+
+  A3:
+    x: 15.0
+    y: 0.0
+    height: 3.5
+    connection:
+      type: tcp
+      host: "192.168.1.103"
+      port: 9003
+
+  A4:
+    x: 15.0
+    y: 12.5
+    height: 2.5
+    connection:
+      type: tcp
+      host: "192.168.1.104"
+      port: 9004
+
+# ── 펌웨어 주소 매핑 ─────────────────────────────────────────
+hardware_map:
+  anchors:
+    "0001": A1
+    "0002": A2
+    "0003": A3
+    "0004": A4
+  tags:
+    "0064": TAG1   # 0x0064 = 100
+    "0065": TAG2   # 0x0065 = 101
+
+# ── 태그 설정 ─────────────────────────────────────────────────
+tags:
+  height: 1.0              # 태그 설치/휴대 높이 (m)
+
+# ── 위치 계산 파라미터 ────────────────────────────────────────
+positioning:
+  min_anchors: 3           # 위치 계산 최소 앵커 수
+  group_window_sec: 0.15   # 그룹핑 타임윈도우 (s)
+  max_dist_m: 22.0         # 유효 최대 거리 (m)
+  dist_valid_age_sec: 0.8  # 거리 데이터 유효 기간 (s)
+
+  height_correction:
+    enabled: true          # 높이 보정 활성화
+
+  wls:
+    max_jump_m: 4.0        # 프레임 간 최대 이동 허용 거리 (m)
+    outlier_threshold_m: 1.5
+    dist_buffer_size: 8
+
+  ekf:
+    process_noise:         # Q 행렬 대각 성분 [x, y, vx, vy]
+      - 0.05
+      - 0.05
+      - 0.20
+      - 0.20
+    measurement_noise: 0.25   # R (측정 노이즈 분산)
+    init_covariance: 2.0      # 초기 P 행렬 스케일
+    dt: 0.1                   # 예측 주기 (s)
+    adaptive_r: true          # 적응형 측정 노이즈 활성화
+    adaptive_r_window: 10     # 잔차 기반 R 추정 윈도우 크기
+    max_speed_m_s: 5.0        # 속도 클리핑 상한 (m/s)
+
+# ── 연결 관리 ─────────────────────────────────────────────────
+connection:
+  tag_timeout_sec: 5.0
+  reconnect_sec: 5.0
+  tcp_timeout_sec: 3.0
+
+# ── 시각화 ────────────────────────────────────────────────────
+visualization:
+  update_interval_ms: 100
+  anchor_colors:
+    A1: "#E53935"
+    A2: "#1E8B3E"
+    A3: "#D98000"
+    A4: "#6B3FA0"
+  tag_colors:
+    TAG1: "#1565C0"
+    TAG2: "#C62828"
+
+# ── 시뮬레이터 (simulation_mode: true 시 사용) ───────────────
+simulator:
+  move_duration_sec: 8.0
+  stop_duration_sec: 5.0
+  noise_moving_m: 0.08
+  noise_stopped_m: 0.03
