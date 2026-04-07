@@ -1,6 +1,6 @@
-현재 서버 운영체제는 ubuntu 24.04 LTS 인데, 
-nginx, FastAPI, Postgresql, Redpanda를 
-docker container에 깔고 다음 서비스 처리
+현재 서버 운영체제 : ubuntu 24.04 LTS
+docker container
+nginx, FastAPI, Postgresql, Redpanda
 
 FastAPI + Redpanda 실시간 처리 코드 👉 UWB 태그 데이터 스트리밍
 WebSocket UI 👉 공장 지도 + 실시간 위치 표시
@@ -11,9 +11,7 @@ DB 저장 👉 PostgreSQL에 위치 로그 이력 저장
 50~100 Tag 분산 처리 서버 구조 : 멀티 Consumer
 AI 기반 이상 탐지 : LSTM / Isolation Forest
 
-전체 구조를 파악했으면 이제 단계별로 실제 코드와 설정 파일을 만들겠습니다.
-
-구축 순서 (권장)
+구축 순서
 1단계 → Docker Compose 전체 구성
 2단계 → Redpanda Topic 설계
 3단계 → FastAPI + Kafka Producer/Consumer
