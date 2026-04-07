@@ -19,7 +19,7 @@
 - 6단계 → AI 이상 탐지 Worker
 - 7단계 → WebSocket UI (공장 지도)
 
-
+---
 
 - Docker Compose - all services : docker-compose.yml
 - Nginx config : nginx.conf
