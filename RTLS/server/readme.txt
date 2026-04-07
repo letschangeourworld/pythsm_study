@@ -1,4 +1,4 @@
-현재 서버 운영체제 : ubuntu 24.04 LTS
+Server OS : ubuntu 24.04 LTS
 docker container
 nginx, FastAPI, Postgresql, Redpanda
 
