@@ -1,9 +1,9 @@
 """
-AI 이상 탐지 Worker
-- Kafka tag-location 토픽 소비
-- Isolation Forest: 즉시 이상 탐지 (실시간)
-- LSTM Autoencoder: 시계열 패턴 이상 탐지 (윈도우 기반)
-- 이상 탐지 시 anomaly-detection 토픽 발행 + Redis 저장
+AI Anomaly Detection Worker
+- Kafka tag-location : topic consumption
+- Isolation Forest: immediately anomaly detection (real time)
+- LSTM Autoencoder: Timeseries Pattern Anomaly Detection (based on WINDOW)
+- In case of anomaly detection, anomaly-detection topic publish + Redis save
 """
 import asyncio
 import json
