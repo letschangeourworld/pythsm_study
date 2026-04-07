@@ -20,17 +20,17 @@ AI 기반 이상 탐지 : LSTM / Isolation Forest
 6단계 → AI 이상 탐지 Worker
 7단계 → WebSocket UI (공장 지도)
 
-Docker Compose - all services : docker-compose.yml
-Nginx config : nginx.conf
-PostgreSQL init SQL - schema : init.sql
-FastAPI : Dockerfile
-DockerfileFastAPI requirements : requirements.txt
-FastAPI core config : config.py
-Pydantic models for location data : events.py
-Redis WebSocket manager - pub/sub broadcast : ws_manager.py
-Kafka producer service : kafka_producer.py
-Location consumer worker - multi-instance : location_consumer.py
-FastAPI main app + WebSocket endpoint : main.py
-AI anomaly detection worker - LSTM + Isolation Forest : anomaly_worker.py
-AI worker Dockerfile and requirements : Dockerfile
-AI worker requirements : requirements.txt
+- Docker Compose - all services : docker-compose.yml
+- Nginx config : nginx.conf
+- PostgreSQL init SQL - schema : init.sql
+- FastAPI : Dockerfile
+- DockerfileFastAPI requirements : requirements.txt
+- FastAPI core config : config.py
+- Pydantic models for location data : events.py
+- Redis WebSocket manager - pub/sub broadcast : ws_manager.py
+- Kafka producer service : kafka_producer.py
+- Location consumer worker - multi-instance : location_consumer.py
+- FastAPI main app + WebSocket endpoint : main.py
+- AI anomaly detection worker - LSTM + Isolation Forest : anomaly_worker.py
+- AI worker Dockerfile and requirements : Dockerfile
+- AI worker requirements : requirements.txt
