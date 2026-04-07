@@ -1,6 +1,6 @@
 """
 Redis Pub/Sub 기반 WebSocket 매니저
-- FastAPI 인스턴스가 여러 개여도 모든 클라이언트에 브로드캐스트 가능
+- FastAPI 인스턴스 여러 개라도 모든 클라이언트에 브로드캐스트 가능
 - Redis channel: uwb:broadcast
 """
 import asyncio
