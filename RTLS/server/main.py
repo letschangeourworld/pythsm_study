@@ -23,8 +23,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
  
 _redis_client: aioredis.Redis | None = None
- 
- 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _redis_client
