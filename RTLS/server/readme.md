@@ -1,6 +1,5 @@
-Server OS : ubuntu 24.04 LTS
-docker container
-nginx, FastAPI, Postgresql, Redpanda
+- Server OS : ubuntu 24.04 LTS
+- docker container : nginx, FastAPI, Postgresql, Redpanda
 
 - FastAPI + Redpanda 실시간 처리 코드 👉 UWB 태그 데이터 스트리밍
 - WebSocket UI 👉 공장 지도 + 실시간 위치 표시
@@ -12,13 +11,13 @@ nginx, FastAPI, Postgresql, Redpanda
 - AI 기반 이상 탐지 : LSTM / Isolation Forest
 
 구축 순서
-1단계 → Docker Compose 전체 구성
-2단계 → Redpanda Topic 설계
-3단계 → FastAPI + Kafka Producer/Consumer
-4단계 → Redis WebSocket 브로드캐스트
-5단계 → PostgreSQL 스키마 + 저장
-6단계 → AI 이상 탐지 Worker
-7단계 → WebSocket UI (공장 지도)
+- 1단계 → Docker Compose 전체 구성
+- 2단계 → Redpanda Topic 설계
+- 3단계 → FastAPI + Kafka Producer/Consumer
+- 4단계 → Redis WebSocket 브로드캐스트
+- 5단계 → PostgreSQL 스키마 + 저장
+- 6단계 → AI 이상 탐지 Worker
+- 7단계 → WebSocket UI (공장 지도)
 
 - Docker Compose - all services : docker-compose.yml
 - Nginx config : nginx.conf
