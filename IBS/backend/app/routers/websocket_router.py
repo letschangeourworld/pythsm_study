@@ -3,6 +3,7 @@
 - /ws WebSocket 엔드포인트
 - /api/login, /api/channels, /api/broadcast/* 등
 - 채팅, STT, 번역 히스토리 관리
+- 동적 채널 추가 지원
 """
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from fastapi.responses import JSONResponse
@@ -25,9 +26,9 @@ class ChannelManager:
             "english": {}, "japanese": {}, "chinese": {}
         }
         self.states: Dict[str, dict] = {
-            "english":  {"active": False, "listeners": 0, "startedAt": None, "sessionId": None, "maxListeners": 0},
-            "japanese": {"active": False, "listeners": 0, "startedAt": None, "sessionId": None, "maxListeners": 0},
-            "chinese":  {"active": False, "listeners": 0, "startedAt": None, "sessionId": None, "maxListeners": 0},
+            "english":  {"active": False, "listeners": 0, "startedAt": None, "sessionId": None, "maxListeners": 0, "label": "English", "flag": "🇺🇸", "room": "room_en"},
+            "japanese": {"active": False, "listeners": 0, "startedAt": None, "sessionId": None, "maxListeners": 0, "label": "日本語", "flag": "🇯🇵", "room": "room_ja"},
+            "chinese":  {"active": False, "listeners": 0, "startedAt": None, "sessionId": None, "maxListeners": 0, "label": "中文",   "flag": "🇨🇳", "room": "room_zh"},
         }
         self.chat_history: Dict[str, list] = {"english": [], "japanese": [], "chinese": []}
         self.stt_history: list = []
@@ -36,6 +37,19 @@ class ChannelManager:
     def next_id(self) -> int:
         self._id += 1
         return self._id
+
+    def add_channel(self, ch_key: str, label: str, flag: str, room: str):
+        """동적 채널 추가"""
+        if ch_key not in self.channels:
+            self.channels[ch_key] = {}
+            self.states[ch_key] = {
+                "active": False, "listeners": 0, "startedAt": None,
+                "sessionId": None, "maxListeners": 0,
+                "label": label, "flag": flag, "room": room
+            }
+            self.chat_history[ch_key] = []
+            return True
+        return False
 
     async def add(self, ws: WebSocket, channel: str, name: str, role: str):
         if channel not in self.channels:
@@ -112,7 +126,6 @@ class ChannelManager:
 
 
 mgr = ChannelManager()
-VALID_CHANNELS = {"english", "japanese", "chinese"}
 
 
 def sanitize(s: str, max_len: int = 100) -> str:
@@ -130,7 +143,6 @@ async def websocket_endpoint(websocket: WebSocket):
     client_id = mgr.next_id()
 
     try:
-        # 초기 상태 전송
         await websocket.send_json({"type": "state", "channels": mgr.get_all_states()})
 
         async for raw in websocket.iter_text():
@@ -142,18 +154,16 @@ async def websocket_endpoint(websocket: WebSocket):
             msg_type = data.get("type", "")
 
             if msg_type == "init":
-                # 기존 채널에서 제거
                 if joined:
                     mgr.remove(websocket)
 
                 channel = data.get("channel", "english")
-                if channel not in VALID_CHANNELS:
+                if channel not in mgr.channels:
                     channel = "english"
 
                 input_name = sanitize(data.get("name", ""), 20)
                 role = "listener"
 
-                # JWT 토큰으로 관리자 확인
                 token = data.get("token", "")
                 if token:
                     try:
@@ -174,32 +184,22 @@ async def websocket_endpoint(websocket: WebSocket):
                 joined = True
 
                 await websocket.send_json({
-                    "type": "init_ok",
-                    "clientId": client_id,
-                    "name": name,
-                    "role": role,
-                    "channel": channel
+                    "type": "init_ok", "clientId": client_id,
+                    "name": name, "role": role, "channel": channel
                 })
 
-                # 채팅 히스토리
                 hist = mgr.chat_history.get(channel, [])
                 if hist:
                     await websocket.send_json({"type": "chat_history", "messages": hist[-50:]})
-
-                # STT 히스토리
                 if mgr.stt_history:
                     await websocket.send_json({"type": "stt_history", "transcripts": mgr.stt_history[-50:]})
 
-                # 접속자 목록
                 await mgr.broadcast_channel(channel, {
                     "type": "user_list", "channel": channel,
                     "users": mgr.get_users(channel)
                 })
-
-                # 채널 상태 갱신
                 await mgr.broadcast_all({
-                    "type": "channel_update",
-                    "channel": channel,
+                    "type": "channel_update", "channel": channel,
                     "state": mgr.states[channel]
                 })
 
@@ -241,9 +241,6 @@ async def websocket_endpoint(websocket: WebSocket):
                     "sender_type": role, "sender_name": name,
                     "message": message, "sent_at": chat_data["sentAt"]
                 })
-                # ★ 보낸 사람(websocket)은 제외하고 브로드캐스트
-                # listen.html sendChat에서 직접 표시하지 않으므로
-                # 보낸 사람에게도 포함하여 전송 (echo 방식)
                 await mgr.broadcast_channel(channel, chat_data)
 
     except WebSocketDisconnect:
@@ -255,8 +252,7 @@ async def websocket_endpoint(websocket: WebSocket):
             ch, info = mgr.remove(websocket)
             if ch:
                 await mgr.broadcast_channel(ch, {
-                    "type": "listener_update",
-                    "channel": ch,
+                    "type": "listener_update", "channel": ch,
                     "count": mgr.states[ch]["listeners"]
                 })
                 await mgr.broadcast_channel(ch, {
@@ -269,17 +265,41 @@ async def websocket_endpoint(websocket: WebSocket):
                 })
 
 
-# ── 기존 Node.js API 호환 엔드포인트 ────────────────────────
+# ── API 엔드포인트 ────────────────────────────────────────
 
 @router.get("/api/channels")
 async def get_channels():
-    """기존 index.html 호환"""
     return {"channels": mgr.get_all_states()}
+
+@router.post("/api/channels")
+async def create_channel(data: dict):
+    """신규 채널 동적 생성"""
+    ch_key = sanitize(data.get("key", ""), 30).lower().replace(" ", "_")
+    label  = sanitize(data.get("label", ""), 30)
+    flag   = sanitize(data.get("flag", "🌐"), 8)
+    room   = sanitize(data.get("room", f"room_{ch_key}"), 50)
+
+    if not ch_key or not label:
+        return JSONResponse(status_code=400, content={"error": "key, label 필수"})
+    if ch_key in mgr.channels:
+        return JSONResponse(status_code=409, content={"error": "이미 존재하는 채널"})
+
+    mgr.add_channel(ch_key, label, flag, room)
+
+    # 전체 클라이언트에 신규 채널 알림
+    await mgr.broadcast_all({
+        "type": "channel_added",
+        "channel": ch_key,
+        "state": mgr.states[ch_key]
+    })
+
+    logger.info(f"채널 추가: {ch_key} ({label}) → {room}")
+    return {"success": True, "channel": ch_key, "state": mgr.states[ch_key]}
 
 @router.get("/api/health")
 async def health():
     return {
-        "status": "ok", "version": "2.6.0-py",
+        "status": "ok", "version": "2.7.0-py",
         "wsClients": sum(len(c) for c in mgr.channels.values()),
         "channels": {k: {"active": v["active"], "listeners": v["listeners"]}
                      for k, v in mgr.states.items()}
@@ -287,22 +307,16 @@ async def health():
 
 @router.post("/api/login")
 async def api_login(data: dict):
-    """기존 login.html 호환"""
     username = data.get("username", "")
     password = data.get("password", "")
-
-    # 테스트용 계정 + 기존 환경변수 방식 지원
     admin_user = os.environ.get("ADMIN_USERNAME", "admin")
     admin_pass = os.environ.get("ADMIN_PASSWORD", "admin123")
     vitna_pass = os.environ.get("KEYCLOAK_ADMIN_PASSWORD", "vitnap@ssw0rd")
-
     valid = (username == admin_user and password in [admin_pass, vitna_pass]) or \
             (username == "admin" and password == "admin123")
-
     if not valid:
         from fastapi import HTTPException
         raise HTTPException(status_code=401, detail="아이디 또는 비밀번호가 올바르지 않습니다.")
-
     payload = {
         "sub": username, "username": username, "role": "admin",
         "exp": datetime.utcnow() + timedelta(hours=12)
@@ -313,55 +327,44 @@ async def api_login(data: dict):
 @router.post("/api/broadcast/start")
 async def broadcast_start(data: dict):
     channel = data.get("channel", "english")
-    if channel not in VALID_CHANNELS:
+    if channel not in mgr.channels:
         return {"error": "유효하지 않은 채널"}
-
     mgr.set_active(channel, True)
     await mgr.broadcast_all({
         "type": "channel_update", "channel": channel,
         "state": mgr.states[channel]
     })
-
-    # 시작 안내 메시지
     sys_msg = {
         "type": "chat", "channel": channel,
         "senderType": "admin", "senderName": "system",
         "message": "📢 통역 방송이 시작되었습니다. 이어폰을 연결하고 청취해 주세요.",
         "sentAt": datetime.utcnow().isoformat()
     }
-    mgr.add_chat(channel, {
-        "sender_type": "admin", "sender_name": "system",
-        "message": sys_msg["message"], "sent_at": sys_msg["sentAt"]
-    })
+    mgr.add_chat(channel, {"sender_type": "admin", "sender_name": "system",
+                            "message": sys_msg["message"], "sent_at": sys_msg["sentAt"]})
     await mgr.broadcast_channel(channel, sys_msg)
-
     logger.info(f"방송 시작: {channel}")
     return {"success": True, "channel": channel, "state": mgr.states[channel]}
 
 @router.post("/api/broadcast/stop")
 async def broadcast_stop(data: dict):
     channel = data.get("channel", "english")
-    if channel not in VALID_CHANNELS:
+    if channel not in mgr.channels:
         return {"error": "유효하지 않은 채널"}
-
     stop_msg = {
         "type": "chat", "channel": channel,
         "senderType": "admin", "senderName": "system",
         "message": "통역 방송이 종료되었습니다. 함께해 주셔서 감사합니다.",
         "sentAt": datetime.utcnow().isoformat()
     }
-    mgr.add_chat(channel, {
-        "sender_type": "admin", "sender_name": "system",
-        "message": stop_msg["message"], "sent_at": stop_msg["sentAt"]
-    })
+    mgr.add_chat(channel, {"sender_type": "admin", "sender_name": "system",
+                            "message": stop_msg["message"], "sent_at": stop_msg["sentAt"]})
     await mgr.broadcast_channel(channel, stop_msg)
-
     mgr.set_active(channel, False)
     await mgr.broadcast_all({
         "type": "channel_update", "channel": channel,
         "state": mgr.states[channel]
     })
-
     logger.info(f"방송 종료: {channel}")
     return {"success": True, "channel": channel, "state": mgr.states[channel]}
 
@@ -369,18 +372,15 @@ async def broadcast_stop(data: dict):
 async def chat_announce(data: dict):
     channel = data.get("channel", "english")
     message = sanitize(data.get("message", ""), 300)
-    if not message or channel not in VALID_CHANNELS:
+    if not message or channel not in mgr.channels:
         return {"error": "채널명/메시지 필요"}
-
     msg = {
         "type": "chat", "channel": channel,
         "senderType": "admin", "senderName": "관리자",
         "message": message, "sentAt": datetime.utcnow().isoformat()
     }
-    mgr.add_chat(channel, {
-        "sender_type": "admin", "sender_name": "관리자",
-        "message": message, "sent_at": msg["sentAt"]
-    })
+    mgr.add_chat(channel, {"sender_type": "admin", "sender_name": "관리자",
+                            "message": message, "sent_at": msg["sentAt"]})
     await mgr.broadcast_channel(channel, msg)
     return {"success": True}
 
@@ -390,13 +390,8 @@ async def chat_history(channel: str = "english"):
 
 @router.get("/api/stt/status")
 async def stt_status():
-    return {
-        "engine": os.environ.get("STT_ENGINE", "none"),
-        "running": False,
-        "language": os.environ.get("STT_LANGUAGE", "ko"),
-        "device": "cpu",
-        "note": "STT 파이프라인 별도 구성 필요"
-    }
+    return {"engine": os.environ.get("STT_ENGINE","none"), "running": False,
+            "language": os.environ.get("STT_LANGUAGE","ko"), "device": "cpu"}
 
 @router.get("/api/stt/history")
 async def stt_history(limit: int = 100):
@@ -404,19 +399,16 @@ async def stt_history(limit: int = 100):
 
 @router.get("/api/translation/status")
 async def translation_status():
-    return {
-        "engine": os.environ.get("TRANSLATION_ENGINE", "none"),
-        "sourceLang": "ko",
-        "targetLangs": ["en", "ja", "zh"]
-    }
+    return {"engine": os.environ.get("TRANSLATION_ENGINE","none"),
+            "sourceLang": "ko", "targetLangs": ["en","ja","zh"]}
 
 @router.get("/api/schedule")
 async def get_schedule():
     return {"schedules": [
-        {"id": 1, "schedule_time": "07:50", "label": "오전 1부 예배 (08:00)", "days_of_week": "0", "active": True},
-        {"id": 2, "schedule_time": "09:20", "label": "오전 2부 예배 (09:30)", "days_of_week": "0", "active": True},
-        {"id": 3, "schedule_time": "11:20", "label": "오전 3부 예배 (11:30)", "days_of_week": "0", "active": True},
-        {"id": 4, "schedule_time": "13:50", "label": "오후 예배 (14:00)",     "days_of_week": "0", "active": True},
+        {"id":1,"schedule_time":"07:50","label":"오전 1부 예배 (08:00)","days_of_week":"0","active":True},
+        {"id":2,"schedule_time":"09:20","label":"오전 2부 예배 (09:30)","days_of_week":"0","active":True},
+        {"id":3,"schedule_time":"11:20","label":"오전 3부 예배 (11:30)","days_of_week":"0","active":True},
+        {"id":4,"schedule_time":"13:50","label":"오후 예배 (14:00)",    "days_of_week":"0","active":True},
     ]}
 
 @router.post("/api/schedule")
@@ -432,75 +424,52 @@ async def get_stats():
     total = sum(v["listeners"] for v in mgr.states.values())
     ws_clients = sum(len(c) for c in mgr.channels.values())
     return {
-        "totalListeners": total,
-        "channels": mgr.get_all_states(),
-        "wsClients": ws_clients,
-        "todayStats": [],
-        "recentSessions": [],
+        "totalListeners": total, "channels": mgr.get_all_states(),
+        "wsClients": ws_clients, "todayStats": [], "recentSessions": [],
         "stt": {"engine": "none", "running": False},
         "translation": {"engine": "none"},
-        "redis": {"connected": True},
-        "dbQueue": 0,
+        "redis": {"connected": True}, "dbQueue": 0,
     }
 
 @router.post("/api/log/connect")
 async def log_connect(data: dict):
     channel = data.get("channel", "english")
-    if channel in VALID_CHANNELS:
+    if channel in mgr.channels:
         mgr.states[channel]["listeners"] = max(0, mgr.states[channel]["listeners"] + 1)
-        await mgr.broadcast_all({
-            "type": "listener_update", "channel": channel,
-            "count": mgr.states[channel]["listeners"]
-        })
+        await mgr.broadcast_all({"type":"listener_update","channel":channel,"count":mgr.states[channel]["listeners"]})
     return {"success": True}
 
 @router.post("/api/log/disconnect")
 async def log_disconnect(data: dict):
     channel = data.get("channel", "english")
-    if channel in VALID_CHANNELS:
+    if channel in mgr.channels:
         mgr.states[channel]["listeners"] = max(0, mgr.states[channel]["listeners"] - 1)
-        await mgr.broadcast_all({
-            "type": "listener_update", "channel": channel,
-            "count": mgr.states[channel]["listeners"]
-        })
+        await mgr.broadcast_all({"type":"listener_update","channel":channel,"count":mgr.states[channel]["listeners"]})
     return {"success": True}
 
-# STT 결과 수신 (외부 STT 모듈에서 POST로 전달)
 @router.post("/api/stt/result")
 async def stt_result(data: dict):
-    text       = sanitize(data.get("text", ""), 4000)
-    confidence = float(data.get("confidence", 0.9))
-    spoken_at  = data.get("spokenAt", datetime.utcnow().isoformat())
+    text = sanitize(data.get("text",""), 4000)
     if not text:
         return {"error": "텍스트 없음"}
-
-    record = {
-        "original_text": text, "text": text,
-        "confidence": confidence, "spoken_at": spoken_at, "spokenAt": spoken_at,
-        "language": "ko", "speaker": "preacher"
-    }
+    record = {"original_text":text,"text":text,"confidence":float(data.get("confidence",0.9)),
+              "spoken_at":data.get("spokenAt",datetime.utcnow().isoformat()),
+              "spokenAt":data.get("spokenAt",datetime.utcnow().isoformat()),
+              "language":"ko","speaker":"preacher"}
     mgr.add_stt(record)
-
-    # 전체 WS 클라이언트에 브로드캐스트
-    await mgr.broadcast_all({"type": "stt_text", **record})
+    await mgr.broadcast_all({"type":"stt_text",**record})
     return {"success": True}
 
-# 번역 결과 수신 (외부 번역 모듈에서 POST로 전달)
 @router.post("/api/translation/result")
 async def translation_result(data: dict):
-    channel       = data.get("channel", "english")
-    translated    = sanitize(data.get("translatedText", ""), 4000)
-    original      = sanitize(data.get("originalText",   ""), 4000)
-    target_lang   = data.get("targetLanguage", "en")
-    spoken_at     = data.get("spokenAt", datetime.utcnow().isoformat())
-
-    if not translated or channel not in VALID_CHANNELS:
+    channel = data.get("channel","english")
+    translated = sanitize(data.get("translatedText",""), 4000)
+    if not translated or channel not in mgr.channels:
         return {"error": "데이터 오류"}
-
-    msg = {
-        "type": "stt_translation", "channel": channel,
-        "translatedText": translated, "originalText": original,
-        "targetLanguage": target_lang, "spokenAt": spoken_at
-    }
-    await mgr.broadcast_channel(channel, msg)
+    await mgr.broadcast_channel(channel, {
+        "type":"stt_translation","channel":channel,
+        "translatedText":translated,"originalText":sanitize(data.get("originalText",""),4000),
+        "targetLanguage":data.get("targetLanguage","en"),
+        "spokenAt":data.get("spokenAt",datetime.utcnow().isoformat())
+    })
     return {"success": True}

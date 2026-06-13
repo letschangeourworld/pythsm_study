@@ -388,7 +388,8 @@
     <div class="card">
       <div class="card-hd">
         <span>채널 방송 제어</span>
-        <span style="font-size:11px;color:var(--dim)">토글로 ON/OFF</span>
+        <button class="btn-gold" style="font-size:11px;padding:4px 10px"
+          onclick="openChModal()">➕ 채널 추가</button>
       </div>
       <div class="ch-list">
         <div class="ch" id="ch-english">
@@ -438,6 +439,8 @@
             </label>
           </div>
         </div>
+        <!-- 동적으로 추가된 채널들 -->
+        <div id="dynamic-ch-list"></div>
       </div>
     </div>
 
@@ -522,11 +525,35 @@
       <option value="room_en">🇺🇸 English (영어)</option>
       <option value="room_ja">🇯🇵 日本語 (일본어)</option>
       <option value="room_zh">🇨🇳 中文 (중국어)</option>
-      <option value="room_ko">🇰🇷 한국어 (원음)</option>
     </select>
     <div class="modal-actions">
       <button class="btn-modal-ok" onclick="doCreate()">생성 및 시작</button>
       <button class="btn-modal-cancel" onclick="closeModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 신규 채널 추가 모달 ── -->
+<div class="modal-bg" id="modal-ch" onclick="if(event.target===this)closeChModal()">
+  <div class="modal-box">
+    <div class="modal-title">➕ 신규 채널 추가</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">
+      새 언어 채널을 추가하면 메인 화면에 자동으로 표시됩니다.
+    </div>
+    <div class="field-label">채널 키 (영문소문자, 예: french)</div>
+    <input class="field" type="text" id="chKey" placeholder="예: french" maxlength="20">
+    <div class="field-label">채널 이름 (표시용, 예: Français)</div>
+    <input class="field" type="text" id="chLabel" placeholder="예: Français" maxlength="30">
+    <div class="field-label">이모지 국기 (예: 🇫🇷)</div>
+    <input class="field" type="text" id="chFlag" placeholder="🇫🇷" maxlength="8" value="🌐">
+    <div class="field-label">LiveKit Room 이름 (예: room_fr)</div>
+    <input class="field" type="text" id="chRoom" placeholder="room_fr" maxlength="50">
+    <div style="font-size:10px;color:var(--muted);margin-top:4px">
+      ※ 통역자는 추가된 채널 키로 접속해야 합니다
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-ok" onclick="doAddChannel()">채널 추가</button>
+      <button class="btn-modal-cancel" onclick="closeChModal()">취소</button>
     </div>
   </div>
 </div>
@@ -628,6 +655,10 @@ function connectWS(){
       switch(d.type){
         case 'state':           updateDash(d.channels);break;
         case 'channel_update':  updateCh(d.channel,d.state);break;
+        case 'channel_added':
+          addDynamicChCard(d.channel, d.state);
+          updateCh(d.channel, d.state);
+          break;
         case 'listener_update': updateLC(d.channel,d.count);break;
         case 'user_list':
           document.getElementById('navExtra').textContent=`접속자 ${d.users?.length||0}명`;
@@ -743,6 +774,16 @@ async function bcStop(id){
   loadBroadcasts();loadStats();
 }
 function openModal(){ document.getElementById('modal').classList.add('open'); }
+function openChModal(){
+  document.getElementById('modal-ch').classList.add('open');
+  // 채널 키 입력 시 room 자동완성
+  document.getElementById('chKey').oninput = function(){
+    const k = this.value.replace(/[^a-z0-9_]/g,'');
+    this.value = k;
+    document.getElementById('chRoom').value = k ? 'room_'+k : '';
+  };
+}
+function closeChModal(){ document.getElementById('modal-ch').classList.remove('open'); }
 function closeModal(){ document.getElementById('modal').classList.remove('open'); }
 async function doCreate(){
   const title=document.getElementById('bcTitle').value.trim();
@@ -760,6 +801,54 @@ async function doCreate(){
     }else{alert(r.error?.message||'생성 실패');}
   }catch{alert('서버 오류');}
 }
+
+async function doAddChannel(){
+  const key   = document.getElementById('chKey').value.trim().toLowerCase();
+  const label = document.getElementById('chLabel').value.trim();
+  const flag  = document.getElementById('chFlag').value.trim() || '🌐';
+  const room  = document.getElementById('chRoom').value.trim();
+  if(!key||!label){alert('채널 키와 이름을 입력하세요.');return;}
+  if(!/^[a-z0-9_]+$/.test(key)){alert('채널 키는 영문소문자, 숫자, _ 만 사용 가능합니다.');return;}
+  try{
+    const r = await fetch(`${API}/api/channels`,{
+      method:'POST', headers:HDR,
+      body:JSON.stringify({key, label, flag, room: room||'room_'+key})
+    }).then(r=>r.json());
+    if(r.success){
+      closeChModal();
+      ['chKey','chLabel','chRoom'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('chFlag').value='🌐';
+      toast(`✅ '${label}' 채널이 추가되었습니다!`);
+      // 즉시 UI에 추가
+      addDynamicChCard(key, r.state);
+    } else {
+      alert(r.error||'채널 추가 실패');
+    }
+  }catch(e){alert('서버 오류: '+e.message);}
+}
+
+function addDynamicChCard(ch, st){
+  if(document.getElementById('ch-'+ch)) return; // 이미 있으면 스킵
+  const wrap = document.getElementById('dynamic-ch-list');
+  const div  = document.createElement('div');
+  div.className = 'ch'; div.id = 'ch-'+ch;
+  div.innerHTML = `
+    <div class="ch-flag">${st.flag||'🌐'}</div>
+    <div class="ch-info">
+      <div class="ch-name">${st.label||ch}</div>
+      <div class="ch-stat" id="lc-${ch}">0명 청취 중</div>
+      <div class="ch-time" id="ct-${ch}"></div>
+    </div>
+    <div class="ch-right">
+      <span class="pill off" id="pill-${ch}">OFF</span>
+      <label class="sw">
+        <input type="checkbox" id="tog-${ch}" onchange="doToggle('${ch}',this.checked)">
+        <span class="sw-track"></span>
+      </label>
+    </div>`;
+  wrap.appendChild(div);
+}
+
 
 // ════════════════════════════════════════
 // 채팅

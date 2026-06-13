@@ -43,24 +43,72 @@
                z-index:100;padding:10px 18px;border-radius:var(--radius-md);font-weight:600;font-size:13px;
                display:none;box-shadow:var(--shadow-md)}
     .hint{font-size:10px;color:var(--color-text-secondary);text-align:center;padding:6px}
+    .mic-src-wrap{padding:10px 16px;background:var(--color-bg-dark);border-bottom:1px solid var(--color-border)}
+    .mic-src-btns{display:flex;gap:8px;margin-bottom:8px}
+    .mic-src-btn{flex:1;padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+    .mic-src-btn.active{background:var(--color-primary);color:#fff;border:2px solid var(--color-primary)}
+    .mic-src-btn.inactive{background:var(--color-bg-card);color:var(--color-text-primary);border:2px solid var(--color-border)}
   </style>
 </head>
 <body>
+
+<!-- ── 상단 헤더 ── -->
 <div class="top">
   <div class="ri">
     <span style="font-size:22px">🎙️</span>
-    <div><div class="rl">English Room</div><div style="font-size:11px;color:var(--color-text-secondary)">room_en</div></div>
+    <div>
+      <select id="ch-select"
+        style="background:var(--color-bg-card);color:var(--color-text-primary);
+               border:1px solid var(--color-border);border-radius:6px;
+               padding:4px 8px;font-size:13px;font-weight:600"
+        onchange="onChChange(this.value)">
+        <option value="room_en">🇺🇸 English</option>
+        <option value="room_ja">🇯🇵 日本語</option>
+        <option value="room_zh">🇨🇳 中文</option>
+      </select>
+      <div style="font-size:10px;color:var(--color-text-secondary);text-align:center"
+           id="ch-room-label">room_en</div>
+    </div>
     <span class="badge badge-ready" id="bc-status">대기 중</span>
   </div>
   <div class="rs">
     <span>👥 <strong id="lst-count">0</strong>명</span>
     <span>🕐 <span id="clock"></span></span>
-    <button class="btn btn-secondary" style="padding:5px 10px;font-size:11px" onclick="logout()">로그아웃</button>
+    <button class="btn btn-secondary" style="padding:5px 10px;font-size:11px"
+            onclick="logout()">로그아웃</button>
   </div>
 </div>
 
 <div class="alert-bar" id="alert-bar"></div>
 
+<!-- ── 마이크 소스 선택 ── -->
+<div class="mic-src-wrap">
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;font-weight:600">
+    🎙️ 마이크 소스 선택
+  </div>
+  <div class="mic-src-btns">
+    <button id="btn-mic-phone" class="mic-src-btn active"
+            onclick="selectMicSource('phone')">📱 내 마이크</button>
+    <button id="btn-mic-server" class="mic-src-btn inactive"
+            onclick="selectMicSource('server')">🖥️ 서버PC 마이크</button>
+  </div>
+  <div id="device-select-wrap" style="display:none;margin-bottom:6px">
+    <select id="mic-device-select"
+      style="width:100%;background:var(--color-bg-card);color:var(--color-text-primary);
+             border:1px solid var(--color-border);border-radius:6px;padding:6px 8px;font-size:12px">
+      <option value="">-- 마이크 장치 선택 --</option>
+    </select>
+    <div style="font-size:10px;color:var(--color-text-secondary);margin-top:3px">
+      ※ 서버PC에 연결된 전문 마이크를 선택하세요
+    </div>
+  </div>
+  <div id="mic-source-info"
+       style="font-size:11px;color:var(--color-text-secondary)">
+    현재: 📱 내 마이크 사용 중
+  </div>
+</div>
+
+<!-- ── 마이크 상태 ── -->
 <div class="mic-sec">
   <div class="mic-hd">
     <span style="font-size:22px" id="mic-icon">🎤</span>
@@ -77,45 +125,67 @@
   </div>
 </div>
 
+<!-- ── 방송 제어 ── -->
 <div class="ctrl">
   <button class="btn btn-st" id="btn-st" onclick="startBC()">▶ 방송 시작</button>
   <button class="btn btn-sp" id="btn-sp" onclick="stopBC()">⏹ 방송 종료</button>
   <button class="btn btn-mu" id="btn-mu" onclick="toggleMute()">🔇 음소거</button>
-  <div class="rec" id="rec-time"><span class="rdot"></span><span id="rec-timer">00:00:00</span></div>
+  <div class="rec" id="rec-time">
+    <span class="rdot"></span><span id="rec-timer">00:00:00</span>
+  </div>
 </div>
 <div class="hint">Space: 음소거 토글</div>
 
+<!-- ── AI 보조 패널 ── -->
 <div class="ai-sec">
   <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px">
     🤖 AI 보조 패널
-    <span style="font-size:11px;color:var(--color-text-secondary);font-weight:400">(참고용 - 최종 통역은 통역자 책임)</span>
+    <span style="font-size:11px;color:var(--color-text-secondary);font-weight:400">
+      (참고용 - 최종 통역은 통역자 책임)
+    </span>
   </div>
   <div class="ai-panels">
     <div class="ai-panel">
       <div class="ai-lbl">📢 원문 (한국어 STT)</div>
-      <div class="ai-txt ai-orig" id="orig-txt"><span style="color:var(--color-text-secondary)">원문 자막이 표시됩니다...</span></div>
+      <div class="ai-txt ai-orig" id="orig-txt">
+        <span style="color:var(--color-text-secondary)">원문 자막이 표시됩니다...</span>
+      </div>
     </div>
     <div class="ai-panel">
       <div class="ai-lbl">🌐 AI 번역 초안 (English)</div>
-      <div class="ai-txt ai-trans" id="trans-txt"><span style="color:var(--color-text-secondary)">AI 번역이 표시됩니다...</span></div>
+      <div class="ai-txt ai-trans" id="trans-txt">
+        <span style="color:var(--color-text-secondary)">AI 번역이 표시됩니다...</span>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- ── 볼륨 제어 ── -->
 <div class="vol-ctrl">
-  <div class="vi"><div class="vl">🎧 원음 모니터</div><input type="range" class="vs" min="0" max="100" value="70" oninput="document.getElementById('ov').textContent=this.value+'%'"><span id="ov" style="font-size:11px;min-width:30px">70%</span></div>
-  <div class="vi"><div class="vl">🎤 내 모니터</div><input type="range" class="vs" min="0" max="100" value="40" oninput="document.getElementById('sv').textContent=this.value+'%'"><span id="sv" style="font-size:11px;min-width:30px">40%</span></div>
+  <div class="vi">
+    <div class="vl">🎧 원음 모니터</div>
+    <input type="range" class="vs" min="0" max="100" value="70"
+           oninput="document.getElementById('ov').textContent=this.value+'%'">
+    <span id="ov" style="font-size:11px;min-width:30px">70%</span>
+  </div>
+  <div class="vi">
+    <div class="vl">🎤 내 모니터</div>
+    <input type="range" class="vs" min="0" max="100" value="40"
+           oninput="document.getElementById('sv').textContent=this.value+'%'">
+    <span id="sv" style="font-size:11px;min-width:30px">40%</span>
+  </div>
 </div>
 
 <script src="/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js"></script>
 <script>
-// 토큰 관리 (iOS Safari localStorage 제한 대응)
+// ════════════════════════════════════════
+// 토큰 관리
+// ════════════════════════════════════════
 let TOKEN = localStorage.getItem('auth_token') ||
             localStorage.getItem('vitna_token') ||
             sessionStorage.getItem('auth_token') || null;
 
-// 토큰 없으면 자동으로 관리자 로그인 시도
 async function ensureToken() {
   if (TOKEN) return TOKEN;
   try {
@@ -130,156 +200,297 @@ async function ensureToken() {
       try { localStorage.setItem('auth_token', TOKEN); } catch(e) {}
       try { sessionStorage.setItem('auth_token', TOKEN); } catch(e) {}
     }
-  } catch(e) {
-    console.error('[Auth] 자동 로그인 실패:', e);
-  }
+  } catch(e) { console.error('[Auth] 자동 로그인 실패:', e); }
   return TOKEN;
 }
-// 토큰은 startBC에서 ensureToken()으로 자동 처리
-// API URL: HTTPS(19443)에서도 같은 서버로 연결 (Mixed Content 방지)
+
+// ════════════════════════════════════════
+// API URL (HTTPS/HTTP 자동 감지)
+// ════════════════════════════════════════
 const API = (function() {
-  var host = location.hostname;
+  var host  = location.hostname;
   var proto = location.protocol;
   var port  = location.port;
-  // HTTPS 19443 포트 → API도 19443으로 (Nginx가 내부적으로 변환)
   if (proto === 'https:' && port === '19443') {
     return 'https://' + host + ':19443';
   }
-  // 기존 HTTP 방식
   return localStorage.getItem('api_base') || AppConfig.apiBase;
 })();
 
-let room=null, broadcasting=false, muted=false;
-let recStart=null, recTmr=null, hbTmr=null, statTmr=null;
+// ════════════════════════════════════════
+// 상태 변수
+// ════════════════════════════════════════
+let room = null, broadcasting = false, muted = false;
+let recStart = null, recTmr = null, hbTmr = null, statTmr = null;
 
-// 미터 초기화
-const meter = document.getElementById('meter');
-for(let i=0;i<20;i++){const b=document.createElement('div');b.className='bar';b.style.height='4px';meter.appendChild(b);}
+// 채널/마이크 선택 상태
+let _selectedRoom     = 'room_en';
+let _micSource        = 'phone';   // 'phone' | 'server'
+let _selectedDeviceId = null;
 
-// 마이크 초기화
-async function initMic(){
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    const ctx=new AudioContext();
-    const analyser=ctx.createAnalyser();
-    ctx.createMediaStreamSource(stream).connect(analyser);
-    analyser.fftSize=64;
-    const data=new Uint8Array(analyser.frequencyBinCount);
-    const devs=await navigator.mediaDevices.enumerateDevices();
-    const mic=devs.find(d=>d.kind==='audioinput');
-    document.getElementById('mic-dev').textContent=mic?.label||'기본 마이크';
-    document.getElementById('mic-status').textContent='마이크 연결됨';
-    document.getElementById('mic-icon').textContent='✅';
-    setInterval(()=>{
-      analyser.getByteFrequencyData(data);
-      const bars=meter.querySelectorAll('.bar');
-      const avg=data.reduce((a,b)=>a+b,0)/data.length;
-      const db=Math.round(20*Math.log10(avg/255+0.001));
-      document.getElementById('db-level').textContent=db;
-      bars.forEach((bar,i)=>{
-        const v=data[i]||0;
-        bar.style.height=Math.max(4,(v/255)*28)+'px';
-        bar.className='bar'+(v>200?' c':v>150?' w':'');
-      });
-    },100);
-    stream.getTracks().forEach(t=>t.stop());
-  }catch(e){
-    document.getElementById('mic-status').textContent='⚠️ 마이크 접근 실패';
-    showAlert('마이크 권한을 허용해주세요.','error');
+// ════════════════════════════════════════
+// 채널 선택
+// ════════════════════════════════════════
+function onChChange(roomVal) {
+  _selectedRoom = roomVal;
+  document.getElementById('ch-room-label').textContent = roomVal;
+  if (broadcasting) {
+    showAlert('방송 중에는 채널 변경이 적용되지 않습니다.', 'warn');
   }
 }
 
-async function startBC(){
+// ════════════════════════════════════════
+// 마이크 소스 선택
+// ════════════════════════════════════════
+async function selectMicSource(src) {
+  _micSource = src;
+  const btnPhone  = document.getElementById('btn-mic-phone');
+  const btnServer = document.getElementById('btn-mic-server');
+  const wrap      = document.getElementById('device-select-wrap');
+  const info      = document.getElementById('mic-source-info');
+
+  if (src === 'phone') {
+    btnPhone.className  = 'mic-src-btn active';
+    btnServer.className = 'mic-src-btn inactive';
+    wrap.style.display  = 'none';
+    info.textContent    = '현재: 📱 내 마이크 사용 중';
+    _selectedDeviceId   = null;
+  } else {
+    btnServer.className = 'mic-src-btn active';
+    btnPhone.className  = 'mic-src-btn inactive';
+    wrap.style.display  = 'block';
+    info.textContent    = '현재: 🖥️ 서버PC 마이크 로딩 중...';
+    await loadMicDevices();
+  }
+}
+
+async function loadMicDevices() {
+  try {
+    const tmp = await navigator.mediaDevices.getUserMedia({audio: true});
+    tmp.getTracks().forEach(t => t.stop());
+
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const mics    = devices.filter(d => d.kind === 'audioinput');
+    const sel     = document.getElementById('mic-device-select');
+
+    sel.innerHTML = '<option value="">-- 마이크 장치 선택 --</option>';
+    mics.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d.deviceId;
+      opt.text  = d.label || '마이크 ' + d.deviceId.slice(0, 8);
+      sel.appendChild(opt);
+    });
+    sel.onchange = () => { _selectedDeviceId = sel.value || null; };
+
+    if (mics.length > 0) {
+      sel.value         = mics[0].deviceId;
+      _selectedDeviceId = mics[0].deviceId;
+    }
+    document.getElementById('mic-source-info').textContent =
+      '현재: 🖥️ 서버PC 마이크 (' + mics.length + '개 감지)';
+  } catch(e) {
+    showAlert('마이크 장치 로드 실패: ' + e.message, 'error');
+    selectMicSource('phone');
+  }
+}
+
+// ════════════════════════════════════════
+// 마이크 레벨 미터 초기화
+// ════════════════════════════════════════
+const meter = document.getElementById('meter');
+for (let i = 0; i < 20; i++) {
+  const b = document.createElement('div');
+  b.className = 'bar'; b.style.height = '4px';
+  meter.appendChild(b);
+}
+
+async function initMic() {
+  try {
+    const stream   = await navigator.mediaDevices.getUserMedia({audio: true});
+    const ctx      = new AudioContext();
+    const analyser = ctx.createAnalyser();
+    ctx.createMediaStreamSource(stream).connect(analyser);
+    analyser.fftSize = 64;
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    const devs = await navigator.mediaDevices.enumerateDevices();
+    const mic  = devs.find(d => d.kind === 'audioinput');
+    document.getElementById('mic-dev').textContent    = mic?.label || '기본 마이크';
+    document.getElementById('mic-status').textContent = '마이크 연결됨';
+    document.getElementById('mic-icon').textContent   = '✅';
+    setInterval(() => {
+      analyser.getByteFrequencyData(data);
+      const bars = meter.querySelectorAll('.bar');
+      const avg  = data.reduce((a, b) => a + b, 0) / data.length;
+      const db   = Math.round(20 * Math.log10(avg / 255 + 0.001));
+      document.getElementById('db-level').textContent = db;
+      bars.forEach((bar, i) => {
+        const v = data[i] || 0;
+        bar.style.height = Math.max(4, (v / 255) * 28) + 'px';
+        bar.className = 'bar' + (v > 200 ? ' c' : v > 150 ? ' w' : '');
+      });
+    }, 100);
+    stream.getTracks().forEach(t => t.stop());
+  } catch(e) {
+    document.getElementById('mic-status').textContent = '⚠️ 마이크 접근 실패';
+    showAlert('마이크 권한을 허용해주세요.', 'error');
+  }
+}
+
+// ════════════════════════════════════════
+// 방송 시작
+// ════════════════════════════════════════
+async function startBC() {
   TOKEN = await ensureToken();
-  showAlert('서버 연결 중...','info');
-  try{
-    const tr=await fetch(`${API}/api/v1/livekit/token`,{
-      method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${TOKEN}`},
-      body:JSON.stringify({room:'room_en',role:'interpreter',identity:`interp_${Date.now()}`})});
-    const td=await tr.json();
-    if(!td.success) throw new Error('토큰 발급 실패');
-    room=new LivekitClient.Room();
-    await room.connect((function(){
-      var lkUrl = td.data.server_url || AppConfig.liveKitUrl;
-      if (location.protocol === 'https:') {
-        // HTTPS → wss:// 직접 TCP 연결 (iOS 필수)
-        // 17443 포트: Nginx stream이 LiveKit TCP 7881로 SSL 래핑
-        var host = location.hostname;
-        lkUrl = 'wss://' + host + ':19443';
-        console.log('[LiveKit] iOS wss URL:', lkUrl);
-      }
-      return lkUrl;
-    })(), td.data.token);
-    await room.localParticipant.setMicrophoneEnabled(true);
-    broadcasting=true; recStart=Date.now();
-    document.getElementById('btn-st').style.display='none';
-    document.getElementById('btn-sp').style.display='inline-flex';
-    document.getElementById('rec-time').style.display='flex';
-    document.getElementById('bc-status').textContent='방송 중';
-    document.getElementById('bc-status').className='badge badge-live';
-    recTmr=setInterval(updateRec,1000);
-    hbTmr=setInterval(sendHB,30000);
-    statTmr=setInterval(updateStats,5000);
+  showAlert('서버 연결 중...', 'info');
+  try {
+    // 1. LiveKit 토큰 발급
+    const tr = await fetch(API + '/api/v1/livekit/token', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN},
+      body: JSON.stringify({
+        room:     _selectedRoom,
+        role:     'interpreter',
+        identity: 'interp_' + Date.now()
+      })
+    });
+    const td = await tr.json();
+    if (!td.success) throw new Error('토큰 발급 실패');
+
+    // 2. LiveKit 서버 URL 결정
+    var lkUrl = td.data.server_url || AppConfig.liveKitUrl;
+    if (location.protocol === 'https:') {
+      lkUrl = 'wss://' + location.hostname + ':19443';
+      console.log('[LiveKit] wss URL:', lkUrl);
+    }
+
+    // 3. Room 연결
+    room = new LivekitClient.Room();
+    await room.connect(lkUrl, td.data.token);
+
+    // 4. 마이크 소스에 따라 트랙 발행
+    if (_micSource === 'server' && _selectedDeviceId) {
+      const stream  = await navigator.mediaDevices.getUserMedia({
+        audio: {deviceId: {exact: _selectedDeviceId}}
+      });
+      const track   = stream.getAudioTracks()[0];
+      const lkTrack = new LivekitClient.LocalAudioTrack(track);
+      await room.localParticipant.publishTrack(lkTrack);
+      document.getElementById('mic-dev').textContent = '🖥️ ' + (track.label || '서버PC 마이크');
+    } else {
+      await room.localParticipant.setMicrophoneEnabled(true);
+    }
+
+    // 5. UI 업데이트
+    broadcasting = true; recStart = Date.now();
+    document.getElementById('btn-st').style.display  = 'none';
+    document.getElementById('btn-sp').style.display  = 'inline-flex';
+    document.getElementById('rec-time').style.display = 'flex';
+    document.getElementById('bc-status').textContent  = '방송 중';
+    document.getElementById('bc-status').className    = 'badge badge-live';
+    recTmr  = setInterval(updateRec, 1000);
+    hbTmr   = setInterval(sendHB, 30000);
+    statTmr = setInterval(updateStats, 5000);
     hideAlert();
-    await fetch(`${API}/api/v1/interpreters/session/start`,{
-      method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${TOKEN}`},
-      body:JSON.stringify({room_name:'room_en'})});
-  }catch(e){showAlert(`연결 실패: ${e.message}`,'error');}
+
+    // 6. 세션 기록 (실패해도 무시)
+    await fetch(API + '/api/v1/interpreters/session/start', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN},
+      body: JSON.stringify({room_name: _selectedRoom})
+    }).catch(() => {});
+
+  } catch(e) {
+    showAlert('연결 실패: ' + e.message, 'error');
+  }
 }
 
-async function stopBC(){
-  if(!confirm('방송을 종료하시겠습니까?'))return;
-  if(room){await room.disconnect();room=null;}
-  broadcasting=false;
-  [recTmr,hbTmr,statTmr].forEach(t=>clearInterval(t));
-  document.getElementById('btn-st').style.display='inline-flex';
-  document.getElementById('btn-sp').style.display='none';
-  document.getElementById('rec-time').style.display='none';
-  document.getElementById('bc-status').textContent='대기 중';
-  document.getElementById('bc-status').className='badge badge-ready';
-  await fetch(`${API}/api/v1/interpreters/session/stop`,{method:'POST',headers:{'Authorization':`Bearer ${TOKEN}`}}).catch(()=>{});
+// ════════════════════════════════════════
+// 방송 종료
+// ════════════════════════════════════════
+async function stopBC() {
+  if (!confirm('방송을 종료하시겠습니까?')) return;
+  if (room) { await room.disconnect(); room = null; }
+  broadcasting = false;
+  [recTmr, hbTmr, statTmr].forEach(t => clearInterval(t));
+  document.getElementById('btn-st').style.display   = 'inline-flex';
+  document.getElementById('btn-sp').style.display   = 'none';
+  document.getElementById('rec-time').style.display = 'none';
+  document.getElementById('bc-status').textContent  = '대기 중';
+  document.getElementById('bc-status').className    = 'badge badge-ready';
+  await fetch(API + '/api/v1/interpreters/session/stop', {
+    method: 'POST',
+    headers: {'Authorization': 'Bearer ' + TOKEN}
+  }).catch(() => {});
 }
 
-function toggleMute(){
-  muted=!muted;
-  if(room) room.localParticipant.setMicrophoneEnabled(!muted);
-  const btn=document.getElementById('btn-mu');
-  btn.textContent=muted?'🔊 음소거 해제':'🔇 음소거';
-  btn.classList.toggle('muted',muted);
+// ════════════════════════════════════════
+// 유틸리티
+// ════════════════════════════════════════
+function toggleMute() {
+  muted = !muted;
+  if (room) room.localParticipant.setMicrophoneEnabled(!muted);
+  const btn = document.getElementById('btn-mu');
+  btn.textContent = muted ? '🔊 음소거 해제' : '🔇 음소거';
+  btn.classList.toggle('muted', muted);
 }
 
-function updateRec(){
-  const e=Math.floor((Date.now()-recStart)/1000);
-  const h=String(Math.floor(e/3600)).padStart(2,'0');
-  const m=String(Math.floor((e%3600)/60)).padStart(2,'0');
-  const s=String(e%60).padStart(2,'0');
-  document.getElementById('rec-timer').textContent=`${h}:${m}:${s}`;
+function updateRec() {
+  const e = Math.floor((Date.now() - recStart) / 1000);
+  const h = String(Math.floor(e / 3600)).padStart(2, '0');
+  const m = String(Math.floor((e % 3600) / 60)).padStart(2, '0');
+  const s = String(e % 60).padStart(2, '0');
+  document.getElementById('rec-timer').textContent = h + ':' + m + ':' + s;
 }
 
-async function sendHB(){
-  await fetch(`${API}/api/v1/interpreters/heartbeat`,{method:'POST',headers:{'Authorization':`Bearer ${TOKEN}`}}).catch(()=>{});
+async function sendHB() {
+  await fetch(API + '/api/v1/interpreters/heartbeat', {
+    method: 'POST',
+    headers: {'Authorization': 'Bearer ' + TOKEN}
+  }).catch(() => {});
 }
 
-async function updateStats(){
-  const r=await fetch(`${API}/api/v1/listeners/count`,{headers:{'Authorization':`Bearer ${TOKEN}`}}).catch(()=>null);
-  if(r?.ok){const d=await r.json();if(d.success) document.getElementById('lst-count').textContent=d.data.en||0;}
+async function updateStats() {
+  const r = await fetch(API + '/api/v1/listeners/count', {
+    headers: {'Authorization': 'Bearer ' + TOKEN}
+  }).catch(() => null);
+  if (r?.ok) {
+    const d = await r.json();
+    if (d.success) document.getElementById('lst-count').textContent = d.data.en || 0;
+  }
 }
 
-function showAlert(msg,type='warning'){
-  const bar=document.getElementById('alert-bar');
-  bar.textContent=(type==='error'?'⚠️ ':'ℹ️ ')+msg;
-  bar.style.display='block';
-  bar.style.background=type==='error'?'var(--color-error)':type==='info'?'var(--color-info)':'var(--color-warning)';
-  bar.style.color='white';
+function showAlert(msg, type) {
+  const bar = document.getElementById('alert-bar');
+  bar.textContent  = (type === 'error' ? '⚠️ ' : 'ℹ️ ') + msg;
+  bar.style.display    = 'block';
+  bar.style.background = type === 'error'  ? 'var(--color-error)'   :
+                         type === 'info'   ? 'var(--color-info)'    :
+                                             'var(--color-warning)';
+  bar.style.color = 'white';
 }
-function hideAlert(){document.getElementById('alert-bar').style.display='none';}
-function logout(){if(broadcasting&&!confirm('방송 중! 정말 로그아웃?'))return;stopBC().then(()=>{localStorage.clear();location.href='/pages/admin/login.html';});}
+function hideAlert() { document.getElementById('alert-bar').style.display = 'none'; }
 
-setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('ko-KR');},1000);
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.target.matches('input,textarea')){e.preventDefault();toggleMute();}});
+function logout() {
+  if (broadcasting && !confirm('방송 중! 정말 로그아웃?')) return;
+  stopBC().then(() => { localStorage.clear(); location.href = '/pages/admin/login.html'; });
+}
+
+// ════════════════════════════════════════
+// 초기화
+// ════════════════════════════════════════
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('ko-KR');
+}, 1000);
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && !e.target.matches('input,textarea,select')) {
+    e.preventDefault(); toggleMute();
+  }
+});
+
 initMic();
 updateStats();
-setInterval(updateStats,30000);
+setInterval(updateStats, 30000);
 </script>
 </body>
 </html>
