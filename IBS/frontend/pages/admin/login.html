@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 로그인</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+    body { background:var(--color-bg-dark); color:var(--color-text-primary);
+           display:flex; align-items:center; justify-content:center; min-height:100vh; }
+    .box { background:var(--color-bg-card); border:1px solid var(--color-border);
+           border-radius:var(--radius-xl); padding:40px; width:100%; max-width:400px;
+           box-shadow:var(--shadow-lg); }
+    .logo { text-align:center; margin-bottom:32px; }
+    .logo h1 { font-size:20px; font-weight:700; color:var(--color-primary); }
+    .logo p  { font-size:12px; color:var(--color-text-secondary); margin-top:4px; }
+    .fg { margin-bottom:16px; }
+    .fg label { display:block; font-size:12px; font-weight:600;
+                color:var(--color-text-secondary); margin-bottom:6px; }
+    .fg input { width:100%; padding:12px 14px; background:var(--color-bg-input);
+                border:1px solid var(--color-border); border-radius:var(--radius-md);
+                color:var(--color-text-primary); font-size:14px; transition:border-color 0.2s; }
+    .fg input:focus { outline:none; border-color:var(--color-primary); }
+    .err { color:var(--color-error); font-size:12px; margin-top:8px; display:none; }
+    .hint { margin-top:16px; padding:12px; background:#1e40af22;
+            border-radius:var(--radius-md); font-size:11px; color:var(--color-text-secondary); line-height:1.8; }
+    .api-status { margin-top:10px; padding:6px 10px; border-radius:var(--radius-sm);
+                  font-size:11px; font-family:monospace; background:#0f172a; color:#64748b; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <div class="logo">
+    <div style="font-size:44px;margin-bottom:8px">🎙️</div>
+    <h1>다국어 통역방송 시스템</h1>
+    <p>관리자 로그인</p>
+  </div>
+  <form onsubmit="doLogin(event)">
+    <div class="fg">
+      <label>아이디</label>
+      <input id="u" type="text" placeholder="admin" autocomplete="username" required>
+    </div>
+    <div class="fg">
+      <label>비밀번호</label>
+      <input id="p" type="password" placeholder="••••••••" autocomplete="current-password" required>
+    </div>
+    <div class="err" id="err"></div>
+    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:4px;font-size:15px" id="btn">
+      로그인
+    </button>
+  </form>
+  <div class="hint">
+    테스트 계정<br>
+    관리자: <strong>admin</strong> / <strong>admin123</strong><br>
+    통역자: <strong>interpreter_en</strong> / <strong>interp123</strong>
+  </div>
+  <div class="api-status" id="api-status">API 연결 확인 중...</div>
+</div>
+<script src="/js/config.js"></script>
+<script>
+  async function doLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn');
+    const err = document.getElementById('err');
+    btn.disabled = true; btn.textContent = '로그인 중...'; err.style.display = 'none';
+    try {
+      const r = await fetch(`${AppConfig.apiBase}/api/v1/auth/login`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username: document.getElementById('u').value.trim(),
+                              password: document.getElementById('p').value})
+      });
+      const d = await r.json();
+      if (r.ok && d.access_token) {
+        localStorage.setItem('auth_token', d.access_token);
+        localStorage.setItem('api_base', AppConfig.apiBase);
+        localStorage.setItem('livekit_url', AppConfig.liveKitUrl);
+        location.href = '/pages/admin/index.html';
+      } else {
+        throw new Error(d.detail || d.error?.message || '로그인 실패');
+      }
+    } catch(ex) {
+      err.textContent = '⚠️ ' + (ex.message || '서버 연결 실패');
+      err.style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = '로그인';
+    }
+  }
+
+  fetch(`${AppConfig.apiBase}/api/v1/system/health`)
+    .then(r => r.json())
+    .then(d => {
+      const el = document.getElementById('api-status');
+      el.textContent = `✅ API: ${AppConfig.apiBase} (${d.status})`;
+      el.style.color = '#10b981';
+    })
+    .catch(() => {
+      const el = document.getElementById('api-status');
+      el.textContent = `❌ API 연결 실패: ${AppConfig.apiBase}`;
+      el.style.color = '#ef4444';
+    });
+</script>
+</body>
+</html>

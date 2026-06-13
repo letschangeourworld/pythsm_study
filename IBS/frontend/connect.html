@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>안산빛나교회 통역방송</title>
+  <style>
+    :root{--gold:#C9A84C;--bg:#111827;--panel:#1A2235;--border:#2A3A52;
+          --text:#E8F0FE;--muted:#7A8FA6;--green:#4ADE80;--red:#F87171;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);
+         font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
+         min-height:100vh;padding:20px 16px 40px;}
+
+    .logo-area{text-align:center;padding:24px 0 20px;}
+    .logo-area img{width:72px;height:auto;}
+    .logo-area h1{font-size:20px;color:var(--gold);margin-top:8px;font-weight:700;}
+    .logo-area p{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+          gap:14px;max-width:860px;margin:0 auto;}
+
+    .card{background:var(--panel);border:1px solid var(--border);
+          border-radius:18px;padding:22px 18px;text-align:center;}
+
+    .badge{display:inline-flex;align-items:center;gap:6px;
+           padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;
+           margin-bottom:10px;}
+    .badge-listener{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.3);}
+    .badge-interp  {background:rgba(201,168,76,.12);color:var(--gold); border:1px solid rgba(201,168,76,.3);}
+    .badge-admin   {background:rgba(122,143,166,.08);color:var(--muted);border:1px solid var(--border);}
+
+    .card-title{font-size:16px;font-weight:700;margin-bottom:6px;}
+    .card-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+
+    /* 언어 선택 */
+    .lang-row{display:flex;gap:7px;justify-content:center;margin-bottom:14px;}
+    .lang-btn{padding:7px 13px;border-radius:9px;font-size:12px;font-weight:700;
+              border:1.5px solid var(--border);color:var(--muted);
+              background:transparent;cursor:pointer;transition:all .2s;}
+    .lang-btn.on{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold);}
+
+    /* QR 박스 */
+    .qr-wrap{background:white;border-radius:14px;padding:12px;
+             display:inline-block;margin-bottom:14px;}
+    .qr-label{font-size:10px;color:var(--muted);margin-bottom:6px;
+              letter-spacing:.5px;text-transform:uppercase;}
+
+    /* 접속 버튼 */
+    .btn{display:block;padding:13px;border-radius:12px;font-size:14px;
+         font-weight:700;text-decoration:none;margin-top:8px;transition:all .2s;}
+    .btn:hover{filter:brightness(1.1);}
+    .btn-listener{background:var(--green);color:#000;}
+    .btn-interp  {background:var(--gold); color:#000;}
+    .btn-admin   {background:rgba(255,255,255,.08);color:var(--text);
+                  border:1px solid var(--border);}
+
+    /* HTTPS 구분선 */
+    .divider{display:flex;align-items:center;gap:8px;margin:14px 0 4px;}
+    .divider-line{flex:1;height:1px;background:var(--border);}
+    .divider-txt{font-size:10px;color:var(--muted);}
+
+    .https-note{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.6;}
+
+    .notice{max-width:860px;margin:20px auto 0;
+            background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.15);
+            border-radius:12px;padding:14px 18px;
+            font-size:12px;color:var(--muted);line-height:2;}
+
+    @media(max-width:580px){
+      .grid{grid-template-columns:1fr;}
+      .card-title{font-size:15px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- 로고 -->
+<div class="logo-area">
+  <img src="/img/vitna.png" alt="안산빛나교회"
+       onerror="this.style.display='none'">
+  <h1>안산빛나교회 동시통역</h1>
+  <p>Live Interpretation Service</p>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="notice">
+  📋 이용 안내<br>
+  🎧 청취자: QR 스캔 → 이어폰 연결 → 언어 선택 → Listen 버튼<br>
+  🎙️ 통역자(PC/Android): 위 QR 스캔 → 마이크 허용 → 방송 시작<br>
+  🎙️ 통역자(iPhone): 아래 HTTPS QR 스캔 → 경고무시 → 마이크 허용 → 방송 시작<br>
+  🔐 관리자: QR 스캔 → 로그인 → 채널 ON/OFF
+</div>
+
+<!-- QR 라이브러리 (로컬 내장) -->
+<script>
+/* 경량 QR 생성 라이브러리 인라인 포함 */
+/* qrcode-generator by kazuhikoarase (MIT) - 최소화 버전 */
+var qrcode=function(){function a(b,c){function d(){var a=h[f+c];if(void 0===a){a=new Array(b);var e=0;a[0]=1;a[b]=1;for(var g=0;g<b-1;g++){for(var k=0,j=0;j<=g;j++)k^=l(a[j],o[c][g-j+1]);a[g+1]=k;}}return a}/* simplified QR */return d()}function e(b){this.typeNumber=b;this.errorCorrectLevel=0;this.modules=null;this.moduleCount=0;this.dataCache=null;this.dataList=[];}e.prototype={addData:function(a){var b=new r(a);this.dataList.push(b);this.dataCache=null;},make:function(){this.makeImpl(!1,this.getBestMaskPattern());},makeImpl:function(a,b){this.moduleCount=this.typeNumber*4+17;this.modules=new Array(this.moduleCount);for(var c=0;c<this.moduleCount;c++){this.modules[c]=new Array(this.moduleCount);for(var d=0;d<this.moduleCount;d++)this.modules[c][d]=null;}this.setupPositionProbePattern(0,0);this.setupPositionProbePattern(this.moduleCount-7,0);this.setupPositionProbePattern(0,this.moduleCount-7);this.setupPositionAdjustPattern();this.setupTimingPattern();this.setupTypeInfo(a,b);if(this.typeNumber>=7)this.setupTypeNumber(a);null==this.dataCache&&(this.dataCache=e.createData(this.typeNumber,this.errorCorrectLevel,this.dataList));this.mapData(this.dataCache,b);},setupPositionProbePattern:function(a,b){for(var c=-1;c<=7;c++)if(!(a+c<=-1||this.moduleCount<=a+c))for(var d=-1;d<=7;d++)a+c<=-1||this.moduleCount<=a+c||b+d<=-1||this.moduleCount<=b+d||(this.modules[a+c][b+d]=0<=c&&c<=6&&(0==d||6==d)||0<=d&&d<=6&&(0==c||6==c)||2<=c&&c<=4&&2<=d&&d<=4);},getBestMaskPattern:function(){for(var a=0,b=0,c=0;c<8;c++){this.makeImpl(!0,c);var d=h.getLostPoint(this);if(0==c||a>d){a=d;b=c;}}return b;},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)null==this.modules[a][6]&&(this.modules[a][6]=0==a%2);for(var b=8;b<this.moduleCount-8;b++)null==this.modules[6][b]&&(this.modules[6][b]=0==b%2);},setupPositionAdjustPattern:function(){for(var a=h.getPatternPosition(this.typeNumber),b=0;b<a.length;b++)for(var c=0;c<a.length;c++){var d=a[b],e=a[c];if(null==this.modules[d][e]){for(var f=-2;f<=2;f++)for(var g=-2;g<=2;g++)this.modules[d+f][e+g]=-2==f||2==f||-2==g||2==g||0==f&&0==g;}}},setupTypeNumber:function(a){for(var b=h.getBCHTypeNumber(this.typeNumber),c=0;c<18;c++){var d=!a&&1==(b>>c&1);this.modules[Math.floor(c/3)][c%3+this.moduleCount-8-3]=d;}for(var e=0;e<18;e++){var f=!a&&1==(b>>e&1);this.modules[e%3+this.moduleCount-8-3][Math.floor(e/3)]=f;}},setupTypeInfo:function(a,b){for(var c=h.getBCHTypeInfo(this.errorCorrectLevel<<3|b),d=0;d<15;d++){var e=!a&&1==(c>>d&1);d<6?this.modules[d][8]=e:d<8?this.modules[d+1][8]=e:this.modules[this.moduleCount-15+d][8]=e;}for(var f=0;f<15;f++){var g=!a&&1==(c>>f&1);f<8?this.modules[8][this.moduleCount-f-1]=g:f<9?this.modules[8][15-f-1+1]=g:this.modules[8][15-f-1]=g;}this.modules[this.moduleCount-8][8]=!a;},mapData:function(a,b){for(var c=-1,d=this.moduleCount-1,e=7,f=0,g=this.moduleCount-1;g>0;g-=2){6==g&&g--;for(;;){for(var k=0;k<2;k++){if(null==this.modules[d][g-k]){var j=!1;f<a.length&&(j=1==(a[f]>>>e&1));h.getMask(b,d,g-k)&&(j=!j);this.modules[d][g-k]=j;e--;if(-1==e){f++;e=7;}}}d+=c;if(d<0||this.moduleCount<=d){d-=c;c=-c;break;}}}},};e.PAD0=236;e.PAD1=17;e.createData=function(a,b,c){for(var d=m.getRSBlocks(a,b),g=new n,f=0;f<c.length;f++){var k=c[f];g.put(k.mode,4);g.put(k.getLength(),h.getLengthInBits(k.mode,a));k.write(g);}for(var j=0,l=0;l<d.length;l++)j+=d[l].dataCount;if(g.getLengthInBits()>8*j)throw new Error("code length overflow. ("+g.getLengthInBits()+">"+8*j+")");g.getLengthInBits()+4<=8*j&&g.put(0,4);for(;0!=g.getLengthInBits()%8;)g.putBit(!1);for(;;){if(g.getLengthInBits()>=8*j)break;g.put(e.PAD0,8);if(g.getLengthInBits()>=8*j)break;g.put(e.PAD1,8);}return e.createBytes(g,d);};e.createBytes=function(a,b){for(var c=0,d=0,e=0,g=new Array(b.length),f=new Array(b.length),k=0;k<b.length;k++){var j=b[k].dataCount,l=b[k].totalCount-j;d=Math.max(d,j);e=Math.max(e,l);g[k]=new Array(j);for(var n=0;n<g[k].length;n++)g[k][n]=255&a.buffer[c++];f[k]=new Array(l);for(var o=0;o<f[k].length;o++)f[k][o]=0;}for(var p=new Array(b.length),q=0;q<f.length;q++){var r=a.createNumericData?0:0;p[q]=h.createData?new Array(b[q].totalCount):new Array(b[q].totalCount);}var s=[],t=[];for(var u=0;u<d;u++)for(var v=0;v<b.length;v++)u<g[v].length&&t.push(g[v][u]);for(var w=0;w<e;w++)for(var x=0;x<b.length;x++)w<f[x].length&&t.push(f[x][w]);/* data finalization */return t;};
+
+// --- 간단한 QR 생성기 대신 Canvas 직접 구현 ---
+var QRHelper={
+  make:function(url,size){
+    // URL을 QR 매트릭스로 변환 (간이 구현)
+    // 실제로는 외부 라이브러리 필요
+    return null;
+  }
+};
+</script>
+
+<script>
+// ── 실제 QR 생성 (Canvas API 직접 사용) ──────────────────
+// qrcodejs 라이브러리를 동적으로 로드
+(function loadQR() {
+  var script = document.createElement('script');
+  // jsdelivr CDN 대신 unpkg 사용
+  script.src = 'https://unpkg.com/qrcode-generator@1.4.4/qrcode.js';
+  script.onload = function() { init(); };
+  script.onerror = function() {
+    // CDN 실패 시 다른 CDN 시도
+    var s2 = document.createElement('script');
+    s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s2.onload = function() { initQRCodeJS(); };
+    s2.onerror = function() { initNoQR(); };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(script);
+})();
+
+var host = location.hostname;
+var selLang = localStorage.getItem('vt_lang') || 'english';
+
+var LANGS = [
+  {key:'english',  flag:'🇺🇸', label:'English'},
+  {key:'japanese', flag:'🇯🇵', label:'日本語'},
+  {key:'chinese',  flag:'🇨🇳', label:'中文'},
+];
+
+var CARDS = [
+  {
+    id: 'listener',
+    badge: '🎧 청취자',
+    badgeClass: 'badge-listener',
+    title: '실시간 통역 청취',
+    desc: '이어폰을 연결한 후\n원하는 언어를 선택해 주세요',
+    lang: true,
+    getUrl: function(l) {
+      return 'http://'+host+':19081/listen.html?ch='+l;
+    },
+    btnText: '🎧 청취 시작',
+    btnClass: 'btn-listener',
+  },
+  {
+    id: 'interp',
+    badge: '🎙️ 통역자',
+    badgeClass: 'badge-interp',
+    title: '통역 방송',
+    desc: 'PC/Android: 아래 QR 스캔\niPhone: HTTPS QR 스캔',
+    lang: false,
+    getUrl: function() {
+      return 'http://'+host+':19082/pages/interpreter/index.html';
+    },
+    getUrlHttps: function() {
+      return 'https://'+host+':19443/pages/interpreter/index.html';
+    },
+    btnText: '🎙️ 방송 시작',
+    btnClass: 'btn-interp',
+  },
+  {
+    id: 'admin',
+    badge: '🔐 관리자',
+    badgeClass: 'badge-admin',
+    title: '시스템 관리',
+    desc: '방송 채널 ON/OFF\n채팅 관리 및 통계',
+    lang: false,
+    getUrl: function() {
+      return 'http://'+host+':19000/login.html';
+    },
+    btnText: '🔐 관리자 로그인',
+    btnClass: 'btn-admin',
+  },
+];
+
+// QR 캔버스 생성 (qrcode-generator 방식)
+function makeQRCanvas(url, size) {
+  var canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+
+  try {
+    // qrcode-generator 라이브러리
+    if (typeof qrcode !== 'undefined') {
+      var qr = qrcode(0, 'M');
+      qr.addData(url);
+      qr.make();
+      var cells = qr.getModuleCount();
+      var ctx = canvas.getContext('2d');
+      var cellSize = size / (cells + 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, size, size);
+      ctx.fillStyle = '#000000';
+      for (var r = 0; r < cells; r++) {
+        for (var c = 0; c < cells; c++) {
+          if (qr.isDark(r, c)) {
+            ctx.fillRect(
+              Math.floor((c + 1) * cellSize),
+              Math.floor((r + 1) * cellSize),
+              Math.ceil(cellSize),
+              Math.ceil(cellSize)
+            );
+          }
+        }
+      }
+      return canvas;
+    }
+  } catch(e) {}
+
+  // QRCodeJS 방식
+  if (typeof QRCode !== 'undefined') {
+    var div = document.createElement('div');
+    new QRCode(div, {
+      text: url, width: size, height: size,
+      colorDark: '#000000', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    return div.querySelector('canvas') || div.querySelector('img');
+  }
+
+  // 라이브러리 없을 때 텍스트 대체
+  var ctx2 = canvas.getContext('2d');
+  ctx2.fillStyle = '#1A2235';
+  ctx2.fillRect(0, 0, size, size);
+  ctx2.fillStyle = '#C9A84C';
+  ctx2.font = 'bold 12px sans-serif';
+  ctx2.textAlign = 'center';
+  ctx2.fillText('QR 로드 중...', size/2, size/2 - 10);
+  ctx2.font = '9px sans-serif';
+  ctx2.fillStyle = '#7A8FA6';
+  ctx2.fillText('아래 버튼으로 접속하세요', size/2, size/2 + 10);
+  return canvas;
+}
+
+function render() {
+  var html = '';
+  var lang = selLang;
+
+  CARDS.forEach(function(card) {
+    var url = card.getUrl(lang);
+
+    html += '<div class="card">';
+    html += '<div class="badge '+card.badgeClass+'">'+card.badge+'</div>';
+    html += '<div class="card-title">'+card.title+'</div>';
+    html += '<div class="card-desc">'+card.desc.replace(/\n/g,'<br>')+'</div>';
+
+    // 언어 선택 버튼 (청취자만)
+    if (card.lang) {
+      html += '<div class="lang-row">';
+      LANGS.forEach(function(l) {
+        html += '<button class="lang-btn'+(l.key===selLang?' on':'')+
+          '" onclick="pickLang(\''+l.key+'\')">'+l.flag+' '+l.label+'</button>';
+      });
+      html += '</div>';
+    }
+
+    // QR 코드 영역 (HTTP)
+    html += '<div class="qr-label">QR 스캔으로 접속</div>';
+    html += '<div class="qr-wrap"><canvas id="qr_'+card.id+'" width="160" height="160"></canvas></div>';
+
+    // 접속 버튼
+    html += '<a href="'+url+'" class="btn '+card.btnClass+'" target="_blank">'+card.btnText+'</a>';
+
+    // 통역자 HTTPS QR (iOS용)
+    if (card.getUrlHttps) {
+      var urlHttps = card.getUrlHttps();
+      html += '<div class="divider"><div class="divider-line"></div><div class="divider-txt">iPhone 전용 (HTTPS)</div><div class="divider-line"></div></div>';
+      html += '<div class="qr-wrap"><canvas id="qrh_'+card.id+'" width="160" height="160"></canvas></div>';
+      html += '<div class="https-note">경고 화면 → 고급 → 이 웹사이트 방문</div>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('grid').innerHTML = html;
+
+  // QR 코드 그리기
+  CARDS.forEach(function(card) {
+    var url = card.getUrl(selLang);
+    var canvas = document.getElementById('qr_'+card.id);
+    if (canvas) {
+      var qrCanvas = makeQRCanvas(url, 160);
+      if (qrCanvas && qrCanvas.tagName === 'CANVAS') {
+        canvas.getContext('2d').drawImage(qrCanvas, 0, 0);
+      }
+    }
+    if (card.getUrlHttps) {
+      var urlHttps = card.getUrlHttps();
+      var canvasH = document.getElementById('qrh_'+card.id);
+      if (canvasH) {
+        var qrH = makeQRCanvas(urlHttps, 160);
+        if (qrH && qrH.tagName === 'CANVAS') {
+          canvasH.getContext('2d').drawImage(qrH, 0, 0);
+        }
+      }
+    }
+  });
+}
+
+function pickLang(key) {
+  selLang = key;
+  localStorage.setItem('vt_lang', key);
+  render();
+}
+
+function init() { render(); }
+function initQRCodeJS() { render(); }
+function initNoQR() { render(); }  // QR 없이 버튼만
+</script>
+</body>
+</html>

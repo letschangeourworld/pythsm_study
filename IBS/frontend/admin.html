@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vitna 관리자</title>
+  <style>
+    /* ── LiveKit 스타일 변수 ── */
+    :root {
+      --bg:     #0A0E1A;
+      --panel:  #111827;
+      --card:   #1A2235;
+      --card2:  #1E2A3D;
+      --border: #2A3A52;
+      --gold:   #C9A84C;
+      --gold2:  #E8C86A;
+      --text:   #E8F0FE;
+      --muted:  #7A8FA6;
+      --dim:    #4A5568;
+      --green:  #4ADE80;
+      --red:    #F87171;
+      --blue:   #60A5FA;
+      --accent: #2563EB;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, 'Noto Sans KR', sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column;
+    }
+
+    /* ── 상단바 ── */
+    .nav {
+      height: 52px; background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 1px 20px rgba(0,0,0,.5);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 700; color: var(--text);
+    }
+    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .nav-brand .dot.on  { background: var(--green); box-shadow: 0 0 6px var(--green); animation: glow 2s infinite; }
+    .nav-brand .dot.off { background: var(--dim); }
+    @keyframes glow { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .nav-right { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+    .nav-status { color: var(--muted); }
+    .btn-nav {
+      padding: 5px 12px; border-radius: 6px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--muted); font-size: 12px; cursor: pointer;
+      transition: all .15s;
+    }
+    .btn-nav:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── 사이드바 + 메인 레이아웃 ── */
+    .layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* 사이드바 */
+    .sidebar {
+      width: 200px; background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 16px 0; flex-shrink: 0;
+      overflow-y: auto;
+    }
+    .sidebar-section {
+      padding: 10px 16px 4px;
+      font-size: 10px; color: var(--dim);
+      text-transform: uppercase; letter-spacing: 1.2px;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 16px; color: var(--muted);
+      cursor: pointer; transition: all .15s; font-size: 13px;
+      border-left: 2px solid transparent;
+      user-select: none;
+    }
+    .sidebar-item:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .sidebar-item.active { color: var(--gold); border-left-color: var(--gold);
+                           background: rgba(201,168,76,.07); }
+    .sidebar-item .icon { font-size: 15px; width: 18px; text-align: center; }
+    .sidebar-badge {
+      margin-left: auto; background: var(--red);
+      color: #fff; border-radius: 9px;
+      font-size: 9px; padding: 1px 5px; font-weight: 700;
+    }
+    .sidebar-badge.hidden { display: none; }
+
+    /* 메인 콘텐츠 */
+    .main {
+      flex: 1; overflow-y: auto; padding: 20px;
+      display: none;
+    }
+    .main.active { display: block; }
+
+    /* ── 카드 ── */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card-hd {
+      font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ── 경고 ── */
+    .warn {
+      background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25);
+      border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;
+      font-size: 12px; color: var(--red); display: none;
+    }
+
+    /* ── KPI 그리드 ── */
+    .kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
+    .kpi {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .kpi-label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .8px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: var(--gold); line-height: 1; }
+    .kpi-sub   { font-size: 10px; color: var(--muted); }
+
+    /* ── 채널 카드 ── */
+    .ch-list { display: flex; flex-direction: column; gap: 8px; }
+    .ch {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 16px;
+      display: flex; align-items: center; gap: 14px;
+      transition: all .2s;
+    }
+    .ch.live {
+      border-color: rgba(74,222,128,.4);
+      background: rgba(74,222,128,.04);
+      box-shadow: 0 0 0 1px rgba(74,222,128,.15);
+    }
+    .ch-flag {
+      font-size: 26px; line-height: 1; flex-shrink: 0;
+      font-family: 'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;
+    }
+    .ch-info { flex: 1; min-width: 0; }
+    .ch-name { font-size: 14px; font-weight: 600; }
+    .ch-stat { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .ch-time { font-size: 10px; color: var(--gold); margin-top: 2px; }
+    .ch-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pill {
+      font-size: 10px; padding: 3px 9px; border-radius: 12px;
+      font-weight: 700; letter-spacing: .3px;
+    }
+    .pill.live { background: rgba(74,222,128,.15); color: var(--green);
+                  border: 1px solid rgba(74,222,128,.3); }
+    .pill.off  { background: rgba(74,84,99,.2); color: var(--dim);
+                  border: 1px solid var(--border); }
+
+    /* 토글 */
+    .sw { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .sw input { opacity: 0; width: 0; height: 0; }
+    .sw-track {
+      position: absolute; inset: 0; background: var(--border);
+      border-radius: 24px; cursor: pointer; transition: .25s;
+    }
+    .sw-track::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; left: 4px; top: 4px;
+      background: #fff; border-radius: 50%; transition: .25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.4);
+    }
+    .sw input:checked + .sw-track { background: var(--green); }
+    .sw input:checked + .sw-track::before { transform: translateX(20px); }
+
+    /* ── 테이블 ── */
+    .tbl-wrap {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th {
+      padding: 9px 12px; text-align: left; font-size: 10px;
+      color: var(--dim); text-transform: uppercase; letter-spacing: .8px;
+      border-bottom: 1px solid var(--border); font-weight: 600;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid rgba(42,58,82,.4); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+    .status-pill {
+      font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700;
+    }
+    .status-pill.live  { background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.3); }
+    .status-pill.ready { background:rgba(96,165,250,.12);color:var(--blue); border:1px solid rgba(96,165,250,.3); }
+    .status-pill.ended { background:rgba(74,84,99,.15);  color:var(--dim);  border:1px solid var(--border); }
+    .act-btn {
+      padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      border: 1px solid; cursor: pointer; background: transparent;
+      font-family: inherit; transition: opacity .15s;
+    }
+    .act-btn:hover { opacity: .7; }
+    .act-btn.go   { color: var(--green); border-color: rgba(74,222,128,.4); }
+    .act-btn.stop { color: var(--red);   border-color: rgba(248,113,113,.4); }
+
+    /* ── 채팅 ── */
+    .ann-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .sel, .inp {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 12px;
+      font-size: 13px; color: var(--text); font-family: inherit; outline: none;
+      transition: border-color .15s;
+    }
+    .sel:focus, .inp:focus { border-color: var(--gold); }
+    .sel { flex-shrink: 0; }
+    .inp { flex: 1; }
+    .btn-gold {
+      background: linear-gradient(135deg,var(--gold),var(--gold2));
+      color: #0D1117; border: none; border-radius: 8px;
+      padding: 9px 16px; font-size: 13px; font-weight: 700;
+      cursor: pointer; flex-shrink: 0; transition: opacity .15s;
+    }
+    .btn-gold:hover { opacity: .85; }
+    .chat-log {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .chat-log-hd {
+      padding: 10px 14px; border-bottom: 1px solid var(--border);
+      font-size: 11px; color: var(--muted);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .chat-log-body {
+      max-height: 340px; overflow-y: auto;
+      padding: 12px 14px; display: flex; flex-direction: column; gap: 7px;
+    }
+    .chat-log-body::-webkit-scrollbar { width: 4px; }
+    .chat-log-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .msg { font-size: 12px; line-height: 1.6; padding: 8px 12px; border-radius: 9px; }
+    .msg.admin    { background: rgba(201,168,76,.1);  border-left: 2px solid var(--gold); }
+    .msg.listener { background: rgba(96,165,250,.08); border-left: 2px solid var(--blue); }
+    .msg.system   { background: rgba(167,139,250,.06); color: var(--muted);
+                     font-style: italic; text-align: center; }
+    .msg-meta { font-size: 10px; color: var(--dim); margin-bottom: 2px;
+                display: flex; justify-content: space-between; }
+
+    /* ── 스케줄 ── */
+    .sch { background: var(--card2); border: 1px solid var(--border);
+           border-radius: 10px; padding: 13px 16px; margin-bottom: 8px;
+           display: flex; align-items: center; justify-content: space-between; }
+    .sch-time  { font-size: 22px; font-weight: 700; color: var(--gold); }
+    .sch-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .sch-days  { font-size: 11px; color: var(--blue); margin-top: 2px; }
+
+    /* ── 빠른 링크 ── */
+    .links { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+    .lnk {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 11px; border-radius: 18px;
+      background: var(--card2); border: 1px solid var(--border);
+      text-decoration: none; color: var(--muted); font-size: 11px; font-weight: 600;
+      transition: all .15s;
+    }
+    .lnk:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── 모달 ── */
+    .modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
+      z-index: 300; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-box {
+      background: var(--card); border: 1px solid rgba(201,168,76,.2);
+      border-radius: 16px; padding: 26px; width: 100%; max-width: 380px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.7);
+    }
+    .modal-title { font-size: 15px; font-weight: 700; color: var(--gold); margin-bottom: 16px; }
+    .field-label { font-size: 11px; color: var(--muted); margin: 12px 0 5px; font-weight: 600; }
+    .field {
+      width: 100%; padding: 10px 13px; background: var(--card2);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-size: 14px; font-family: inherit; outline: none;
+    }
+    .field:focus { border-color: var(--gold); }
+    .modal-actions { display: flex; gap: 8px; margin-top: 18px; }
+    .btn-modal-ok {
+      flex: 1; padding: 11px; background: linear-gradient(135deg,var(--gold),var(--gold2));
+      color: #0D1117; border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .btn-modal-cancel {
+      flex: 1; padding: 11px; background: transparent;
+      color: var(--muted); border: 1px solid var(--border); border-radius: 8px;
+      font-size: 14px; cursor: pointer; font-family: inherit;
+    }
+    .btn-modal-cancel:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── 토스트 ── */
+    .toast-wrap { position: fixed; bottom: 20px; right: 20px; z-index: 400;
+                   display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── 반응형 ── */
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .kpi-row .kpi:last-child { grid-column: span 2; }
+      .ann-row { flex-wrap: wrap; }
+      .sel { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── 네비게이션 ── -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="dot off" id="navDot"></span>
+    ✝ Vitna 관리자
+    <span style="font-size:10px;color:var(--dim);font-weight:400">v3.0</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-status" id="navStatus">연결 중...</span>
+    <span class="nav-status" id="navExtra"></span>
+    <a href="/index.html"
+       style="color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;">
+      ← 메인
+    </a>
+    <button class="btn-nav" onclick="logout()">로그아웃</button>
+  </div>
+</nav>
+
+<!-- ── 레이아웃 ── -->
+<div class="layout">
+
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="sidebar-section">방송</div>
+    <div class="sidebar-item active" onclick="goPage('dashboard')" id="si-dashboard">
+      <span class="icon">📊</span> 대시보드
+    </div>
+    <div class="sidebar-item" onclick="goPage('broadcast')" id="si-broadcast">
+      <span class="icon">📡</span> 방송 관리
+    </div>
+
+    <div class="sidebar-section" style="margin-top:8px">커뮤니케이션</div>
+    <div class="sidebar-item" onclick="goPage('chat')" id="si-chat">
+      <span class="icon">💬</span> 채팅
+      <span class="sidebar-badge hidden" id="chatBadge">0</span>
+    </div>
+    <div class="sidebar-item" onclick="goPage('schedule')" id="si-schedule">
+      <span class="icon">🕐</span> 스케줄
+    </div>
+
+    <div class="sidebar-section" style="margin-top:8px">접속</div>
+    <div id="sideLinks"></div>
+  </aside>
+
+  <!-- ━━━━ 대시보드 ━━━━ -->
+  <div class="main active" id="page-dashboard">
+
+    <div class="warn" id="warnBar">
+      ⚠️ 세션 만료.
+      <a href="login.html" style="color:var(--red);font-weight:700">다시 로그인</a>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">청취자</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-sub">Live listeners</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">활성 채널</div>
+        <div class="kpi-value" id="kpiCh">0</div>
+        <div class="kpi-sub">Active channels</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">WS 연결</div>
+        <div class="kpi-value" id="kpiWs">0</div>
+        <div class="kpi-sub">WebSocket</div>
+      </div>
+    </div>
+
+    <!-- 채널 제어 -->
+    <div class="card">
+      <div class="card-hd">
+        <span>채널 방송 제어</span>
+        <span style="font-size:11px;color:var(--dim)">토글로 ON/OFF</span>
+      </div>
+      <div class="ch-list">
+        <div class="ch" id="ch-english">
+          <div class="ch-flag">🇺🇸</div>
+          <div class="ch-info">
+            <div class="ch-name">English</div>
+            <div class="ch-stat" id="lc-english">0명 청취 중</div>
+            <div class="ch-time" id="ct-english"></div>
+          </div>
+          <div class="ch-right">
+            <span class="pill off" id="pill-english">OFF</span>
+            <label class="sw">
+              <input type="checkbox" id="tog-english" onchange="doToggle('english',this.checked)">
+              <span class="sw-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="ch" id="ch-japanese">
+          <div class="ch-flag">🇯🇵</div>
+          <div class="ch-info">
+            <div class="ch-name">日本語</div>
+            <div class="ch-stat" id="lc-japanese">0명 청취 중</div>
+            <div class="ch-time" id="ct-japanese"></div>
+          </div>
+          <div class="ch-right">
+            <span class="pill off" id="pill-japanese">OFF</span>
+            <label class="sw">
+              <input type="checkbox" id="tog-japanese" onchange="doToggle('japanese',this.checked)">
+              <span class="sw-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="ch" id="ch-chinese">
+          <div class="ch-flag">🇨🇳</div>
+          <div class="ch-info">
+            <div class="ch-name">中文</div>
+            <div class="ch-stat" id="lc-chinese">0명 청취 중</div>
+            <div class="ch-time" id="ct-chinese"></div>
+          </div>
+          <div class="ch-right">
+            <span class="pill off" id="pill-chinese">OFF</span>
+            <label class="sw">
+              <input type="checkbox" id="tog-chinese" onchange="doToggle('chinese',this.checked)">
+              <span class="sw-track"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 빠른 링크 -->
+    <div class="card">
+      <div class="card-hd"><span>빠른 접속</span></div>
+      <div class="links" id="quickLinks"></div>
+    </div>
+  </div>
+
+  <!-- ━━━━ 방송 관리 ━━━━ -->
+  <div class="main" id="page-broadcast">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <span style="font-size:13px;font-weight:600;color:var(--muted)">방송 세션</span>
+      <button class="btn-gold" onclick="openModal()">+ 방송 생성</button>
+    </div>
+    <div class="tbl-wrap" id="bcTable">
+      <table><tbody>
+        <tr><td colspan="5" style="text-align:center;padding:28px;color:var(--muted)">로딩 중...</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- ━━━━ 채팅 ━━━━ -->
+  <div class="main" id="page-chat">
+    <div class="card">
+      <div class="card-hd"><span>공지 전송</span></div>
+      <div class="ann-row">
+        <select class="sel" id="annCh">
+          <option value="english">🇺🇸 영어</option>
+          <option value="japanese">🇯🇵 일본어</option>
+          <option value="chinese">🇨🇳 중국어</option>
+        </select>
+        <input class="inp" type="text" id="annMsg"
+          placeholder="공지 메시지 입력 (Enter로 전송)"
+          maxlength="300" onkeydown="if(event.key==='Enter')doAnnounce()">
+        <button class="btn-gold" onclick="doAnnounce()">전송</button>
+      </div>
+    </div>
+
+    <div class="chat-log">
+      <div class="chat-log-hd">
+        <span>💬 채팅 기록</span>
+        <div style="display:flex;gap:7px;align-items:center">
+          <select id="histCh" onchange="loadChat()"
+            style="font-size:11px;padding:4px 8px;background:var(--card2);
+                   border:1px solid var(--border);border-radius:6px;color:var(--text)">
+            <option value="english">영어</option>
+            <option value="japanese">일본어</option>
+            <option value="chinese">중국어</option>
+          </select>
+          <button class="btn-nav" style="font-size:10px;padding:3px 9px"
+            onclick="loadChat()">새로고침</button>
+        </div>
+      </div>
+      <div class="chat-log-body" id="chatBody">
+        <div style="color:var(--muted);font-size:12px;text-align:center;padding:24px">채팅 기록 없음</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━ 스케줄 ━━━━ -->
+  <div class="main" id="page-schedule">
+    <div class="card">
+      <div class="card-hd"><span>방송 스케줄</span></div>
+      <div id="schList">
+        <div style="color:var(--muted);font-size:12px;text-align:center;padding:24px">로딩 중...</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /layout -->
+
+<!-- ── 방송 생성 모달 ── -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-title">📡 방송 생성</div>
+    <div class="field-label">방송 제목</div>
+    <input class="field" type="text" id="bcTitle" placeholder="예: 주일예배 영어 통역방송">
+    <div class="field-label">통역 채널</div>
+    <select class="field" id="bcRoom">
+      <option value="room_en">🇺🇸 English (영어)</option>
+      <option value="room_ja">🇯🇵 日本語 (일본어)</option>
+      <option value="room_zh">🇨🇳 中文 (중국어)</option>
+      <option value="room_ko">🇰🇷 한국어 (원음)</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-modal-ok" onclick="doCreate()">생성 및 시작</button>
+      <button class="btn-modal-cancel" onclick="closeModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 토스트 컨테이너 ── -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ════════════════════════════════════════
+// 초기화
+// ════════════════════════════════════════
+const API  = `http://${location.hostname}:19000`;
+const WSURL= `ws://${location.hostname}:19000/ws`;
+let TOKEN  = localStorage.getItem('vitna_token') ||
+             localStorage.getItem('auth_token');
+
+function expired(t){
+  try{return JSON.parse(atob(t.split('.')[1])).exp*1000<Date.now();}
+  catch{return true;}
+}
+if(!TOKEN){ location.href='login.html'; }
+if(expired(TOKEN)){
+  document.getElementById('warnBar').style.display='block';
+  setTimeout(()=>location.href='login.html', 2500);
+}
+
+const HDR={'Content-Type':'application/json','Authorization':`Bearer ${TOKEN}`};
+let curPage='dashboard', unread=0, ws=null, wsDelay=2000;
+
+// 사이드바 링크
+const h = location.hostname;
+const LINKS = [
+  ['🎧 영어 청취자',  `http://${h}:19081/listen.html?ch=english`],
+  ['🎧 일어 청취자',  `http://${h}:19081/listen.html?ch=japanese`],
+  ['🎧 중어 청취자',  `http://${h}:19081/listen.html?ch=chinese`],
+  ['🎙️ 통역자(PC)',   `http://${h}:19082/pages/interpreter/index.html`],
+  ['🎙️ 통역자(iOS)',  `https://${h}:19443/pages/interpreter/index.html`],
+];
+
+document.getElementById('sideLinks').innerHTML = LINKS.map(([lbl,url])=>
+  `<a href="${url}" target="_blank" class="sidebar-item" style="font-size:12px">
+    <span class="icon">↗</span>${lbl}
+  </a>`
+).join('');
+
+document.getElementById('quickLinks').innerHTML = [
+  ...LINKS,
+  ['📊 Grafana', `http://${h}:19300`],
+  ['🗄️ MinIO',  `http://${h}:19011`],
+].map(([lbl,url])=>`<a href="${url}" target="_blank" class="lnk">${lbl}</a>`).join('');
+
+// ════════════════════════════════════════
+// 페이지 전환
+// ════════════════════════════════════════
+function goPage(name){
+  document.querySelectorAll('.main').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item[id^="si-"]').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const si = document.getElementById('si-'+name);
+  if(si) si.classList.add('active');
+  curPage = name;
+  if(name==='broadcast') loadBroadcasts();
+  if(name==='chat')      { loadChat(); unread=0; updateBadge(); }
+  if(name==='schedule')  loadSchedule();
+}
+
+function updateBadge(){
+  const b=document.getElementById('chatBadge');
+  unread>0&&curPage!=='chat'
+    ?(b.textContent=unread>99?'99+':unread,b.classList.remove('hidden'))
+    :b.classList.add('hidden');
+}
+
+// ════════════════════════════════════════
+// WebSocket
+// ════════════════════════════════════════
+function setWS(on,txt){
+  const cls=on?'dot on':'dot off';
+  document.getElementById('navDot').className=cls;
+  document.getElementById('navStatus').textContent=txt;
+}
+
+function connectWS(){
+  ws=new WebSocket(WSURL);
+  ws.onopen=()=>{
+    wsDelay=2000;
+    ws.send(JSON.stringify({type:'init',channel:'english',name:'관리자',role:'admin',token:TOKEN}));
+    setWS(true,'연결됨');
+  };
+  ws.onclose=()=>{
+    setWS(false,`재연결 ${wsDelay/1000}초 후`);
+    setTimeout(connectWS,wsDelay);
+    wsDelay=Math.min(wsDelay*2,30000);
+  };
+  ws.onerror=()=>ws.close();
+  ws.onmessage=e=>{
+    try{
+      const d=JSON.parse(e.data);
+      switch(d.type){
+        case 'state':           updateDash(d.channels);break;
+        case 'channel_update':  updateCh(d.channel,d.state);break;
+        case 'listener_update': updateLC(d.channel,d.count);break;
+        case 'user_list':
+          document.getElementById('navExtra').textContent=`접속자 ${d.users?.length||0}명`;
+          break;
+        case 'chat':
+          appendMsg(d);
+          if(curPage!=='chat'&&d.senderName!=='system'){unread++;updateBadge();}
+          break;
+      }
+    }catch{}
+  };
+}
+setInterval(()=>{
+  if(ws&&ws.readyState===1) try{ws.send(JSON.stringify({type:'ping'}));}catch{}
+},30000);
+connectWS();
+
+// ════════════════════════════════════════
+// 채널 상태
+// ════════════════════════════════════════
+function updateDash(channels){
+  let tot=0,act=0;
+  Object.entries(channels).forEach(([ch,st])=>{
+    tot+=st.listeners||0; if(st.active)act++;
+    updateCh(ch,st);
+  });
+  document.getElementById('kpiTotal').textContent=tot;
+  document.getElementById('kpiCh').textContent=act;
+}
+
+function updateCh(ch,st){
+  const tog  =document.getElementById(`tog-${ch}`);
+  const card =document.getElementById(`ch-${ch}`);
+  const lc   =document.getElementById(`lc-${ch}`);
+  const ct   =document.getElementById(`ct-${ch}`);
+  const pill =document.getElementById(`pill-${ch}`);
+  if(!tog)return;
+  tog.checked=st.active;
+  card?.classList.toggle('live',st.active);
+  if(lc)lc.textContent=`${st.listeners||0}명 청취 중`;
+  if(pill){ pill.textContent=st.active?'● LIVE':'OFF';
+            pill.className=`pill ${st.active?'live':'off'}`; }
+  if(ct)ct.textContent=st.active&&st.startedAt
+    ?`시작: ${new Date(st.startedAt).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`
+    :'';
+}
+function updateLC(ch,cnt){
+  const el=document.getElementById(`lc-${ch}`);
+  if(el)el.textContent=`${cnt}명 청취 중`;
+}
+
+async function doToggle(ch,on){
+  if(expired(TOKEN)){location.href='login.html';return;}
+  if(!confirm(`${ch} 채널을 ${on?'시작':'종료'}하시겠습니까?`)){
+    document.getElementById(`tog-${ch}`).checked=!on;return;
+  }
+  if(ws&&ws.readyState===1)
+    ws.send(JSON.stringify({type:'broadcast_control',channel:ch,active:on}));
+  await fetch(`${API}/api/broadcast/${on?'start':'stop'}`,
+    {method:'POST',headers:HDR,body:JSON.stringify({channel:ch})}).catch(()=>{});
+}
+
+// ════════════════════════════════════════
+// 통계
+// ════════════════════════════════════════
+async function loadStats(){
+  try{
+    const r=await fetch(`${API}/api/stats`,{headers:HDR});
+    if(r.status===401)return;
+    const d=await r.json();
+    document.getElementById('kpiTotal').textContent=d.totalListeners||0;
+    document.getElementById('kpiCh').textContent=
+      Object.values(d.channels||{}).filter(c=>c.active).length;
+    document.getElementById('kpiWs').textContent=d.wsClients||0;
+    if(d.channels)updateDash(d.channels);
+  }catch{}
+}
+loadStats(); setInterval(loadStats,30000);
+
+// ════════════════════════════════════════
+// 방송 목록
+// ════════════════════════════════════════
+async function loadBroadcasts(){
+  try{
+    const d=await fetch(`${API}/api/v1/broadcasts/`,{headers:HDR}).then(r=>r.json());
+    const rows=d.data?.length
+      ?d.data.map(b=>`
+        <tr>
+          <td>${esc(b.title||'-')}</td>
+          <td>${esc(b.language_name||b.language_code||'-')}</td>
+          <td><span class="status-pill ${(b.status||'ready').toLowerCase()}">${b.status||'READY'}</span></td>
+          <td style="color:var(--muted);font-size:11px">
+            ${b.created_at?new Date(b.created_at).toLocaleString('ko-KR'):'-'}</td>
+          <td>
+            ${b.status!=='LIVE'?`<button class="act-btn go" onclick="bcStart('${b.id}')">▶ 시작</button>`:''}
+            ${b.status==='LIVE'?`<button class="act-btn stop" onclick="bcStop('${b.id}')">⏹ 종료</button>`:''}
+          </td>
+        </tr>`).join('')
+      :'<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--muted)">방송 없음</td></tr>';
+    document.getElementById('bcTable').innerHTML=
+      `<table><thead><tr>
+        <th>제목</th><th>언어</th><th>상태</th><th>생성일</th><th></th>
+       </tr></thead><tbody>${rows}</tbody></table>`;
+  }catch{}
+}
+async function bcStart(id){
+  await fetch(`${API}/api/v1/broadcasts/${id}/start`,{method:'POST',headers:HDR});
+  loadBroadcasts();loadStats();
+}
+async function bcStop(id){
+  if(!confirm('방송을 종료하시겠습니까?'))return;
+  await fetch(`${API}/api/v1/broadcasts/${id}/stop`,{method:'POST',headers:HDR});
+  loadBroadcasts();loadStats();
+}
+function openModal(){ document.getElementById('modal').classList.add('open'); }
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+async function doCreate(){
+  const title=document.getElementById('bcTitle').value.trim();
+  const room =document.getElementById('bcRoom').value;
+  if(!title){alert('방송 제목을 입력하세요.');return;}
+  try{
+    const r=await fetch(`${API}/api/v1/broadcasts/`,
+      {method:'POST',headers:HDR,body:JSON.stringify({title,room_name:room})}).then(r=>r.json());
+    if(r.success){
+      await fetch(`${API}/api/v1/broadcasts/${r.data.id}/start`,{method:'POST',headers:HDR});
+      closeModal();
+      document.getElementById('bcTitle').value='';
+      goPage('broadcast'); loadBroadcasts();
+      toast('방송이 시작되었습니다!');
+    }else{alert(r.error?.message||'생성 실패');}
+  }catch{alert('서버 오류');}
+}
+
+// ════════════════════════════════════════
+// 채팅
+// ════════════════════════════════════════
+async function doAnnounce(){
+  const ch =document.getElementById('annCh').value;
+  const msg=document.getElementById('annMsg').value.trim();
+  if(!msg)return;
+  const r=await fetch(`${API}/api/chat/announce`,
+    {method:'POST',headers:HDR,body:JSON.stringify({channel:ch,message:msg})});
+  if(r.ok){ document.getElementById('annMsg').value=''; toast('공지 전송 완료!'); }
+  else alert('전송 실패');
+}
+async function loadChat(){
+  const ch =document.getElementById('histCh').value;
+  const res=await fetch(`${API}/api/chat/history?channel=${ch}`,{headers:HDR});
+  if(!res.ok)return;
+  const d  =await res.json();
+  const box=document.getElementById('chatBody');
+  if(!d.messages?.length){
+    box.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px">채팅 기록 없음</div>';
+    return;
+  }
+  box.innerHTML=d.messages.slice(-80).map(m=>`
+    <div class="msg ${m.sender_type}">
+      <div class="msg-meta">
+        <span>${esc(m.sender_name)}</span>
+        <span>${new Date(m.sent_at).toLocaleString('ko-KR')}</span>
+      </div>
+      ${esc(m.message)}
+    </div>`).join('');
+  box.scrollTop=box.scrollHeight;
+}
+function appendMsg(d){
+  const box=document.getElementById('chatBody');
+  if(!box||curPage!=='chat')return;
+  const el=document.createElement('div');
+  el.className=`msg ${d.senderType}`;
+  el.innerHTML=`<div class="msg-meta">
+    <span>${esc(d.senderName)}</span>
+    <span>${new Date(d.sentAt).toLocaleString('ko-KR')}</span>
+  </div>${esc(d.message)}`;
+  box.appendChild(el);
+  if(box.querySelectorAll('.msg').length>100) box.querySelector('.msg')?.remove();
+  box.scrollTop=box.scrollHeight;
+}
+
+// ════════════════════════════════════════
+// 스케줄
+// ════════════════════════════════════════
+async function loadSchedule(){
+  const res=await fetch(`${API}/api/schedule`,{headers:HDR});
+  if(!res.ok)return;
+  const d=await res.json();
+  const box=document.getElementById('schList');
+  if(!d.schedules?.length){
+    box.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:24px">스케줄 없음</div>';
+    return;
+  }
+  const DAY={'0':'일','1':'월','2':'화','3':'수','4':'목','5':'금','6':'토','*':'매일'};
+  box.innerHTML=d.schedules.map(s=>{
+    const days=s.days_of_week==='*'?'매일'
+      :s.days_of_week.split(',').map(x=>(DAY[x]||x)+'요일').join(' · ');
+    return `<div class="sch">
+      <div>
+        <div class="sch-time">${esc(s.schedule_time)}</div>
+        <div class="sch-label">${esc(s.label||'')}</div>
+        <div class="sch-days">${days}</div>
+      </div>
+      <span class="pill ${s.active?'live':'off'}">${s.active?'활성':'비활성'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════
+// 유틸
+// ════════════════════════════════════════
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toast(msg,type='ok'){
+  const el=document.createElement('div');
+  el.textContent=msg;
+  el.style.cssText=`
+    background:${type==='ok'?'#1E3A2F':'#3A1E1E'};
+    border:1px solid ${type==='ok'?'rgba(74,222,128,.4)':'rgba(248,113,113,.4)'};
+    color:${type==='ok'?'var(--green)':'var(--red)'};
+    padding:10px 18px;border-radius:9px;font-size:13px;font-weight:600;
+    box-shadow:0 4px 20px rgba(0,0,0,.5);
+    animation:fadeUp .25s ease;`;
+  const s=document.createElement('style');
+  s.textContent='@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1}}';
+  document.head.appendChild(s);
+  document.getElementById('toastWrap').appendChild(el);
+  setTimeout(()=>el.remove(),2800);
+}
+function logout(){ localStorage.clear(); location.href='login.html'; }
+</script>
+</body>
+</html>
