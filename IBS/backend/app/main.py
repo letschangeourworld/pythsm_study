@@ -15,7 +15,7 @@ from app.routers import (
     websocket_router,
     auth, users, broadcasts, rooms,
     livekit_router, listeners, interpreters,
-    recordings, ai_router, monitoring, audit, webhooks
+    recordings, ai_router, monitoring, audit, webhooks, stt_router
 )
 
 def get_server_ip():
@@ -93,6 +93,7 @@ app.include_router(livekit_router.router,   prefix=PREFIX)
 app.include_router(listeners.router,        prefix=PREFIX)
 app.include_router(interpreters.router,     prefix=PREFIX)
 app.include_router(recordings.router,       prefix=PREFIX)
+app.include_router(stt_router.router,       prefix=PREFIX)
 app.include_router(ai_router.router,        prefix=PREFIX)
 app.include_router(monitoring.router,       prefix=PREFIX)
 app.include_router(audit.router,            prefix=PREFIX)
