@@ -666,15 +666,41 @@
 
   <!-- ━━━━ 방송 관리 ━━━━ -->
   <div class="main" id="page-broadcast">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <span style="font-size:13px;font-weight:600;color:var(--muted)">방송 세션</span>
-      <button class="btn-gold" onclick="openModal()">+ 방송 생성</button>
+
+    <!-- 통계 카드 -->
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">전체 방송</div>
+        <div class="kpi-value" id="stat-total">-</div>
+        <div class="kpi-sub">Total sessions</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">이번 주</div>
+        <div class="kpi-value" id="stat-week">-</div>
+        <div class="kpi-sub">This week</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">평균 시간</div>
+        <div class="kpi-value" id="stat-avg">-</div>
+        <div class="kpi-sub">Avg. minutes</div>
+      </div>
     </div>
-    <div class="tbl-wrap" id="bcTable">
-      <table><tbody>
-        <tr><td colspan="5" style="text-align:center;padding:28px;color:var(--muted)">로딩 중...</td></tr>
-      </tbody></table>
+
+    <!-- 방송 이력 -->
+    <div class="card">
+      <div class="card-hd">
+        <span>📋 방송 이력</span>
+        <button class="btn-gold" onclick="loadBroadcasts()">🔄 새로고침</button>
+      </div>
+      <div class="tbl-wrap" id="bcTable">
+        <table><tbody>
+          <tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">
+            로딩 중...
+          </td></tr>
+        </tbody></table>
+      </div>
     </div>
+
   </div>
 
   <!-- ━━━━ 채팅 ━━━━ -->
@@ -1395,38 +1421,72 @@ loadStats(); setInterval(loadStats,30000);
 // ════════════════════════════════════════
 // 방송 목록
 // ════════════════════════════════════════
-async function loadBroadcasts(){
-  try{
-    const d=await fetch(`${API}/api/v1/broadcasts/`,{headers:HDR}).then(r=>r.json());
-    const rows=d.data?.length
-      ?d.data.map(b=>`
-        <tr>
-          <td>${esc(b.title||'-')}</td>
-          <td>${esc(b.language_name||b.language_code||'-')}</td>
-          <td><span class="status-pill ${(b.status||'ready').toLowerCase()}">${b.status||'READY'}</span></td>
-          <td style="color:var(--muted);font-size:11px">
-            ${b.created_at?new Date(b.created_at).toLocaleString('ko-KR'):'-'}</td>
-          <td>
-            ${b.status!=='LIVE'?`<button class="act-btn go" onclick="bcStart('${b.id}')">▶ 시작</button>`:''}
-            ${b.status==='LIVE'?`<button class="act-btn stop" onclick="bcStop('${b.id}')">⏹ 종료</button>`:''}
-          </td>
-        </tr>`).join('')
-      :'<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--muted)">방송 없음</td></tr>';
-    document.getElementById('bcTable').innerHTML=
-      `<table><thead><tr>
-        <th>제목</th><th>언어</th><th>상태</th><th>생성일</th><th></th>
-       </tr></thead><tbody>${rows}</tbody></table>`;
-  }catch{}
+// ════════════════════════════════════════
+// 방송 이력 + 통계
+// ════════════════════════════════════════
+function fmtDuration(sec) {
+  if (!sec || sec < 0) return '-';
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  if (h > 0) return h + '시간 ' + m + '분';
+  if (m > 0) return m + '분 ' + s + '초';
+  return s + '초';
 }
-async function bcStart(id){
-  await fetch(`${API}/api/v1/broadcasts/${id}/start`,{method:'POST',headers:HDR});
-  loadBroadcasts();loadStats();
+function fmtDt(iso) {
+  if (!iso) return '-';
+  return new Date(iso).toLocaleString('ko-KR', {
+    month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit'
+  });
 }
-async function bcStop(id){
-  if(!confirm('방송을 종료하시겠습니까?'))return;
-  await fetch(`${API}/api/v1/broadcasts/${id}/stop`,{method:'POST',headers:HDR});
-  loadBroadcasts();loadStats();
+
+async function loadBroadcasts() {
+  try {
+    // 통계
+    const st = await fetch(API + '/api/broadcast/stats', {headers:HDR}).then(r=>r.json());
+    if (st.success && st.data) {
+      const el1 = document.getElementById('stat-total');
+      const el2 = document.getElementById('stat-week');
+      const el3 = document.getElementById('stat-avg');
+      if (el1) el1.textContent = st.data.total_sessions ?? '-';
+      if (el2) el2.textContent = st.data.this_week ?? '-';
+      if (el3) el3.textContent = st.data.avg_duration_min
+        ? st.data.avg_duration_min + '분' : '-';
+    }
+    // 이력
+    const d = await fetch(API + '/api/broadcast/history', {headers:HDR}).then(r=>r.json());
+    const rows = d.data && d.data.length
+      ? d.data.map(function(b) {
+          var statusCls = b.status==='LIVE' ? 'live' : b.status==='ENDED' ? 'ended' : 'ready';
+          var statusTxt = b.status==='LIVE' ? '🔴 LIVE' : b.status==='ENDED' ? '✅ 완료' : '⏸ 대기';
+          var flag = b.language_code==='EN' ? '🇺🇸' :
+                     b.language_code==='JA' ? '🇯🇵' :
+                     b.language_code==='ZH' ? '🇨🇳' :
+                     b.language_code==='KO' ? '🇰🇷' : '🌐';
+          return '<tr>' +
+            '<td style="font-size:11px;color:var(--muted)">' + fmtDt(b.created_at) + '</td>' +
+            '<td>' + flag + ' ' + esc(b.language_name||b.room_name||'-') + '</td>' +
+            '<td>' + esc(b.title||'-') + '</td>' +
+            '<td><span class="status-pill ' + statusCls + '">' + statusTxt + '</span></td>' +
+            '<td style="font-size:11px;color:var(--muted)">' + fmtDuration(b.duration_sec) + '</td>' +
+            '<td style="font-size:11px;color:var(--muted)">' + fmtDt(b.start_time) + '</td>' +
+            '</tr>';
+        }).join('')
+      : '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">' +
+        '방송 이력 없음<br><small style="font-size:10px">채널 토글로 방송을 시작하면 자동으로 기록됩니다</small>' +
+        '</td></tr>';
+
+    document.getElementById('bcTable').innerHTML =
+      '<table><thead><tr>' +
+      '<th>날짜</th><th>채널</th><th>제목</th>' +
+      '<th>상태</th><th>방송시간</th><th>시작시각</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>';
+  } catch(e) {
+    console.error('loadBroadcasts:', e);
+  }
 }
+
 function openModal(){ document.getElementById('modal').classList.add('open'); }
 function openChModal(){
   document.getElementById('modal-ch').classList.add('open');

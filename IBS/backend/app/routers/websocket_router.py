@@ -329,7 +329,40 @@ async def broadcast_start(data: dict):
     channel = data.get("channel", "english")
     if channel not in mgr.channels:
         return {"error": "유효하지 않은 채널"}
-    mgr.set_active(channel, True)
+
+    # DB에 방송 세션 기록
+    session_id = None
+    try:
+        from app.database import AsyncSessionLocal
+        from sqlalchemy import text
+        import uuid
+        ch_to_room = {
+            "english": "room_en", "japanese": "room_ja",
+            "chinese": "room_zh", "korean": "room_ko"
+        }
+        room_name = mgr.states[channel].get("room") or ch_to_room.get(channel, f"room_{channel[:2]}")
+        async with AsyncSessionLocal() as db:
+            room = (await db.execute(
+                text("SELECT id FROM broadcast.rooms WHERE room_name=:n"),
+                {"n": room_name}
+            )).fetchone()
+            if room:
+                session_id = str(uuid.uuid4())
+                label = mgr.states[channel].get("label", channel)
+                await db.execute(text(
+                    "INSERT INTO broadcast.sessions"
+                    " (id, room_id, title, status, start_time, created_at, updated_at)"
+                    " VALUES (:id, :room_id, :title, 'LIVE', NOW(), NOW(), NOW())"
+                ), {"id": session_id, "room_id": str(room.id),
+                    "title": f"{label} 통역 방송"})
+                await db.commit()
+                logger.info(f"방송 세션 DB 기록 완료: {session_id}")
+            else:
+                logger.warning(f"room_name '{room_name}' 없음 - DB 기록 생략")
+    except Exception as e:
+        logger.warning(f"방송 DB 기록 실패 (무시): {e}")
+
+    mgr.set_active(channel, True, session_id)
     await mgr.broadcast_all({
         "type": "channel_update", "channel": channel,
         "state": mgr.states[channel]
@@ -344,13 +377,32 @@ async def broadcast_start(data: dict):
                             "message": sys_msg["message"], "sent_at": sys_msg["sentAt"]})
     await mgr.broadcast_channel(channel, sys_msg)
     logger.info(f"방송 시작: {channel}")
-    return {"success": True, "channel": channel, "state": mgr.states[channel]}
+    return {"success": True, "channel": channel, "state": mgr.states[channel],
+            "session_id": session_id}
 
 @router.post("/api/broadcast/stop")
 async def broadcast_stop(data: dict):
     channel = data.get("channel", "english")
     if channel not in mgr.channels:
         return {"error": "유효하지 않은 채널"}
+
+    # DB 방송 세션 종료 기록
+    session_id = mgr.states[channel].get("sessionId")
+    try:
+        if session_id:
+            from app.database import AsyncSessionLocal
+            from sqlalchemy import text
+            async with AsyncSessionLocal() as db:
+                await db.execute(text(
+                    "UPDATE broadcast.sessions"
+                    " SET status='ENDED', end_time=NOW(), updated_at=NOW()"
+                    " WHERE id=:id"
+                ), {"id": session_id})
+                await db.commit()
+                logger.info(f"방송 세션 종료 DB 기록 완료: {session_id}")
+    except Exception as e:
+        logger.warning(f"방송 종료 DB 기록 실패 (무시): {e}")
+
     stop_msg = {
         "type": "chat", "channel": channel,
         "senderType": "admin", "senderName": "system",
@@ -367,6 +419,106 @@ async def broadcast_stop(data: dict):
     })
     logger.info(f"방송 종료: {channel}")
     return {"success": True, "channel": channel, "state": mgr.states[channel]}
+
+
+@router.get("/api/broadcast/history")
+async def broadcast_history():
+    """방송 이력 조회 (최근 30개)"""
+    try:
+        from app.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(text(
+                "SELECT s.id, s.title, s.status,"
+                " s.start_time, s.end_time,"
+                " r.room_name, r.language_name, r.language_code,"
+                " EXTRACT(EPOCH FROM ("
+                "   COALESCE(s.end_time, NOW()) - COALESCE(s.start_time, s.created_at)"
+                " ))::int AS duration_sec,"
+                " s.created_at"
+                " FROM broadcast.sessions s"
+                " LEFT JOIN broadcast.rooms r ON s.room_id = r.id"
+                " ORDER BY s.created_at DESC LIMIT 30"
+            ))
+            rows = result.fetchall()
+            return {"success": True, "data": [dict(r._mapping) for r in rows]}
+    except Exception as e:
+        logger.warning(f"방송 이력 조회 실패: {e}")
+        return {"success": False, "data": [], "error": str(e)}
+
+@router.get("/api/broadcast/stats")
+async def broadcast_stats():
+    """방송 통계 조회"""
+    try:
+        from app.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(text(
+                "SELECT"
+                " COUNT(*) AS total_sessions,"
+                " COUNT(CASE WHEN status='LIVE'  THEN 1 END) AS live_count,"
+                " COUNT(CASE WHEN status='ENDED' THEN 1 END) AS ended_count,"
+                " COALESCE(AVG(EXTRACT(EPOCH FROM (end_time - start_time))/60)"
+                "   FILTER (WHERE status='ENDED' AND end_time IS NOT NULL), 0)::int"
+                "   AS avg_duration_min,"
+                " COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END)"
+                "   AS this_week"
+                " FROM broadcast.sessions"
+            ))
+            row = result.fetchone()
+            return {"success": True, "data": dict(row._mapping) if row else {}}
+    except Exception as e:
+        return {"success": False, "data": {}, "error": str(e)}
+
+
+@router.get("/api/broadcast/history")
+async def broadcast_history():
+    """방송 이력 조회 (최근 30개)"""
+    try:
+        from app.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(text(
+                "SELECT s.id, s.title, s.status,"
+                " s.start_time, s.end_time,"
+                " r.room_name, r.language_name, r.language_code,"
+                " EXTRACT(EPOCH FROM ("
+                "   COALESCE(s.end_time, NOW()) - COALESCE(s.start_time, s.created_at)"
+                " ))::int AS duration_sec,"
+                " s.created_at"
+                " FROM broadcast.sessions s"
+                " LEFT JOIN broadcast.rooms r ON s.room_id = r.id"
+                " ORDER BY s.created_at DESC LIMIT 30"
+            ))
+            rows = result.fetchall()
+            return {"success": True, "data": [dict(r._mapping) for r in rows]}
+    except Exception as e:
+        logger.warning(f"방송 이력 조회 실패: {e}")
+        return {"success": False, "data": [], "error": str(e)}
+
+@router.get("/api/broadcast/stats")
+async def broadcast_stats():
+    """방송 통계 조회"""
+    try:
+        from app.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(text(
+                "SELECT"
+                " COUNT(*) AS total_sessions,"
+                " COUNT(CASE WHEN status='LIVE'  THEN 1 END) AS live_count,"
+                " COUNT(CASE WHEN status='ENDED' THEN 1 END) AS ended_count,"
+                " COALESCE(AVG(EXTRACT(EPOCH FROM (end_time - start_time))/60)"
+                "   FILTER (WHERE status='ENDED' AND end_time IS NOT NULL), 0)::int"
+                "   AS avg_duration_min,"
+                " COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END)"
+                "   AS this_week"
+                " FROM broadcast.sessions"
+            ))
+            row = result.fetchone()
+            return {"success": True, "data": dict(row._mapping) if row else {}}
+    except Exception as e:
+        return {"success": False, "data": {}, "error": str(e)}
 
 @router.post("/api/chat/announce")
 async def chat_announce(data: dict):
