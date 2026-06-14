@@ -136,6 +136,17 @@
 </div>
 <div class="hint">Space: 음소거 토글</div>
 
+<!-- 녹음 상태 표시 -->
+<div id="rec-status-bar" style="display:none;
+     background:rgba(248,113,113,.1);border-top:1px solid rgba(248,113,113,.2);
+     padding:8px 20px;font-size:11px;color:var(--color-text-secondary);
+     display:none;align-items:center;gap:8px;">
+  <span style="width:8px;height:8px;border-radius:50%;background:#f87171;
+               animation:pulse 1s infinite;flex-shrink:0"></span>
+  <span id="rec-status-txt">녹음 중...</span>
+  <span id="rec-size" style="margin-left:auto;color:var(--color-text-secondary)"></span>
+</div>
+
 <!-- ── AI 보조 패널 ── -->
 <div class="ai-sec">
   <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px">
@@ -337,6 +348,109 @@ async function initMic() {
 }
 
 // ════════════════════════════════════════
+// 녹음 관리
+// ════════════════════════════════════════
+let _recSessionId   = null;   // 녹음 세션 ID
+let _recDbSessionId = null;   // DB 방송 세션 ID
+let _recChunks      = 0;      // 청크 카운트
+let _recTotalBytes  = 0;      // 총 바이트
+let _mediaRecorder  = null;   // MediaRecorder 인스턴스
+
+async function startRecording(dbSessionId) {
+  try {
+    _recDbSessionId = dbSessionId || null;
+
+    // 녹음 세션 시작
+    const res = await fetch(API + '/api/v1/recordings/start', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN},
+      body: JSON.stringify({session_id: null})
+    }).then(r => r.json());
+
+    _recSessionId = res.session_id;
+    _recChunks    = 0;
+    _recTotalBytes= 0;
+
+    // MediaRecorder로 마이크 스트림 녹음
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    _mediaRecorder = new MediaRecorder(stream, {mimeType: 'audio/webm'});
+
+    _mediaRecorder.ondataavailable = async function(e) {
+      if (!e.data || e.data.size === 0) return;
+      const formData = new FormData();
+      formData.append('session_id', _recSessionId);
+      formData.append('chunk', e.data, 'chunk.webm');
+      try {
+        const r = await fetch(API + '/api/v1/recordings/chunk', {
+          method: 'POST',
+          headers: {'Authorization': 'Bearer ' + TOKEN},
+          body: formData
+        }).then(r => r.json());
+        _recChunks     = r.chunks || _recChunks + 1;
+        _recTotalBytes = r.total_bytes || _recTotalBytes;
+        // 상태 업데이트
+        const sizeEl = document.getElementById('rec-size');
+        if (sizeEl) sizeEl.textContent = (_recTotalBytes/1024).toFixed(1) + 'KB';
+      } catch(err) {
+        console.warn('[REC] 청크 업로드 실패:', err);
+      }
+    };
+
+    // 10초마다 청크 전송
+    _mediaRecorder.start(10000);
+
+    // 상태 바 표시
+    const bar = document.getElementById('rec-status-bar');
+    if (bar) { bar.style.display = 'flex'; }
+    const txt = document.getElementById('rec-status-txt');
+    if (txt) txt.textContent = '🔴 녹음 중 (' + _recSessionId.slice(0,8) + '...)';
+
+    console.log('[REC] 녹음 시작:', _recSessionId);
+  } catch(e) {
+    console.warn('[REC] 녹음 시작 실패 (방송은 계속):', e);
+  }
+}
+
+async function stopRecording(channel) {
+  if (!_recSessionId || !_mediaRecorder) return;
+  try {
+    // MediaRecorder 중지 (마지막 청크 전송)
+    if (_mediaRecorder.state !== 'inactive') {
+      _mediaRecorder.stop();
+      _mediaRecorder.stream.getTracks().forEach(t => t.stop());
+      await new Promise(resolve => setTimeout(resolve, 1500)); // 마지막 청크 대기
+    }
+
+    // 녹음 종료 API
+    const res = await fetch(API + '/api/v1/recordings/stop', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN},
+      body: JSON.stringify({
+        session_id:    _recSessionId,
+        channel:       channel || _selectedRoom.replace('room_',''),
+        role:          'interpreter',
+        db_session_id: _recDbSessionId
+      })
+    }).then(r => r.json());
+
+    // 상태 바 숨기기
+    const bar = document.getElementById('rec-status-bar');
+    if (bar) bar.style.display = 'none';
+
+    if (res.success) {
+      console.log('[REC] 녹음 저장 완료:', res.path, res.size_kb + 'KB');
+      showAlert('🎙️ 녹음 저장 완료 (' + res.size_kb + 'KB)', 'info');
+    }
+  } catch(e) {
+    console.warn('[REC] 녹음 종료 실패:', e);
+  } finally {
+    _recSessionId   = null;
+    _recDbSessionId = null;
+    _mediaRecorder  = null;
+  }
+}
+
+// ════════════════════════════════════════
 // 방송 시작
 // ════════════════════════════════════════
 async function startBC() {
@@ -357,7 +471,7 @@ async function startBC() {
     if (!td.success) throw new Error('토큰 발급 실패');
 
     // 2. LiveKit 서버 URL 결정
-    var lkUrl = td.data.server_url || AppConfig.liveKitUrl;
+    var lkUrl = td.data.server_url || ('ws://' + location.hostname + ':17880');
     if (location.protocol === 'https:') {
       lkUrl = 'wss://' + location.hostname + ':19443';
       console.log('[LiveKit] wss URL:', lkUrl);
@@ -367,17 +481,35 @@ async function startBC() {
     room = new LivekitClient.Room();
     await room.connect(lkUrl, td.data.token);
 
-    // 4. 마이크 소스에 따라 트랙 발행
+    // 4. localStorage에서 음향 설정 로드
+    var audioOpt = JSON.parse(localStorage.getItem('ibs_audio') || '{}');
+    var useAEC  = audioOpt.aec  !== undefined ? audioOpt.aec  : true;
+    var useNS   = audioOpt.ns   !== undefined ? audioOpt.ns   : true;
+    var useAGC  = audioOpt.agc  !== undefined ? audioOpt.agc  : true;
+    var micGain = audioOpt.micVol !== undefined ? audioOpt.micVol / 100 : 0.8;
+    console.log('[Audio] AEC:', useAEC, 'NS:', useNS, 'AGC:', useAGC, 'Gain:', micGain);
+
+    // 5. 마이크 소스에 따라 트랙 발행
     if (_micSource === 'server' && _selectedDeviceId) {
       const stream  = await navigator.mediaDevices.getUserMedia({
-        audio: {deviceId: {exact: _selectedDeviceId}}
+        audio: {
+          deviceId:           {exact: _selectedDeviceId},
+          echoCancellation:   useAEC,
+          noiseSuppression:   useNS,
+          autoGainControl:    useAGC,
+        }
       });
       const track   = stream.getAudioTracks()[0];
       const lkTrack = new LivekitClient.LocalAudioTrack(track);
       await room.localParticipant.publishTrack(lkTrack);
       document.getElementById('mic-dev').textContent = '🖥️ ' + (track.label || '서버PC 마이크');
     } else {
-      await room.localParticipant.setMicrophoneEnabled(true);
+      // 음향 처리 옵션 적용
+      await room.localParticipant.setMicrophoneEnabled(true, {
+        echoCancellation:   useAEC,
+        noiseSuppression:   useNS,
+        autoGainControl:    useAGC,
+      });
     }
 
     // 5. UI 업데이트
@@ -399,6 +531,9 @@ async function startBC() {
       body: JSON.stringify({room_name: _selectedRoom})
     }).catch(() => {});
 
+    // 7. 녹음 시작 (방송과 동시에)
+    await startRecording(null);
+
   } catch(e) {
     showAlert('연결 실패: ' + e.message, 'error');
   }
@@ -409,6 +544,11 @@ async function startBC() {
 // ════════════════════════════════════════
 async function stopBC() {
   if (!confirm('방송을 종료하시겠습니까?')) return;
+
+  // 녹음 종료 (방송 종료 전)
+  const ch = _selectedRoom.replace('room_', '');
+  await stopRecording(ch);
+
   if (room) { await room.disconnect(); room = null; }
   broadcasting = false;
   [recTmr, hbTmr, statTmr].forEach(t => clearInterval(t));
