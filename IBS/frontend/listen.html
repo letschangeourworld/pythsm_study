@@ -926,7 +926,20 @@
         if (connected) { stopListen(); }
       });
 
-      var srvUrl = (td.data && td.data.server_url) || ('ws://' + location.hostname + ':17880');
+      // LiveKit 서버 URL 자동 결정
+      var srvUrl;
+      if (location.protocol === 'https:') {
+        // HTTPS 환경 (iOS 등) → wss:// 19443 포트 (Nginx 프록시)
+        srvUrl = 'wss://' + location.hostname + ':19443';
+      } else {
+        // HTTP 환경 → ws:// 현재 호스트 17880 포트 또는 서버 반환값
+        srvUrl = (td.data && td.data.server_url) || ('ws://' + location.hostname + ':17880');
+        // server_url의 IP를 현재 접속 호스트로 교체 (IP 변경 대응)
+        if (srvUrl && td.data && td.data.server_url) {
+          srvUrl = srvUrl.replace(/ws:\/\/[^:]+:/, 'ws://' + location.hostname + ':');
+        }
+      }
+      console.log('[LiveKit] 청취자 연결 URL:', srvUrl);
       room.connect(srvUrl, td.data && td.data.token);
     })
     .catch(function(err) {
