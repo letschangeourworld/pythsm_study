@@ -402,21 +402,63 @@ async def translation_status():
     return {"engine": os.environ.get("TRANSLATION_ENGINE","none"),
             "sourceLang": "ko", "targetLangs": ["en","ja","zh"]}
 
+# ── 스케줄 메모리 저장소 ──────────────────────────────────
+_schedules = [
+    {"id":1,"schedule_time":"07:50","label":"오전 1부 예배 (08:00)","days_of_week":"0","active":True},
+    {"id":2,"schedule_time":"09:20","label":"오전 2부 예배 (09:30)","days_of_week":"0","active":True},
+    {"id":3,"schedule_time":"11:20","label":"오전 3부 예배 (11:30)","days_of_week":"0","active":True},
+    {"id":4,"schedule_time":"13:50","label":"오후 예배 (14:00)",    "days_of_week":"0","active":True},
+]
+_sch_next_id = 5
+
 @router.get("/api/schedule")
 async def get_schedule():
-    return {"schedules": [
-        {"id":1,"schedule_time":"07:50","label":"오전 1부 예배 (08:00)","days_of_week":"0","active":True},
-        {"id":2,"schedule_time":"09:20","label":"오전 2부 예배 (09:30)","days_of_week":"0","active":True},
-        {"id":3,"schedule_time":"11:20","label":"오전 3부 예배 (11:30)","days_of_week":"0","active":True},
-        {"id":4,"schedule_time":"13:50","label":"오후 예배 (14:00)",    "days_of_week":"0","active":True},
-    ]}
+    return {"schedules": _schedules}
 
 @router.post("/api/schedule")
 async def add_schedule(data: dict):
-    return {"success": True, "id": 99, "note": "메모리 저장 (재시작 시 초기화)"}
+    global _sch_next_id
+    from fastapi import HTTPException
+    t     = sanitize(data.get("schedule_time",""), 10)
+    label = sanitize(data.get("label",""), 100)
+    days  = sanitize(data.get("days_of_week","0"), 20)
+    if not t or not label:
+        raise HTTPException(status_code=400, detail="schedule_time, label 필수")
+    new_sch = {
+        "id": _sch_next_id,
+        "schedule_time": t,
+        "label": label,
+        "days_of_week": days,
+        "active": True
+    }
+    _schedules.append(new_sch)
+    _sch_next_id += 1
+    return {"success": True, "schedule": new_sch}
+
+@router.put("/api/schedule/{sid}")
+async def update_schedule(sid: int, data: dict):
+    from fastapi import HTTPException
+    sch = next((s for s in _schedules if s["id"] == sid), None)
+    if not sch:
+        raise HTTPException(status_code=404, detail="스케줄 없음")
+    if "schedule_time" in data:
+        sch["schedule_time"] = sanitize(data["schedule_time"], 10)
+    if "label" in data:
+        sch["label"] = sanitize(data["label"], 100)
+    if "days_of_week" in data:
+        sch["days_of_week"] = sanitize(data["days_of_week"], 20)
+    if "active" in data:
+        sch["active"] = bool(data["active"])
+    return {"success": True, "schedule": sch}
 
 @router.delete("/api/schedule/{sid}")
 async def del_schedule(sid: int):
+    from fastapi import HTTPException
+    global _schedules
+    orig = len(_schedules)
+    _schedules = [s for s in _schedules if s["id"] != sid]
+    if len(_schedules) == orig:
+        raise HTTPException(status_code=404, detail="스케줄 없음")
     return {"success": True}
 
 @router.get("/api/stats")
