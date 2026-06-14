@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vitna 관리자</title>
   <style>
-    /* ── LiveKit 스타일 변수 ── */
+    /* ══════════════════════════════════════
+       CSS 변수
+    ══════════════════════════════════════ */
     :root {
       --bg:     #0A0E1A;
       --panel:  #111827;
@@ -20,294 +22,462 @@
       --green:  #4ADE80;
       --red:    #F87171;
       --blue:   #60A5FA;
-      --accent: #2563EB;
+      --sidebar-w: 200px;
     }
+
+    /* ══════════════════════════════════════
+       리셋 & 기본
+    ══════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 14px; }
     body {
       background: var(--bg); color: var(--text);
       font-family: -apple-system, 'Noto Sans KR', sans-serif;
       min-height: 100vh; display: flex; flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* ── 상단바 ── */
+    /* ══════════════════════════════════════
+       상단 네비게이션
+    ══════════════════════════════════════ */
     .nav {
       height: 52px; background: var(--panel);
       border-bottom: 1px solid var(--border);
-      padding: 0 20px;
-      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px;
+      display: flex; align-items: center;
+      justify-content: space-between;
       position: sticky; top: 0; z-index: 200;
       box-shadow: 0 1px 20px rgba(0,0,0,.5);
+      min-width: 0;
     }
     .nav-brand {
       display: flex; align-items: center; gap: 8px;
-      font-size: 15px; font-weight: 700; color: var(--text);
+      font-size: 14px; font-weight: 700; color: var(--text);
+      flex-shrink: 0; min-width: 0;
     }
-    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
     .nav-brand .dot.on  { background: var(--green); box-shadow: 0 0 6px var(--green); animation: glow 2s infinite; }
     .nav-brand .dot.off { background: var(--dim); }
     @keyframes glow { 0%,100%{opacity:1} 50%{opacity:.4} }
-    .nav-right { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-    .nav-status { color: var(--muted); }
+
+    .nav-center {
+      flex: 1; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+      font-size: 11px; color: var(--muted);
+      overflow: hidden; padding: 0 8px;
+    }
+    .nav-center #navStatus { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .nav-right {
+      display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .nav-status { color: var(--muted); font-size: 11px; }
     .btn-nav {
-      padding: 5px 12px; border-radius: 6px;
-      border: 1px solid var(--border); background: transparent;
-      color: var(--muted); font-size: 12px; cursor: pointer;
+      padding: 4px 10px; border-radius: 6px; font-size: 11px;
+      background: var(--card2); border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; white-space: nowrap;
       transition: all .15s;
     }
     .btn-nav:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* ── 사이드바 + 메인 레이아웃 ── */
-    .layout { display: flex; flex: 1; overflow: hidden; }
+    /* 모바일에서 nav-center 요소 축소 */
+    @media (max-width: 640px) {
+      .nav-center .nav-extra,
+      .nav-center #navExtra { display: none; }
+      .btn-nav { padding: 4px 8px; font-size: 10px; }
+    }
 
-    /* 사이드바 */
+    /* ══════════════════════════════════════
+       레이아웃 (사이드바 + 메인)
+    ══════════════════════════════════════ */
+    .layout {
+      display: flex; flex: 1;
+      overflow: hidden;
+      height: calc(100vh - 52px);
+    }
+
+    /* ══════════════════════════════════════
+       사이드바 (PC)
+    ══════════════════════════════════════ */
     .sidebar {
-      width: 200px; background: var(--panel);
+      width: var(--sidebar-w);
+      background: var(--panel);
       border-right: 1px solid var(--border);
-      padding: 16px 0; flex-shrink: 0;
+      padding: 12px 0;
+      flex-shrink: 0;
       overflow-y: auto;
+      display: flex; flex-direction: column;
     }
     .sidebar-section {
-      padding: 10px 16px 4px;
-      font-size: 10px; color: var(--dim);
-      text-transform: uppercase; letter-spacing: 1.2px;
+      padding: 8px 16px 4px;
+      font-size: 10px; font-weight: 700;
+      color: var(--dim); text-transform: uppercase; letter-spacing: .8px;
     }
     .sidebar-item {
       display: flex; align-items: center; gap: 10px;
       padding: 9px 16px; color: var(--muted);
-      cursor: pointer; transition: all .15s; font-size: 13px;
-      border-left: 2px solid transparent;
-      user-select: none;
+      cursor: pointer; font-size: 13px;
+      border-left: 3px solid transparent;
+      transition: all .15s; user-select: none;
+      white-space: nowrap;
     }
-    .sidebar-item:hover { color: var(--text); background: rgba(255,255,255,.04); }
-    .sidebar-item.active { color: var(--gold); border-left-color: var(--gold);
-                           background: rgba(201,168,76,.07); }
-    .sidebar-item .icon { font-size: 15px; width: 18px; text-align: center; }
+    .sidebar-item:hover  { color: var(--text); background: rgba(255,255,255,.04); }
+    .sidebar-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(201,168,76,.06); }
+    .sidebar-item .icon  { font-size: 15px; width: 20px; text-align: center; flex-shrink:0; }
     .sidebar-badge {
       margin-left: auto; background: var(--red);
-      color: #fff; border-radius: 9px;
+      color: #fff; border-radius: 10px;
       font-size: 9px; padding: 1px 5px; font-weight: 700;
     }
     .sidebar-badge.hidden { display: none; }
 
-    /* 메인 콘텐츠 */
+    /* ══════════════════════════════════════
+       메인 콘텐츠 영역
+    ══════════════════════════════════════ */
     .main {
-      flex: 1; overflow-y: auto; padding: 20px;
       display: none;
+      flex: 1; overflow-y: auto;
+      padding: 16px; min-width: 0;
     }
     .main.active { display: block; }
 
-    /* ── 카드 ── */
-    .card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 18px;
-      margin-bottom: 14px;
-    }
-    .card-hd {
-      font-size: 11px; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 1px;
-      margin-bottom: 14px; padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    /* ── 경고 ── */
+    /* ══════════════════════════════════════
+       경고 바
+    ══════════════════════════════════════ */
     .warn {
       background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25);
-      border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;
-      font-size: 12px; color: var(--red); display: none;
+      border-radius: 10px; padding: 8px 14px; font-size: 11px;
+      color: var(--red); display: none; margin-bottom: 12px;
     }
 
-    /* ── KPI 그리드 ── */
-    .kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
+    /* ══════════════════════════════════════
+       카드
+    ══════════════════════════════════════ */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .card-hd {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px; font-weight: 700; color: var(--text);
+      gap: 8px; flex-wrap: wrap;
+    }
+    .card-hd span:first-child { flex: 1; min-width: 0; }
+
+    /* ══════════════════════════════════════
+       KPI 행
+    ══════════════════════════════════════ */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 12px;
+    }
     .kpi {
       background: var(--card2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 14px 16px;
+      border-radius: 10px; padding: 12px 14px;
       display: flex; flex-direction: column; gap: 4px;
     }
     .kpi-label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .8px; }
-    .kpi-value { font-size: 26px; font-weight: 700; color: var(--gold); line-height: 1; }
+    .kpi-value { font-size: 24px; font-weight: 700; color: var(--gold); line-height: 1; }
     .kpi-sub   { font-size: 10px; color: var(--muted); }
 
-    /* ── 채널 카드 ── */
+    /* ══════════════════════════════════════
+       채널 리스트
+    ══════════════════════════════════════ */
     .ch-list { display: flex; flex-direction: column; gap: 8px; }
     .ch {
       background: var(--card2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 13px 16px;
-      display: flex; align-items: center; gap: 14px;
-      transition: all .2s;
+      border-radius: 10px; padding: 11px 14px;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color .2s;
     }
-    .ch.live {
-      border-color: rgba(74,222,128,.4);
-      background: rgba(74,222,128,.04);
-      box-shadow: 0 0 0 1px rgba(74,222,128,.15);
-    }
-    .ch-flag {
-      font-size: 26px; line-height: 1; flex-shrink: 0;
-      font-family: 'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;
-    }
+    .ch.live { border-color: rgba(74,222,128,.3); background: rgba(74,222,128,.04); }
+    .ch-flag { font-size: 24px; line-height: 1; flex-shrink: 0; }
     .ch-info { flex: 1; min-width: 0; }
-    .ch-name { font-size: 14px; font-weight: 600; }
+    .ch-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .ch-stat { font-size: 11px; color: var(--muted); margin-top: 2px; }
     .ch-time { font-size: 10px; color: var(--gold); margin-top: 2px; }
-    .ch-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .ch-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .pill {
-      font-size: 10px; padding: 3px 9px; border-radius: 12px;
-      font-weight: 700; letter-spacing: .3px;
+      font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: 700;
     }
-    .pill.live { background: rgba(74,222,128,.15); color: var(--green);
-                  border: 1px solid rgba(74,222,128,.3); }
-    .pill.off  { background: rgba(74,84,99,.2); color: var(--dim);
-                  border: 1px solid var(--border); }
+    .pill.live { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
+    .pill.off  { background: rgba(255,255,255,.05); color: var(--dim);   border: 1px solid var(--border); }
 
-    /* 토글 */
-    .sw { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    /* ══════════════════════════════════════
+       토글 스위치
+    ══════════════════════════════════════ */
+    .sw { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
     .sw input { opacity: 0; width: 0; height: 0; }
     .sw-track {
-      position: absolute; inset: 0; background: var(--border);
-      border-radius: 24px; cursor: pointer; transition: .25s;
+      position: absolute; inset: 0; border-radius: 11px;
+      background: var(--border); cursor: pointer; transition: .3s;
     }
-    .sw-track::before {
+    .sw-track::after {
       content: ''; position: absolute;
-      width: 16px; height: 16px; left: 4px; top: 4px;
-      background: #fff; border-radius: 50%; transition: .25s;
-      box-shadow: 0 1px 4px rgba(0,0,0,.4);
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #fff; left: 4px; top: 4px; transition: .3s;
     }
     .sw input:checked + .sw-track { background: var(--green); }
-    .sw input:checked + .sw-track::before { transform: translateX(20px); }
+    .sw input:checked + .sw-track::after { transform: translateX(18px); }
 
-    /* ── 테이블 ── */
-    .tbl-wrap {
+    /* ══════════════════════════════════════
+       빠른 링크
+    ══════════════════════════════════════ */
+    .links {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .lnk {
+      font-size: 11px; padding: 5px 10px; border-radius: 6px;
       background: var(--card2); border: 1px solid var(--border);
-      border-radius: 10px; overflow: hidden;
+      color: var(--muted); text-decoration: none;
+      transition: all .15s; white-space: nowrap;
     }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    th {
-      padding: 9px 12px; text-align: left; font-size: 10px;
-      color: var(--dim); text-transform: uppercase; letter-spacing: .8px;
-      border-bottom: 1px solid var(--border); font-weight: 600;
-    }
-    td { padding: 10px 12px; border-bottom: 1px solid rgba(42,58,82,.4); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,.02); }
-    .status-pill {
-      font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700;
-    }
-    .status-pill.live  { background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.3); }
-    .status-pill.ready { background:rgba(96,165,250,.12);color:var(--blue); border:1px solid rgba(96,165,250,.3); }
-    .status-pill.ended { background:rgba(74,84,99,.15);  color:var(--dim);  border:1px solid var(--border); }
-    .act-btn {
-      padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600;
-      border: 1px solid; cursor: pointer; background: transparent;
-      font-family: inherit; transition: opacity .15s;
-    }
-    .act-btn:hover { opacity: .7; }
-    .act-btn.go   { color: var(--green); border-color: rgba(74,222,128,.4); }
-    .act-btn.stop { color: var(--red);   border-color: rgba(248,113,113,.4); }
+    .lnk:hover { color: var(--gold); border-color: var(--gold); }
 
-    /* ── 채팅 ── */
-    .ann-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    /* ══════════════════════════════════════
+       방송 목록 테이블
+    ══════════════════════════════════════ */
+    .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tbl-wrap table { width: 100%; border-collapse: collapse; min-width: 400px; }
+    .tbl-wrap th, .tbl-wrap td {
+      padding: 9px 10px; text-align: left; font-size: 12px;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .tbl-wrap th { color: var(--dim); font-weight: 600; }
+    .status-pill {
+      font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+    }
+    .status-pill.live  { background: rgba(74,222,128,.15); color: var(--green); }
+    .status-pill.ready { background: rgba(96,165,250,.12); color: var(--blue); }
+    .status-pill.ended { background: rgba(255,255,255,.05); color: var(--dim); }
+    .act-btn {
+      font-size: 11px; padding: 4px 10px; border-radius: 6px;
+      border: none; cursor: pointer; font-weight: 600; transition: all .15s;
+    }
+    .act-btn.go   { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
+    .act-btn.stop { background: rgba(248,113,113,.15); color: var(--red);   border: 1px solid rgba(248,113,113,.3); }
+
+    /* ══════════════════════════════════════
+       채팅 UI
+    ══════════════════════════════════════ */
+    .ann-row {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    }
     .sel, .inp {
       background: var(--card2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 9px 12px;
-      font-size: 13px; color: var(--text); font-family: inherit; outline: none;
-      transition: border-color .15s;
+      border-radius: 8px; padding: 8px 10px; color: var(--text);
+      font-size: 12px; font-family: inherit; outline: none;
     }
-    .sel:focus, .inp:focus { border-color: var(--gold); }
     .sel { flex-shrink: 0; }
-    .inp { flex: 1; }
-    .btn-gold {
-      background: linear-gradient(135deg,var(--gold),var(--gold2));
-      color: #0D1117; border: none; border-radius: 8px;
-      padding: 9px 16px; font-size: 13px; font-weight: 700;
-      cursor: pointer; flex-shrink: 0; transition: opacity .15s;
-    }
-    .btn-gold:hover { opacity: .85; }
-    .chat-log {
-      background: var(--card2); border: 1px solid var(--border);
-      border-radius: 10px; overflow: hidden;
-    }
+    .inp { flex: 1; min-width: 120px; }
+    .inp:focus { border-color: var(--gold); }
+    .chat-log { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
     .chat-log-hd {
       padding: 10px 14px; border-bottom: 1px solid var(--border);
-      font-size: 11px; color: var(--muted);
       display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; font-weight: 700; flex-wrap: wrap; gap: 8px;
     }
-    .chat-log-body {
-      max-height: 340px; overflow-y: auto;
-      padding: 12px 14px; display: flex; flex-direction: column; gap: 7px;
-    }
-    .chat-log-body::-webkit-scrollbar { width: 4px; }
-    .chat-log-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-    .msg { font-size: 12px; line-height: 1.6; padding: 8px 12px; border-radius: 9px; }
-    .msg.admin    { background: rgba(201,168,76,.1);  border-left: 2px solid var(--gold); }
-    .msg.listener { background: rgba(96,165,250,.08); border-left: 2px solid var(--blue); }
-    .msg.system   { background: rgba(167,139,250,.06); color: var(--muted);
-                     font-style: italic; text-align: center; }
-    .msg-meta { font-size: 10px; color: var(--dim); margin-bottom: 2px;
-                display: flex; justify-content: space-between; }
+    .chat-log-body { max-height: 300px; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .chat-item { font-size: 12px; display: flex; gap: 8px; align-items: flex-start; }
+    .chat-sender { color: var(--gold); font-weight: 700; flex-shrink: 0; }
+    .chat-msg { color: var(--text); flex: 1; word-break: break-word; }
+    .chat-time { color: var(--muted); font-size: 10px; flex-shrink: 0; }
 
-    /* ── 스케줄 ── */
-    .sch { background: var(--card2); border: 1px solid var(--border);
-           border-radius: 10px; padding: 13px 16px; margin-bottom: 8px;
-           display: flex; align-items: center; justify-content: space-between; }
-    .sch-time  { font-size: 22px; font-weight: 700; color: var(--gold); }
-    .sch-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .sch-days  { font-size: 11px; color: var(--blue); margin-top: 2px; }
-
-    /* ── 빠른 링크 ── */
-    .links { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-    .lnk {
-      display: flex; align-items: center; gap: 5px;
-      padding: 6px 11px; border-radius: 18px;
+    /* ══════════════════════════════════════
+       스케줄
+    ══════════════════════════════════════ */
+    .sch {
       background: var(--card2); border: 1px solid var(--border);
-      text-decoration: none; color: var(--muted); font-size: 11px; font-weight: 600;
-      transition: all .15s;
+      border-radius: 8px; padding: 10px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
     }
-    .lnk:hover { border-color: var(--gold); color: var(--gold); }
+    .sch-time { font-size: 13px; font-weight: 700; color: var(--gold); flex-shrink:0; }
+    .sch-label{ font-size: 12px; color: var(--text); flex: 1; min-width: 80px; }
+    .sch-del  { font-size: 11px; padding: 3px 8px; border-radius: 6px; cursor: pointer;
+                background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.25); color: var(--red); }
 
-    /* ── 모달 ── */
+    /* ══════════════════════════════════════
+       모달
+    ══════════════════════════════════════ */
     .modal-bg {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
-      z-index: 300; align-items: center; justify-content: center; padding: 20px;
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 16px;
     }
     .modal-bg.open { display: flex; }
     .modal-box {
-      background: var(--card); border: 1px solid rgba(201,168,76,.2);
-      border-radius: 16px; padding: 26px; width: 100%; max-width: 380px;
-      box-shadow: 0 32px 80px rgba(0,0,0,.7);
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; width: 100%; max-width: 420px;
     }
     .modal-title { font-size: 15px; font-weight: 700; color: var(--gold); margin-bottom: 16px; }
-    .field-label { font-size: 11px; color: var(--muted); margin: 12px 0 5px; font-weight: 600; }
+    .field-label { font-size: 11px; color: var(--muted); margin: 10px 0 4px; }
     .field {
       width: 100%; padding: 10px 13px; background: var(--card2);
       border: 1px solid var(--border); border-radius: 8px;
-      color: var(--text); font-size: 14px; font-family: inherit; outline: none;
+      color: var(--text); font-size: 13px; font-family: inherit; outline: none;
     }
     .field:focus { border-color: var(--gold); }
-    .modal-actions { display: flex; gap: 8px; margin-top: 18px; }
-    .btn-modal-ok {
-      flex: 1; padding: 11px; background: linear-gradient(135deg,var(--gold),var(--gold2));
-      color: #0D1117; border: none; border-radius: 8px;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-    }
-    .btn-modal-cancel {
-      flex: 1; padding: 11px; background: transparent;
-      color: var(--muted); border: 1px solid var(--border); border-radius: 8px;
-      font-size: 14px; cursor: pointer; font-family: inherit;
-    }
-    .btn-modal-cancel:hover { border-color: var(--text); color: var(--text); }
+    .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .btn-modal-ok     { flex: 1; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; background: linear-gradient(135deg,var(--gold),var(--gold2)); color: #0D1117; transition: opacity .2s; }
+    .btn-modal-ok:hover { opacity: .85; }
+    .btn-modal-cancel { padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; background: var(--card2); border: 1px solid var(--border); color: var(--muted); transition: all .15s; }
+    .btn-modal-cancel:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* ── 토스트 ── */
-    .toast-wrap { position: fixed; bottom: 20px; right: 20px; z-index: 400;
-                   display: flex; flex-direction: column; gap: 8px; }
+    /* ══════════════════════════════════════
+       버튼
+    ══════════════════════════════════════ */
+    .btn-gold {
+      padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer;
+      font-weight: 700; font-size: 12px; white-space: nowrap;
+      background: linear-gradient(135deg,var(--gold),var(--gold2));
+      color: #0D1117; transition: opacity .2s; flex-shrink: 0;
+    }
+    .btn-gold:hover { opacity: .85; }
 
-    /* ── 반응형 ── */
+    /* ══════════════════════════════════════
+       토스트
+    ══════════════════════════════════════ */
+    .toast-wrap { position: fixed; bottom: 70px; right: 16px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 16px; font-size: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5); animation: slideIn .3s ease;
+      max-width: 260px;
+    }
+    @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:none;opacity:1} }
+
+    /* ══════════════════════════════════════
+       접속자 닉네임
+    ══════════════════════════════════════ */
+    .nick-errmsg { font-size: 11px; color: var(--red); text-align: center; min-height: 16px; }
+
+    /* ══════════════════════════════════════
+       음향 제어
+    ══════════════════════════════════════ */
+    .audio-row {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .audio-row:last-child { border-bottom: none; }
+    .audio-info { flex: 1; min-width: 160px; }
+    .audio-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .audio-desc  { font-size: 11px; color: var(--muted); line-height: 1.6; }
+    .audio-tip   { color: rgba(201,168,76,.8); font-style: italic; }
+    .audio-ctrl  { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .audio-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 10px; min-width: 30px; text-align: center;
+    }
+    .audio-badge.on  { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
+    .audio-badge.off { background: rgba(248,113,113,.12); color: var(--red);   border: 1px solid rgba(248,113,113,.25); }
+    .vol-val { font-size: 12px; font-weight: 700; color: var(--gold); min-width: 34px; text-align: right; }
+    .vol-preset {
+      font-size: 10px; padding: 3px 7px; border-radius: 6px;
+      background: var(--card2); border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; transition: all .15s;
+    }
+    .vol-preset:hover { border-color: var(--gold); color: var(--gold); }
+    .preset-btn {
+      padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--card2); color: var(--text); cursor: pointer;
+      font-size: 11px; font-weight: 600; text-align: center;
+      transition: all .2s; line-height: 1.7; width: 100%;
+    }
+    .preset-btn span { font-size: 10px; color: var(--muted); font-weight: 400; display: block; }
+    .preset-btn:hover  { border-color: var(--gold); background: rgba(201,168,76,.08); }
+    .preset-btn.active { border-color: var(--gold); background: rgba(201,168,76,.12); color: var(--gold); }
+    input[type=range] {
+      -webkit-appearance: none; height: 4px;
+      background: var(--border); border-radius: 2px; outline: none; cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      border-radius: 50%; background: var(--gold); cursor: pointer;
+    }
+
+    /* ══════════════════════════════════════
+       모바일 반응형
+    ══════════════════════════════════════ */
     @media (max-width: 640px) {
-      .sidebar { display: none; }
-      .kpi-row { grid-template-columns: 1fr 1fr; }
-      .kpi-row .kpi:last-child { grid-column: span 2; }
-      .ann-row { flex-wrap: wrap; }
-      .sel { width: 100%; }
+      /* 사이드바 숨김 */
+      .sidebar { display: none !important; }
+
+      /* 본문 여백 조정 */
+      .layout { padding-bottom: 0; height: calc(100vh - 52px - 58px); }
+      .main { padding: 10px; }
+
+      /* KPI 2열 */
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .kpi-value { font-size: 20px; }
+
+      /* 채널 카드 compact */
+      .ch { padding: 10px 12px; gap: 8px; }
+      .ch-flag { font-size: 20px; }
+
+      /* card-hd 세로 정렬 */
+      .card-hd { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .card-hd .btn-gold { width: 100%; text-align: center; }
+
+      /* 공지 입력창 세로 */
+      .ann-row { flex-direction: column; }
+      .ann-row .sel,
+      .ann-row .inp,
+      .ann-row .btn-gold { width: 100%; }
+
+      /* 음향 제어 */
+      .audio-row { flex-direction: column; }
+      .audio-ctrl { width: 100%; justify-content: flex-start; }
+
+      /* 토스트 위치 */
+      .toast-wrap { bottom: 68px; right: 8px; left: 8px; }
+      .toast { max-width: 100%; }
+
+      /* 모달 */
+      .modal-box { padding: 18px; }
+    }
+
+    /* ══════════════════════════════════════
+       모바일 하단 탭바
+    ══════════════════════════════════════ */
+    .mobile-tab-bar {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 58px; z-index: 200;
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      align-items: stretch;
+    }
+    .mob-tab {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2px; font-size: 9px; color: var(--muted);
+      cursor: pointer; padding: 6px 2px;
+      border: none; background: none;
+      transition: all .15s; position: relative;
+    }
+    .mob-tab .mob-icon { font-size: 18px; line-height: 1; }
+    .mob-tab.active { color: var(--gold); }
+    .mob-tab.active::before {
+      content: ''; position: absolute; top: 0; left: 15%; right: 15%;
+      height: 2px; background: var(--gold); border-radius: 0 0 2px 2px;
+    }
+    .mob-tab .mob-badge {
+      position: absolute; top: 4px; right: calc(50% - 16px);
+      background: var(--red); color: #fff;
+      font-size: 9px; font-weight: 700;
+      border-radius: 8px; padding: 1px 5px; min-width: 14px; text-align: center;
+    }
+    @media (max-width: 640px) {
+      .mobile-tab-bar { display: flex !important; }
     }
   </style>
 </head>
@@ -351,6 +521,9 @@
     </div>
     <div class="sidebar-item" onclick="goPage('schedule')" id="si-schedule">
       <span class="icon">🕐</span> 스케줄
+    </div>
+    <div class="sidebar-item" onclick="goPage('audio')" id="si-audio">
+      <span class="icon">🎛️</span> 음향 제어
     </div>
 
     <div class="sidebar-section" style="margin-top:8px">접속</div>
@@ -512,7 +685,234 @@
     </div>
   </div>
 
-</div><!-- /layout -->
+<!-- ━━━━ 음향 제어 페이지 ━━━━ -->
+<div class="main" id="page-audio">
+
+  <!-- 안내 배너 -->
+  <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);
+              border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:12px;
+              color:var(--muted);line-height:1.8">
+    🎧 <strong style="color:var(--gold)">하울링 방지 가이드</strong><br>
+    ① 청취자는 반드시 <strong>이어폰</strong>을 사용하세요<br>
+    ② 송출 기기와 청취 기기를 <strong>같은 공간</strong>에 두지 마세요<br>
+    ③ 아래 <strong>에코 제거(AEC)</strong>와 <strong>노이즈 억제(NS)</strong>를 활성화하세요<br>
+    ④ 마이크 감도를 낮추면 주변 소리 유입을 줄일 수 있습니다
+  </div>
+
+  <!-- 핵심 음향 처리 -->
+  <div class="card">
+    <div class="card-hd">
+      <span>🔧 핵심 음향 처리 (하울링 방지)</span>
+      <button class="btn-gold" style="font-size:11px;padding:4px 10px"
+              onclick="applyAudioSettings()">전체 적용</button>
+    </div>
+
+    <!-- AEC -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">🔇 에코 제거 (AEC)</div>
+        <div class="audio-desc">
+          스피커에서 나오는 소리가 마이크로 다시 들어가는 것을 차단합니다.<br>
+          <span class="audio-tip">💡 하울링의 가장 큰 원인 — 반드시 켜두세요</span>
+        </div>
+      </div>
+      <div class="audio-ctrl">
+        <label class="sw">
+          <input type="checkbox" id="opt-aec" checked onchange="previewSetting('aec',this.checked)">
+          <span class="sw-track"></span>
+        </label>
+        <span class="audio-badge on" id="badge-aec">ON</span>
+      </div>
+    </div>
+
+    <!-- NS -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">🌫️ 노이즈 억제 (NS)</div>
+        <div class="audio-desc">
+          에어컨 소음, 키보드 소리, 주변 잡음을 자동으로 걸러냅니다.<br>
+          <span class="audio-tip">💡 조용한 환경이라면 OFF도 괜찮습니다</span>
+        </div>
+      </div>
+      <div class="audio-ctrl">
+        <label class="sw">
+          <input type="checkbox" id="opt-ns" checked onchange="previewSetting('ns',this.checked)">
+          <span class="sw-track"></span>
+        </label>
+        <span class="audio-badge on" id="badge-ns">ON</span>
+      </div>
+    </div>
+
+    <!-- AGC -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">📶 자동 게인 제어 (AGC)</div>
+        <div class="audio-desc">
+          마이크 입력 음량을 자동으로 일정하게 유지합니다.<br>
+          <span class="audio-tip">💡 통역자 목소리가 들쭉날쭉할 때 켜세요</span>
+        </div>
+      </div>
+      <div class="audio-ctrl">
+        <label class="sw">
+          <input type="checkbox" id="opt-agc" checked onchange="previewSetting('agc',this.checked)">
+          <span class="sw-track"></span>
+        </label>
+        <span class="audio-badge on" id="badge-agc">ON</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 볼륨 제어 -->
+  <div class="card">
+    <div class="card-hd"><span>🔊 볼륨 제어</span></div>
+
+    <!-- 마이크 감도 -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">🎤 마이크 감도 (송출 측)</div>
+        <div class="audio-desc">
+          통역자 마이크 입력 감도를 조절합니다.<br>
+          <span class="audio-tip">💡 하울링 발생 시 감도를 낮추세요 (권장: 70~85%)</span>
+        </div>
+      </div>
+      <div class="audio-ctrl" style="flex-direction:column;align-items:flex-end;gap:6px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="range" id="vol-mic" min="0" max="100" value="80"
+                 style="width:140px" oninput="updateVolLabel('mic',this.value)">
+          <span class="vol-val" id="val-mic">80%</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="vol-preset" onclick="setVol('mic',60)">낮음(60)</button>
+          <button class="vol-preset" onclick="setVol('mic',80)">보통(80)</button>
+          <button class="vol-preset" onclick="setVol('mic',100)">높음(100)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 청취자 기본 볼륨 -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">🔈 청취자 기본 볼륨</div>
+        <div class="audio-desc">
+          청취자 페이지 초기 볼륨을 설정합니다.<br>
+          <span class="audio-tip">💡 청취자가 너무 크다고 하면 낮추세요 (권장: 80%)</span>
+        </div>
+      </div>
+      <div class="audio-ctrl" style="flex-direction:column;align-items:flex-end;gap:6px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="range" id="vol-listener" min="0" max="100" value="80"
+                 style="width:140px" oninput="updateVolLabel('listener',this.value)">
+          <span class="vol-val" id="val-listener">80%</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="vol-preset" onclick="setVol('listener',50)">낮음(50)</button>
+          <button class="vol-preset" onclick="setVol('listener',80)">보통(80)</button>
+          <button class="vol-preset" onclick="setVol('listener',100)">높음(100)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오디오 품질 -->
+  <div class="card">
+    <div class="card-hd"><span>🎵 오디오 품질</span></div>
+
+    <!-- 오디오 코덱 -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">🎼 오디오 코덱</div>
+        <div class="audio-desc">
+          음성 압축 방식을 선택합니다.<br>
+          <span class="audio-tip">💡 Opus RED = 고품질 + 패킷손실 복구 (권장)</span>
+        </div>
+      </div>
+      <div class="audio-ctrl">
+        <select id="opt-codec" class="field" style="width:140px;padding:6px 8px;font-size:12px"
+                onchange="previewSetting('codec',this.value)">
+          <option value="opus_red">Opus RED (권장)</option>
+          <option value="opus">Opus (표준)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 샘플레이트 -->
+    <div class="audio-row">
+      <div class="audio-info">
+        <div class="audio-title">📊 샘플레이트</div>
+        <div class="audio-desc">
+          음성 품질과 데이터 사용량을 결정합니다.<br>
+          <span class="audio-tip">💡 48kHz = 고품질, 16kHz = 저데이터 (통화품질)</span>
+        </div>
+      </div>
+      <div class="audio-ctrl">
+        <select id="opt-samplerate" class="field" style="width:140px;padding:6px 8px;font-size:12px">
+          <option value="48000">48kHz (고품질)</option>
+          <option value="16000">16kHz (절약)</option>
+          <option value="8000">8kHz (최소)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 하울링 진단 -->
+  <div class="card">
+    <div class="card-hd"><span>🔍 하울링 진단 도구</span></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px">
+      현재 활성화된 통역자에게 음향 설정을 즉시 적용합니다
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+
+      <!-- 상황별 프리셋 -->
+      <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:4px">
+        📋 상황별 프리셋
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="preset-btn" onclick="applyPreset('church')">
+          ⛪ 교회/예배당<br>
+          <span>AEC ON · NS ON · 감도 75%</span>
+        </button>
+        <button class="preset-btn" onclick="applyPreset('conference')">
+          🏢 컨퍼런스홀<br>
+          <span>AEC ON · NS ON · 감도 85%</span>
+        </button>
+        <button class="preset-btn" onclick="applyPreset('outdoor')">
+          🌳 야외 행사<br>
+          <span>AEC ON · NS OFF · 감도 100%</span>
+        </button>
+        <button class="preset-btn" onclick="applyPreset('studio')">
+          🎙️ 스튜디오<br>
+          <span>AEC OFF · NS OFF · 감도 90%</span>
+        </button>
+      </div>
+
+      <!-- 적용 버튼 -->
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn-gold" style="flex:1;padding:12px"
+                onclick="applyAudioSettings()">
+          ✅ 현재 설정 저장 및 적용
+        </button>
+        <button class="btn-modal-cancel" style="padding:12px 18px"
+                onclick="resetAudioSettings()">
+          🔄 초기화
+        </button>
+      </div>
+
+      <!-- 적용 결과 -->
+      <div id="audio-result" style="display:none;padding:10px 14px;border-radius:8px;
+           font-size:12px;text-align:center;font-weight:600"></div>
+    </div>
+  </div>
+
+  <!-- 현재 설정 요약 -->
+  <div class="card">
+    <div class="card-hd"><span>📌 현재 적용 설정</span></div>
+    <div id="audio-summary" style="font-size:12px;color:var(--muted);line-height:2">
+      설정을 적용하면 여기에 표시됩니다.
+    </div>
+  </div>
+
+</div>
 
 <!-- ── 방송 생성 모달 ── -->
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
@@ -608,6 +1008,141 @@ document.getElementById('quickLinks').innerHTML = [
 // ════════════════════════════════════════
 // 페이지 전환
 // ════════════════════════════════════════
+// ════════════════════════════════════════
+// 음향 제어
+// ════════════════════════════════════════
+
+// localStorage에서 설정 로드
+var audioSettings = JSON.parse(localStorage.getItem('ibs_audio') || JSON.stringify({
+  aec: true, ns: true, agc: true,
+  micVol: 80, listenerVol: 80,
+  codec: 'opus_red', sampleRate: '48000',
+  preset: ''
+}));
+
+function initAudioPage(){
+  document.getElementById('opt-aec').checked        = audioSettings.aec;
+  document.getElementById('opt-ns').checked         = audioSettings.ns;
+  document.getElementById('opt-agc').checked        = audioSettings.agc;
+  document.getElementById('vol-mic').value          = audioSettings.micVol;
+  document.getElementById('vol-listener').value     = audioSettings.listenerVol;
+  document.getElementById('val-mic').textContent    = audioSettings.micVol + '%';
+  document.getElementById('val-listener').textContent = audioSettings.listenerVol + '%';
+  document.getElementById('opt-codec').value        = audioSettings.codec;
+  document.getElementById('opt-samplerate').value   = audioSettings.sampleRate;
+  updateBadge('aec', audioSettings.aec);
+  updateBadge('ns',  audioSettings.ns);
+  updateBadge('agc', audioSettings.agc);
+  renderSummary();
+}
+
+function updateBadge(id, on){
+  const b = document.getElementById('badge-' + id);
+  if(!b) return;
+  b.textContent   = on ? 'ON' : 'OFF';
+  b.className     = 'audio-badge ' + (on ? 'on' : 'off');
+}
+
+function previewSetting(key, val){
+  updateBadge(key, val);
+}
+
+function updateVolLabel(key, val){
+  document.getElementById('val-' + key).textContent = val + '%';
+}
+
+function setVol(key, val){
+  document.getElementById('vol-' + key).value = val;
+  document.getElementById('val-' + key).textContent = val + '%';
+}
+
+function applyPreset(name){
+  const presets = {
+    church:     { aec:true,  ns:true,  agc:true,  micVol:75,  listenerVol:80 },
+    conference: { aec:true,  ns:true,  agc:true,  micVol:85,  listenerVol:80 },
+    outdoor:    { aec:true,  ns:false, agc:true,  micVol:100, listenerVol:90 },
+    studio:     { aec:false, ns:false, agc:false, micVol:90,  listenerVol:80 },
+  };
+  const p = presets[name];
+  if(!p) return;
+
+  document.getElementById('opt-aec').checked    = p.aec;
+  document.getElementById('opt-ns').checked     = p.ns;
+  document.getElementById('opt-agc').checked    = p.agc;
+  setVol('mic',      p.micVol);
+  setVol('listener', p.listenerVol);
+  updateBadge('aec', p.aec);
+  updateBadge('ns',  p.ns);
+  updateBadge('agc', p.agc);
+
+  // 프리셋 버튼 활성화 표시
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  audioSettings.preset = name;
+  toast('✅ ' + event.currentTarget.textContent.split('\n')[0] + ' 프리셋 적용!');
+}
+
+function applyAudioSettings(){
+  // 현재 UI에서 값 읽기
+  audioSettings.aec         = document.getElementById('opt-aec').checked;
+  audioSettings.ns          = document.getElementById('opt-ns').checked;
+  audioSettings.agc         = document.getElementById('opt-agc').checked;
+  audioSettings.micVol      = parseInt(document.getElementById('vol-mic').value);
+  audioSettings.listenerVol = parseInt(document.getElementById('vol-listener').value);
+  audioSettings.codec       = document.getElementById('opt-codec').value;
+  audioSettings.sampleRate  = document.getElementById('opt-samplerate').value;
+
+  // localStorage 저장
+  localStorage.setItem('ibs_audio', JSON.stringify(audioSettings));
+
+  // WebSocket으로 통역자/청취자에게 설정 브로드캐스트
+  if(ws && ws.readyState === 1){
+    ws.send(JSON.stringify({
+      type: 'audio_settings',
+      settings: audioSettings
+    }));
+  }
+
+  // 결과 표시
+  const res = document.getElementById('audio-result');
+  res.style.display     = 'block';
+  res.style.background  = 'rgba(34,197,94,.12)';
+  res.style.border      = '1px solid rgba(34,197,94,.3)';
+  res.style.color       = '#22c55e';
+  res.textContent       = '✅ 설정이 저장되었습니다. 다음 방송 시작 시 자동 적용됩니다.';
+  setTimeout(() => res.style.display = 'none', 4000);
+
+  renderSummary();
+  toast('🎛️ 음향 설정 적용 완료!');
+}
+
+function resetAudioSettings(){
+  if(!confirm('음향 설정을 초기화하시겠습니까?')) return;
+  localStorage.removeItem('ibs_audio');
+  audioSettings = { aec:true, ns:true, agc:true,
+                    micVol:80, listenerVol:80,
+                    codec:'opus_red', sampleRate:'48000', preset:'' };
+  initAudioPage();
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  toast('🔄 음향 설정 초기화 완료');
+}
+
+function renderSummary(){
+  const s = audioSettings;
+  const codecLabel = s.codec === 'opus_red' ? 'Opus RED (권장)' : 'Opus (표준)';
+  const srLabel    = s.sampleRate === '48000' ? '48kHz (고품질)' :
+                     s.sampleRate === '16000' ? '16kHz (절약)' : '8kHz (최소)';
+  document.getElementById('audio-summary').innerHTML =
+    '🔇 에코 제거(AEC): <strong style="color:' + (s.aec?'#22c55e':'#f87171') + '">' + (s.aec?'ON':'OFF') + '</strong> &nbsp;|&nbsp; ' +
+    '🌫️ 노이즈 억제(NS): <strong style="color:' + (s.ns?'#22c55e':'#f87171')  + '">' + (s.ns?'ON':'OFF')  + '</strong> &nbsp;|&nbsp; ' +
+    '📶 자동게인(AGC): <strong style="color:'  + (s.agc?'#22c55e':'#f87171') + '">' + (s.agc?'ON':'OFF') + '</strong><br>' +
+    '🎤 마이크 감도: <strong style="color:var(--gold)">' + s.micVol + '%</strong> &nbsp;|&nbsp; ' +
+    '🔈 청취자 볼륨: <strong style="color:var(--gold)">' + s.listenerVol + '%</strong><br>' +
+    '🎼 코덱: <strong style="color:var(--gold)">' + codecLabel + '</strong> &nbsp;|&nbsp; ' +
+    '📊 샘플레이트: <strong style="color:var(--gold)">' + srLabel + '</strong>';
+}
+
 function goPage(name){
   document.querySelectorAll('.main').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.sidebar-item[id^="si-"]').forEach(el=>el.classList.remove('active'));
@@ -618,6 +1153,29 @@ function goPage(name){
   if(name==='broadcast') loadBroadcasts();
   if(name==='chat')      { loadChat(); unread=0; updateBadge(); }
   if(name==='schedule')  loadSchedule();
+  if(name==='audio')     initAudioPage();
+  // 모바일 탭 동기화
+  setMobTab(name);
+}
+
+function setMobTab(name){
+  document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
+  const mt = document.getElementById('mtab-'+name);
+  if(mt) mt.classList.add('active');
+}
+
+// 채팅 배지 모바일 동기화
+function updateBadge(){
+  const b = document.getElementById('chatBadge');
+  const mb = document.getElementById('mobChatBadge');
+  if(unread > 0 && curPage !== 'chat'){
+    const txt = unread > 99 ? '99+' : unread;
+    b.textContent = txt; b.classList.remove('hidden');
+    if(mb){ mb.textContent = txt; mb.classList.remove('hidden'); }
+  } else {
+    b.classList.add('hidden');
+    if(mb) mb.classList.add('hidden');
+  }
 }
 
 function updateBadge(){
@@ -948,5 +1506,37 @@ function toast(msg,type='ok'){
 }
 function logout(){ localStorage.clear(); location.href='login.html'; }
 </script>
+  <!-- ── 모바일 하단 탭바 ── -->
+  <nav class="mobile-tab-bar" id="mobileTabBar">
+    <button class="mob-tab active" id="mtab-dashboard"
+            onclick="goPage('dashboard');setMobTab('dashboard')">
+      <span class="mob-icon">📊</span>
+      <span>대시보드</span>
+    </button>
+    <button class="mob-tab" id="mtab-broadcast"
+            onclick="goPage('broadcast');setMobTab('broadcast')">
+      <span class="mob-icon">📡</span>
+      <span>방송</span>
+    </button>
+    <button class="mob-tab" id="mtab-chat"
+            onclick="goPage('chat');setMobTab('chat')">
+      <span class="mob-icon">💬</span>
+      <span>채팅</span>
+      <span class="mob-badge hidden" id="mobChatBadge">0</span>
+    </button>
+    <button class="mob-tab" id="mtab-audio"
+            onclick="goPage('audio');setMobTab('audio')">
+      <span class="mob-icon">🎛️</span>
+      <span>음향</span>
+    </button>
+    <button class="mob-tab" id="mtab-schedule"
+            onclick="goPage('schedule');setMobTab('schedule')">
+      <span class="mob-icon">🕐</span>
+      <span>스케줄</span>
+    </button>
+  </nav>
+
 </body>
 </html>
+
+</div><!-- /layout -->
