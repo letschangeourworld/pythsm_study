@@ -195,7 +195,7 @@ curl http://localhost:19000/api/health
 ## 📱 페이지별 사용법
 
 ### 1. 메인 페이지 (청취자 입장)
-````
+```
 [http://서버IP:19000](http://xn--ip-v41jw5m:19000/)
 
 ```
@@ -250,7 +250,7 @@ curl http://localhost:19000/api/health
 ### 4. 관리자 페이지
 ```
 [http://서버IP:19000/admin.html](http://xn--ip-v41jw5m:19000/admin.html)
-````
+```
 
 **기본 계정:** admin / admin123
 
@@ -298,8 +298,7 @@ docker compose restart livekit api nginx
 ### 🎙️ 마이크 소스 선택
 통역자 페이지에서 두 가지 마이크 모드 지원:
 
-````
-
+```
 📱 내 마이크 모드
 └── 현재 기기(핸드폰/PC)의 내장 마이크 사용
 └── 간편하지만 하울링 주의
@@ -308,7 +307,6 @@ docker compose restart livekit api nginx
 └── 서버에 연결된 전문 마이크 선택
 └── 고음질 방송 가능
 └── 마이크 장치 목록에서 선택
-
 ```
 
 ### 🌐 신규 채널 동적 추가
@@ -329,8 +327,7 @@ LiveKit Room: room\_fr
 내 메시지 → 노란색 말풍선 (오른쪽, #FEE500)
 시스템 알림 ─ 중앙 회색 알약
 날짜 구분선 ─ "2026년 6월 14일"
-
-````
+```
 
 
 ## 🔧 문제 해결
@@ -383,7 +380,6 @@ docker compose restart nginx
 docker compose restart livekit
 ```
 
----
 
 ## 📊 모니터링
 
@@ -393,12 +389,10 @@ docker compose restart livekit
 | MinIO | http://서버IP:19011 | minioadmin / 설정값 |
 | Prometheus | http://서버IP:9090 | - |
 
----
 
 ## 🗂️ 프로젝트 구조
 
 ```
-
 IBS/
 ├── backend/
 │ └── app/
@@ -428,7 +422,6 @@ IBS/
 │ └── update-ip.sh # IP 자동 감지 스크립트
 ├── docker-compose.yml # 전체 스택 정의
 └── .env # 환경변수 (gitignore)
-
 ```
 
 ## 🔐 보안 주의사항
