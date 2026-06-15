@@ -4,7 +4,6 @@
 > **교회/컨퍼런스/행사**에서 실시간 다국어 동시통역 방송을 위한 오픈소스 시스템
 > iPhone · Android · PC 모든 기기에서 브라우저만으로 송출 및 청취 가능
 
----
 
 ## 📋 목차
 
@@ -18,22 +17,18 @@
 8. [주요 기능](#주요-기능)
 9. [문제 해결](#문제-해결)
 
----
 
 ## 🌐 시스템 개요
 
 ```
+[통역자 (iPhone/PC)] ─── 🎙️ 음성 송출 ───► [LiveKit 미디어 서버]
+   │
+   ▼ WebRTC (UDP)
+[청취자 (핸드폰/PC)] ◄─── 🔊 음성 수신 ───────────────┘
 
-\[통역자 (iPhone/PC)\] ─── 🎙️ 음성 송출 ───► \[LiveKit 미디어 서버\]
-│
-▼ WebRTC (UDP)
-\[청취자 (핸드폰/PC)\] ◄─── 🔊 음성 수신 ───────────────┘
+[관리자 (PC/핸드폰)] ─── 채널 ON/OFF, 채팅, 신규채널 추가 ──► [FastAPI + WebSocket]
 
-\[관리자 (PC/핸드폰)\] ─── 채널 ON/OFF, 채팅, 신규채널 추가 ──► \[FastAPI + WebSocket\]
-
-plaintext
-
-```plaintext
+```
 
 ### 주요 특징
 
@@ -46,12 +41,10 @@ plaintext
 | 🎛️ 마이크 선택 | 핸드폰 마이크 / 서버PC 전문마이크 선택 가능 |
 | 📊 모니터링 | Prometheus + Grafana 실시간 모니터링 |
 
----
 
 ## 🏗️ 아키텍처
 
 ```
-
 ┌─────────────────────────────────────────────────────────────┐
 │ 클라이언트 │
 │ 📱 iPhone(Safari) 💻 PC(Chrome) 🖥️ 서버PC(전문마이크) │
@@ -63,14 +56,14 @@ plaintext
 │ :19000 메인/청취자 :19443 iOS통역자 :19082 통역자(PC) │
 │ /rtc → LiveKit:7880 /api → FastAPI:8000 │
 └──────────┬──────────────────────────┬───────────────────────┘
-│ │
-▼ ▼
+           │ │
+           ▼ ▼
 ┌──────────────────┐ ┌───────────────────────────────────┐
-│ LiveKit Server │ │ FastAPI Backend │
-│ :7880 신호채널 │ │ /api/v1/livekit/token 토큰발급 │
-│ :7881 TCP미디어 │ │ /api/channels 채널관리 │
-│ :55000-55100 UDP│ │ /api/broadcast/\* 방송제어 │
-│ WebRTC ICE │ │ /ws WebSocket │
+│ LiveKit Server   │ │ FastAPI Backend │
+│ :7880 신호채널    │ │ /api/v1/livekit/token 토큰발급 │
+│ :7881 TCP미디어   │ │ /api/channels 채널관리 │
+│ :55000-55100 UDP  │ │ /api/broadcast/\* 방송제어 │
+│ WebRTC ICE        │ │ /ws WebSocket │
 └──────────────────┘ └──────────┬────────────────────────┘
 │
 ┌────────────────┼────────────────┐
@@ -87,11 +80,8 @@ plaintext
 │ :9090 │ │ :3000 │ │ 로그 │
 └──────────┘ └──────────┘ └──────────┘
 
-plaintext
+````
 
-````plaintext
-
----
 
 ## 🛠️ 기술 스택
 
@@ -206,28 +196,20 @@ curl http://localhost:19000/api/health
 
 ### 1. 메인 페이지 (청취자 입장)
 ````
-
 [http://서버IP:19000](http://xn--ip-v41jw5m:19000/)
 
-plaintext
-
-```plaintext
+```
 - 언어 채널 선택 (영어/일어/중국어)
 - ON AIR 상태인 채널만 활성화
 - 채널 클릭 → 청취자 페이지로 이동
 
----
 
 ### 2. 청취자 페이지
 ```
-
 [http://서버IP:19000/listen.html?ch=english](http://xn--ip-v41jw5m:19000/listen.html?ch=english)
 [http://서버IP:19000/listen.html?ch=japanese](http://xn--ip-v41jw5m:19000/listen.html?ch=japanese)
 [http://서버IP:19000/listen.html?ch=chinese](http://xn--ip-v41jw5m:19000/listen.html?ch=chinese)
-
-plaintext
-
-```plaintext
+```
 
 **사용 순서:**
 1. 이어폰 연결 (하울링 방지)
@@ -241,27 +223,18 @@ plaintext
 - 실시간 STT 자막 표시
 - 볼륨 조절
 
----
 
 ### 3. 통역자 페이지
 
 **PC 환경:**
 ```
-
 [http://서버IP:19082/pages/interpreter/index.html](http://xn--ip-v41jw5m:19082/pages/interpreter/index.html)
-
-plaintext
-
-```plaintext
+```
 
 **iPhone/iOS 환경:**
 ```
-
 [https://서버IP:19443/pages/interpreter/index.html](https://xn--ip-v41jw5m:19443/pages/interpreter/index.html)
-
-plaintext
-
-```plaintext
+```
 > ⚠️ iOS는 반드시 HTTPS 접속 필요 (인증서 경고 → '고급' → '방문' 클릭)
 
 **사용 순서:**
@@ -273,16 +246,11 @@ plaintext
 4. 방송 중 🔴 표시 확인
 5. **[⏹ 방송 종료]** 클릭
 
----
 
 ### 4. 관리자 페이지
 ```
-
 [http://서버IP:19000/admin.html](http://xn--ip-v41jw5m:19000/admin.html)
-
-plaintext
-
-````plaintext
+````
 
 **기본 계정:** admin / admin123
 
@@ -297,7 +265,6 @@ plaintext
 | 채팅 기록 | 채널별 채팅 히스토리 조회 |
 | 빠른 링크 | 각 페이지 바로가기 |
 
----
 
 ## 🔄 IP 변경 대응
 
@@ -326,8 +293,6 @@ vi configs/livekit/livekit.yaml  # node_ip: 새IP
 docker compose restart livekit api nginx
 ```
 
----
-
 ## ⭐ 주요 기능
 
 ### 🎙️ 마이크 소스 선택
@@ -344,39 +309,29 @@ docker compose restart livekit api nginx
 └── 고음질 방송 가능
 └── 마이크 장치 목록에서 선택
 
-plaintext
-
-```plaintext
+```
 
 ### 🌐 신규 채널 동적 추가
 관리자 페이지 → [➕ 채널 추가]:
 
 ```
-
 채널 키: french
 표시 이름: Français
 국기: 🇫🇷
 LiveKit Room: room\_fr
-
-plaintext
-
-```plaintext
+```
 → 즉시 메인 페이지와 관리자 페이지에 반영
 
 ### 💬 카카오톡 스타일 채팅
 
 ```
-
 관리자/통역자 ← 금색 말풍선 (왼쪽)
 내 메시지 → 노란색 말풍선 (오른쪽, #FEE500)
 시스템 알림 ─ 중앙 회색 알약
 날짜 구분선 ─ "2026년 6월 14일"
 
-plaintext
+````
 
-````plaintext
-
----
 
 ## 🔧 문제 해결
 
@@ -442,7 +397,7 @@ docker compose restart livekit
 
 ## 🗂️ 프로젝트 구조
 
-````
+```
 
 IBS/
 ├── backend/
@@ -474,11 +429,7 @@ IBS/
 ├── docker-compose.yml # 전체 스택 정의
 └── .env # 환경변수 (gitignore)
 
-plaintext
-
-```plaintext
-
----
+```
 
 ## 🔐 보안 주의사항
 
@@ -488,13 +439,11 @@ plaintext
 4. LiveKit API Secret은 32자 이상 랜덤 문자열 사용
 5. 방화벽에서 필요한 포트만 개방
 
----
 
 ## 📝 라이선스
 
 MIT License
 
----
 
 ## 👨‍💻 개발 히스토리
 
