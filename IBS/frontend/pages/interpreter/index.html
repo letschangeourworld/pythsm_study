@@ -316,12 +316,16 @@ for (let i = 0; i < 20; i++) {
   meter.appendChild(b);
 }
 
+// 미터용 스트림 전역 보관 (방송 시작 시 재사용)
+let _meterStream   = null;
+let _meterInterval = null;
+
 async function initMic() {
   try {
-    const stream   = await navigator.mediaDevices.getUserMedia({audio: true});
+    _meterStream   = await navigator.mediaDevices.getUserMedia({audio: true});
     const ctx      = new AudioContext();
     const analyser = ctx.createAnalyser();
-    ctx.createMediaStreamSource(stream).connect(analyser);
+    ctx.createMediaStreamSource(_meterStream).connect(analyser);
     analyser.fftSize = 64;
     const data = new Uint8Array(analyser.frequencyBinCount);
     const devs = await navigator.mediaDevices.enumerateDevices();
@@ -329,7 +333,9 @@ async function initMic() {
     document.getElementById('mic-dev').textContent    = mic?.label || '기본 마이크';
     document.getElementById('mic-status').textContent = '마이크 연결됨';
     document.getElementById('mic-icon').textContent   = '✅';
-    setInterval(() => {
+
+    // 미터 인터벌 저장 (방송 시작 시 중지 가능)
+    _meterInterval = setInterval(() => {
       analyser.getByteFrequencyData(data);
       const bars = meter.querySelectorAll('.bar');
       const avg  = data.reduce((a, b) => a + b, 0) / data.length;
@@ -341,7 +347,7 @@ async function initMic() {
         bar.className = 'bar' + (v > 200 ? ' c' : v > 150 ? ' w' : '');
       });
     }, 100);
-    stream.getTracks().forEach(t => t.stop());
+    // ★ 미터용 스트림은 열어둠 (방송 시작 시 재사용)
   } catch(e) {
     document.getElementById('mic-status').textContent = '⚠️ 마이크 접근 실패';
     showAlert('마이크 권한을 허용해주세요.', 'error');
@@ -372,9 +378,18 @@ async function startRecording(dbSessionId) {
     _recChunks    = 0;
     _recTotalBytes= 0;
 
-    // MediaRecorder로 마이크 스트림 녹음
-    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-    _mediaRecorder = new MediaRecorder(stream, {mimeType: 'audio/webm'});
+    // 미터 인터벌 중지 (충돌 방지)
+    if (_meterInterval) {
+      clearInterval(_meterInterval);
+      _meterInterval = null;
+    }
+
+    // 미터용 스트림 재사용 (새 스트림 열지 않음 → 떨림 방지)
+    let recStream = _meterStream;
+    if (!recStream || recStream.getTracks().every(t => t.readyState === 'ended')) {
+      recStream = await navigator.mediaDevices.getUserMedia({audio: true});
+    }
+    _mediaRecorder = new MediaRecorder(recStream, {mimeType: 'audio/webm'});
 
     _mediaRecorder.ondataavailable = async function(e) {
       if (!e.data || e.data.size === 0) return;
@@ -423,8 +438,7 @@ async function stopRecording(channel) {
     // MediaRecorder 중지 (마지막 청크 전송)
     if (_mediaRecorder.state !== 'inactive') {
       _mediaRecorder.stop();
-      _mediaRecorder.stream.getTracks().forEach(t => t.stop());
-      await new Promise(resolve => setTimeout(resolve, 1500)); // 마지막 청크 대기
+      await new Promise(resolve => setTimeout(resolve, 500)); // 마지막 청크 대기 (단축)
     }
 
     // 녹음 종료 API
@@ -483,6 +497,8 @@ async function stopRecording(channel) {
     _recSessionId   = null;
     _recDbSessionId = null;
     _mediaRecorder  = null;
+    // 미터 재시작 (방송 종료 후 마이크 레벨 표시 복원)
+    setTimeout(() => { initMic(); }, 1000);
   }
 }
 
@@ -617,18 +633,22 @@ async function startBC() {
 async function stopBC() {
   if (!confirm('방송을 종료하시겠습니까?')) return;
 
-  // 녹음 종료 (방송 종료 전)
-  const ch = _selectedRoom.replace('room_', '');
-  await stopRecording(ch);
-
-  if (room) { await room.disconnect(); room = null; }
+  // UI 즉시 업데이트 (사용자 체감 지연 제거)
   broadcasting = false;
-  [recTmr, hbTmr, statTmr].forEach(t => clearInterval(t));
   document.getElementById('btn-st').style.display   = 'inline-flex';
   document.getElementById('btn-sp').style.display   = 'none';
   document.getElementById('rec-time').style.display = 'none';
   document.getElementById('bc-status').textContent  = '대기 중';
   document.getElementById('bc-status').className    = 'badge badge-ready';
+  [recTmr, hbTmr, statTmr].forEach(t => clearInterval(t));
+
+  // LiveKit 연결 해제
+  if (room) { await room.disconnect(); room = null; }
+
+  // 녹음 종료 (백그라운드로 처리)
+  const ch = _selectedRoom.replace('room_', '');
+  stopRecording(ch).catch(e => console.warn('[REC] 종료 오류:', e));
+  // (UI는 이미 위에서 업데이트됨)
   await fetch(API + '/api/v1/interpreters/session/stop', {
     method: 'POST',
     headers: {'Authorization': 'Bearer ' + TOKEN}
