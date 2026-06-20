@@ -215,6 +215,7 @@
       ws.onopen = () => {
         wsDelay = 2000;
         document.getElementById('liveBadge').className = 'live-badge';
+        fetchChannels(); // WS 연결 즉시 채널 상태 갱신
         document.getElementById('liveText').textContent = '서버 연결됨 · Connected';
       };
       ws.onclose = () => {
@@ -239,17 +240,33 @@
       Object.entries(channels).forEach(([ch, st]) => updateCh(ch, st));
     }
     function updateCh(ch, st) {
-      const card  = document.getElementById(`card-${ch}`);
-      const badge = document.getElementById(`badge-${ch}`);
+      const card  = document.getElementById('card-' + ch);
+      const badge = document.getElementById('badge-' + ch);
       if (!card || !badge) return;
+
+      const wasActive = card.classList.contains('active');
+
       if (st.active) {
-        card.classList.remove('disabled'); card.classList.add('active');
-        badge.className = 'ch-badge on-air'; badge.textContent = '● ON AIR';
-      } else {
-        card.classList.add('disabled'); card.classList.remove('active');
-        if (!['준비 중'].includes(badge.textContent)) {
-          badge.className = 'ch-badge offline'; badge.textContent = '방송 전';
+        card.classList.remove('disabled');
+        card.classList.add('active');
+        badge.className   = 'ch-badge on-air';
+        badge.textContent = '● ON AIR';
+        // 새로 활성화된 경우 깜빡임 효과
+        if (!wasActive) {
+          card.style.transition = 'all 0.3s ease';
+          card.style.transform  = 'scale(1.02)';
+          setTimeout(() => { card.style.transform = 'scale(1)'; }, 300);
         }
+      } else {
+        card.classList.add('disabled');
+        card.classList.remove('active');
+        badge.className   = 'ch-badge offline';
+        badge.textContent = '방송 전';
+      }
+      // 청취자 수 업데이트
+      const lc = document.getElementById('lc-' + ch);
+      if (lc) {
+        lc.textContent = (st.listeners > 0) ? '👥 ' + st.listeners : '';
       }
     }
     function updateLC(ch, count) {
@@ -265,7 +282,7 @@
         .catch(() => {});
     }
     fetchChannels();
-    setInterval(fetchChannels, 30000);
+    setInterval(fetchChannels, 3000);  // 3초마다 채널 상태 갱신
 
     // 예배 시간 카운트다운
     const SERVICE_TIMES = [
