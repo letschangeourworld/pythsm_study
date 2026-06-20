@@ -38,6 +38,26 @@ async def lifespan(app: FastAPI):
     logger.info(f"🎙️  통역자 UI:  http://{ip}:{settings.PORT_INTERPRETER}")
     logger.info(f"📖 API Docs:   http://{ip}:19000/api/docs")
     await get_redis()
+
+    # ★ 서버 시작 시 미종료 LIVE 세션 자동 정리
+    try:
+        from app.database import AsyncSessionLocal
+        from sqlalchemy import text
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(text(
+                "UPDATE broadcast.sessions"
+                " SET status='ENDED', end_time=NOW(), updated_at=NOW()"
+                " WHERE status='LIVE'"
+            ))
+            if result.rowcount > 0:
+                logger.warning(
+                    f"⚠️ 미종료 LIVE 세션 {result.rowcount}개 자동 정리 완료"
+                    " (서버 재시작으로 인한 비정상 종료)"
+                )
+            await db.commit()
+    except Exception as e:
+        logger.warning(f"LIVE 세션 정리 실패 (무시): {e}")
+
     yield
     await close_redis()
     await engine.dispose()

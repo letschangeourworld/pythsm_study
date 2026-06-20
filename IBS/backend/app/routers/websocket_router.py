@@ -347,6 +347,15 @@ async def broadcast_start(data: dict):
                 {"n": room_name}
             )).fetchone()
             if room:
+                # ★ 동일 채널의 이전 LIVE 세션 모두 종료 처리
+                ended = await db.execute(text(
+                    "UPDATE broadcast.sessions"
+                    " SET status='ENDED', end_time=NOW(), updated_at=NOW()"
+                    " WHERE room_id=:room_id AND status='LIVE'"
+                ), {"room_id": str(room.id)})
+                if ended.rowcount > 0:
+                    logger.info(f"이전 LIVE 세션 {ended.rowcount}개 자동 종료: {room_name}")
+
                 session_id = str(uuid.uuid4())
                 label = mgr.states[channel].get("label", channel)
                 await db.execute(text(
