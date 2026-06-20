@@ -18,25 +18,16 @@ _stt_jobs: dict = {}
 
 # ── MinIO S3 클라이언트 ───────────────────────────────────
 def get_s3():
-    import boto3, subprocess
+    """boto3 S3 클라이언트 - 환경변수로 MinIO IP 직접 설정"""
+    import boto3
     from botocore.config import Config
-    try:
-        r = subprocess.run(
-            ['docker','inspect','ts_minio','--format',
-             '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}'],
-            capture_output=True, text=True, timeout=3
-        )
-        ips = [ip for ip in r.stdout.strip().split() if ip.startswith('172.')]
-        ip  = ips[0] if ips else os.environ.get("MINIO_IP","172.31.0.6")
-    except Exception:
-        ip = os.environ.get("MINIO_IP","172.31.0.6")
-
+    ip = os.environ.get("MINIO_IP", "172.31.0.4")
     return boto3.client(
         "s3",
         endpoint_url=f"http://{ip}:9000",
-        aws_access_key_id=os.environ.get("MINIO_ROOT_USER","minioadmin"),
-        aws_secret_access_key=os.environ.get("MINIO_ROOT_PASSWORD","vitnap@ssw0rd"),
-        config=Config(signature_version="s3v4",s3={"addressing_style":"path"}),
+        aws_access_key_id=os.environ.get("MINIO_ROOT_USER", "minioadmin"),
+        aws_secret_access_key=os.environ.get("MINIO_ROOT_PASSWORD", "vitnap@ssw0rd"),
+        config=Config(signature_version="s3v4", s3={"addressing_style": "path"}),
         region_name="us-east-1",
     )
 

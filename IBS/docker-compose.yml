@@ -198,6 +198,7 @@ services:
       SERVER_IP: "${SERVER_IP}"
       PUBLIC_IP: "${SERVER_IP}"
       LOG_LEVEL: "info"
+      MINIO_IP: "${MINIO_IP}"
       PORT_MAIN: "19000"
       PORT_ADMIN: "19080"
       PORT_LISTENER: "19081"

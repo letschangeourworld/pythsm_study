@@ -35,19 +35,16 @@ def get_minio_ip():
         return os.environ.get("MINIO_IP", "172.31.0.6")
 
 def get_s3():
-    """boto3 S3 클라이언트 (MinIO IP 직접 접근 - hostname 검증 우회)"""
+    """boto3 S3 클라이언트 - 환경변수로 MinIO IP 직접 설정"""
     import boto3
     from botocore.config import Config
-    minio_ip = get_minio_ip()
+    ip = os.environ.get("MINIO_IP", "172.31.0.4")
     return boto3.client(
         "s3",
-        endpoint_url=f"http://{minio_ip}:9000",
+        endpoint_url=f"http://{ip}:9000",
         aws_access_key_id=os.environ.get("MINIO_ROOT_USER", "minioadmin"),
         aws_secret_access_key=os.environ.get("MINIO_ROOT_PASSWORD", "vitnap@ssw0rd"),
-        config=Config(
-            signature_version="s3v4",
-            s3={"addressing_style": "path"}
-        ),
+        config=Config(signature_version="s3v4", s3={"addressing_style": "path"}),
         region_name="us-east-1",
     )
 
