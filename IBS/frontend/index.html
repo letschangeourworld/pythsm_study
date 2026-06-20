@@ -229,7 +229,12 @@
         try {
           const d = JSON.parse(e.data);
           if      (d.type === 'state')           updateAll(d.channels);
-          else if (d.type === 'channel_update')  updateCh(d.channel, d.state);
+          else if (d.type === 'channel_update')  { ensureChCard(d.channel, d.state); updateCh(d.channel, d.state); }
+          else if (d.type === 'channel_added')   { ensureChCard(d.channel, d.state); updateCh(d.channel, d.state); }
+          else if (d.type === 'channel_removed') {
+            const card = document.getElementById('card-' + d.channel);
+            if (card) card.remove();
+          }
           else if (d.type === 'listener_update') updateLC(d.channel, d.count);
         } catch {}
       };
@@ -237,7 +242,41 @@
     connectWS();
 
     function updateAll(channels) {
-      Object.entries(channels).forEach(([ch, st]) => updateCh(ch, st));
+      Object.entries(channels).forEach(([ch, st]) => {
+        ensureChCard(ch, st);
+        updateCh(ch, st);
+      });
+    }
+
+    // 동적 채널 카드 생성 (없을 때만)
+    function ensureChCard(ch, st) {
+      if (document.getElementById('card-' + ch)) return;
+      const STATIC = ['english', 'japanese', 'chinese'];
+      if (STATIC.includes(ch)) return;
+
+      // 동적 채널 카드 생성
+      const div = document.createElement('a');
+      div.className  = 'ch-card disabled';
+      div.id         = 'card-' + ch;
+      div.href       = '/listen.html?ch=' + ch;
+      div.innerHTML  =
+        '<div class="ch-left">' +
+          '<div class="ch-flag">' + (st.flag || '🌐') + '</div>' +
+          '<div>' +
+            '<div class="ch-name">' + (st.label || ch) + '</div>' +
+            '<div class="ch-sub-ko">실시간 통역</div>' +
+            '<div class="ch-sub-en">Live Interpretation</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ch-right">' +
+          '<span class="ch-badge offline" id="badge-' + ch + '">방송 전</span>' +
+          '<span class="ch-lc" id="lc-' + ch + '"></span>' +
+        '</div>';
+
+      // 채널 목록에 추가
+      const channelsWrap = document.querySelector('.channels');
+      if (channelsWrap) channelsWrap.appendChild(div);
+      console.log('[채널 추가]', ch, st.label);
     }
     function updateCh(ch, st) {
       const card  = document.getElementById('card-' + ch);

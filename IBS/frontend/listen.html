@@ -249,29 +249,89 @@
     }
     .send-btn:hover { opacity: .9; transform: scale(1.05); }
 
-    /* ── 말풍선 ── */
-    .msg { display: flex; flex-direction: column; gap: 3px; max-width: 88%; }
-    .msg.admin, .msg.translator {
+    /* ── 카카오톡 스타일 말풍선 ── */
+
+    /* 날짜 구분선 */
+    .chat-date-divider {
+      display: flex; align-items: center; justify-content: center;
+      margin: 10px 0;
+    }
+    .chat-date-divider span {
+      background: rgba(255,255,255,.08); border-radius: 20px;
+      padding: 3px 14px; font-size: 11px; color: var(--muted);
+    }
+
+    /* 메시지 행 (아바타 + 말풍선 묶음) */
+    .msg-row {
+      display: flex; align-items: flex-end; gap: 8px;
+      max-width: 100%;
+    }
+    .msg-row.left  { flex-direction: row;         align-self: flex-start; }
+    .msg-row.right { flex-direction: row-reverse;  align-self: flex-end;   }
+    .msg-row.center{ justify-content: center;       align-self: center;     }
+
+    /* 아바타 */
+    .msg-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; flex-shrink: 0;
       align-self: flex-start;
-      background: rgba(201,168,76,.12); border: 1px solid rgba(201,168,76,.18);
-      border-radius: 4px 16px 16px 16px; padding: 9px 13px;
     }
-    .msg.listener {
-      align-self: flex-end;
-      background: rgba(96,165,250,.10); border: 1px solid rgba(96,165,250,.18);
-      border-radius: 16px 4px 16px 16px; padding: 9px 13px;
+    .msg-avatar.admin    { background: rgba(201,168,76,.25); border: 1px solid rgba(201,168,76,.4); }
+    .msg-avatar.listener { background: rgba(96,165,250,.2);  border: 1px solid rgba(96,165,250,.35); }
+
+    /* 이름 + 말풍선 묶음 */
+    .msg-col { display: flex; flex-direction: column; gap: 3px; max-width: 72%; }
+    .msg-row.right .msg-col { align-items: flex-end; }
+
+    /* 발신자 이름 */
+    .msg-sender {
+      font-size: 11px; font-weight: 700; color: var(--gold);
+      padding-left: 2px;
     }
-    .msg.system {
-      align-self: center;
-      background: rgba(167,139,250,.08); border: 1px solid rgba(167,139,250,.2);
-      border-radius: 20px; padding: 6px 16px; max-width: 100%;
+    .msg-row.right .msg-sender { display: none; }
+    .msg-row.center .msg-sender { display: none; }
+
+    /* 말풍선 + 시간 묶음 */
+    .msg-bubble-wrap {
+      display: flex; align-items: flex-end; gap: 5px;
     }
-    .msg-sender { font-size: 11px; font-weight: 700; color: var(--gold); margin-bottom: 2px; }
-    .msg.listener .msg-sender { color: var(--blue); }
-    .msg.system  .msg-sender  { display: none; }
-    .msg-text { font-size: 14px; line-height: 1.55; word-break: break-word; }
-    .msg.system .msg-text { font-size: 12px; color: var(--muted); text-align: center; }
-    .msg-time { font-size: 10px; color: var(--muted); margin-top: 3px; }
+    .msg-row.right .msg-bubble-wrap { flex-direction: row-reverse; }
+
+    /* 말풍선 본체 */
+    .msg-bubble {
+      padding: 9px 13px;
+      font-size: 14px; line-height: 1.55;
+      word-break: break-word; max-width: 100%;
+    }
+    /* 왼쪽: 관리자/통역자 - 금색 계열 */
+    .msg-row.left .msg-bubble {
+      background: rgba(201,168,76,.15);
+      border: 1px solid rgba(201,168,76,.25);
+      border-radius: 4px 16px 16px 16px;
+      color: var(--text);
+    }
+    /* 오른쪽: 내 메시지 - 카카오 노란색 */
+    .msg-row.right .msg-bubble {
+      background: #FEE500;
+      border-radius: 16px 4px 16px 16px;
+      color: #1a1a1a;
+    }
+    /* 시스템 메시지 */
+    .msg-row.center .msg-bubble {
+      background: rgba(255,255,255,.07);
+      border-radius: 20px;
+      font-size: 11px; color: var(--muted);
+      padding: 5px 16px;
+      border: none;
+    }
+
+    /* 시간 */
+    .msg-time {
+      font-size: 10px; color: var(--muted);
+      white-space: nowrap; flex-shrink: 0;
+      padding-bottom: 2px;
+    }
 
     /* ── STT 탭 패널 공통 ── */
     .tab-panel {
@@ -763,6 +823,22 @@
     }).join('');
   }
 
+  // ── 날짜 구분선 관리 ──────────────────────────────────────
+  var _lastChatDate = '';
+  function getDateLabel(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return d.getFullYear() + '년 ' + (d.getMonth()+1) + '월 ' + d.getDate() + '일';
+  }
+
+  // ── 아바타 이니셜/이모지 ──────────────────────────────────
+  function getAvatar(senderType, senderName) {
+    if (senderType === 'admin')      return '🎙️';
+    if (senderType === 'translator') return '🌐';
+    if (senderName && senderName.length > 0) return senderName.charAt(0).toUpperCase();
+    return '👤';
+  }
+
   function appendChat(d) {
     var key = getMsgKey(d);
     if (displayedKeys.has(key)) return;
@@ -774,18 +850,69 @@
 
     var box = g('chatBox');
     if (!box) return;
-    var isSys = (d.senderType==='admin'||d.senderType==='system') &&
-                (d.senderName==='system'||d.senderName==='시스템');
-    var div = document.createElement('div');
-    div.className = 'msg ' + (isSys ? 'system' : (d.senderType||'listener'));
-    var time = d.sentAt ? new Date(d.sentAt).toLocaleTimeString(chInfo.lang,{hour:'2-digit',minute:'2-digit'}) : '';
-    div.innerHTML = isSys
-      ? '<div class="msg-text">' + esc(d.message) + '</div>'
-      : '<div class="msg-sender">' + esc(d.senderName) + '</div>' +
-        '<div class="msg-text">'   + esc(d.message)    + '</div>' +
-        '<div class="msg-time">'   + time              + '</div>';
-    box.appendChild(div);
-    var all = box.querySelectorAll('.msg');
+
+    var isSys = (d.senderType==='system') ||
+                (d.senderName==='system' || d.senderName==='시스템');
+    var isMe  = (d.senderName === myNick);
+    var time  = d.sentAt
+      ? new Date(d.sentAt).toLocaleTimeString(chInfo.lang, {hour:'2-digit', minute:'2-digit'})
+      : '';
+
+    // 날짜 구분선
+    var dateLabel = getDateLabel(d.sentAt);
+    if (dateLabel && dateLabel !== _lastChatDate) {
+      _lastChatDate = dateLabel;
+      var dateDivider = document.createElement('div');
+      dateDivider.className = 'chat-date-divider';
+      dateDivider.innerHTML = '<span>' + dateLabel + '</span>';
+      box.appendChild(dateDivider);
+    }
+
+    // 메시지 행 생성
+    var row = document.createElement('div');
+
+    if (isSys) {
+      // 시스템 메시지: 중앙 정렬
+      row.className = 'msg-row center';
+      row.innerHTML =
+        '<div class="msg-col">' +
+          '<div class="msg-bubble-wrap">' +
+            '<div class="msg-bubble">' + esc(d.message) + '</div>' +
+          '</div>' +
+        '</div>';
+
+    } else if (isMe) {
+      // 내 메시지: 오른쪽 (카카오 노란색)
+      row.className = 'msg-row right';
+      row.innerHTML =
+        '<div class="msg-col">' +
+          '<div class="msg-bubble-wrap">' +
+            '<div class="msg-time">' + time + '</div>' +
+            '<div class="msg-bubble">' + esc(d.message) + '</div>' +
+          '</div>' +
+        '</div>';
+
+    } else {
+      // 상대방 메시지: 왼쪽 (아바타 + 이름 + 말풍선)
+      var avatarChar = getAvatar(d.senderType, d.senderName);
+      var avatarCls  = (d.senderType === 'admin' || d.senderType === 'translator')
+                       ? 'admin' : 'listener';
+      row.className = 'msg-row left';
+      row.innerHTML =
+        '<div class="msg-avatar ' + avatarCls + '">' + avatarChar + '</div>' +
+        '<div class="msg-col">' +
+          '<div class="msg-sender">' + esc(d.senderName) + '</div>' +
+          '<div class="msg-bubble-wrap">' +
+            '<div class="msg-bubble">' + esc(d.message) + '</div>' +
+            '<div class="msg-time">'   + time            + '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    box.appendChild(row);
+
+    // 최대 200개 유지
+    var all = box.querySelectorAll('.msg-row');
     if (all.length > 200) all[0].remove();
     if (curTab === 'chat') box.scrollTop = box.scrollHeight;
   }

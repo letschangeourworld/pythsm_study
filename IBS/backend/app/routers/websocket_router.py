@@ -271,6 +271,36 @@ async def websocket_endpoint(websocket: WebSocket):
 async def get_channels():
     return {"channels": mgr.get_all_states()}
 
+@router.delete("/api/channels/{ch_key}")
+async def delete_channel(ch_key: str):
+    """채널 삭제 (기본 3개 채널 삭제 불가)"""
+    PROTECTED = {"english", "japanese", "chinese"}
+    if ch_key in PROTECTED:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="기본 채널은 삭제할 수 없습니다")
+    if ch_key not in mgr.channels:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="채널을 찾을 수 없습니다")
+
+    # 활성 방송 중이면 종료
+    if mgr.states[ch_key].get("active"):
+        mgr.set_active(ch_key, False)
+
+    # 채널 제거
+    del mgr.channels[ch_key]
+    del mgr.states[ch_key]
+    if ch_key in mgr.chat_history:
+        del mgr.chat_history[ch_key]
+
+    # 전체 클라이언트에 삭제 알림
+    await mgr.broadcast_all({
+        "type":    "channel_removed",
+        "channel": ch_key
+    })
+
+    logger.info(f"채널 삭제: {ch_key}")
+    return {"success": True, "channel": ch_key, "message": f"{ch_key} 채널 삭제 완료"}
+
 @router.post("/api/channels")
 async def create_channel(data: dict):
     """신규 채널 동적 생성"""

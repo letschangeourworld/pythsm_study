@@ -565,6 +565,9 @@
     <div class="sidebar-item" onclick="goPage('audio')" id="si-audio">
       <span class="icon">🎛️</span> 음향 제어
     </div>
+    <div class="sidebar-item" onclick="goPage('email')" id="si-email">
+      <span class="icon">📧</span> 이메일 전송
+    </div>
 
     <div class="sidebar-section" style="margin-top:8px">접속</div>
     <div id="sideLinks"></div>
@@ -806,6 +809,180 @@
       </div>
     </div>
   </div>
+
+<!-- ━━━━ 이메일 전송 페이지 ━━━━ -->
+<div class="main" id="page-email">
+
+  <!-- ── 이메일 계정 설정 ── -->
+  <div class="card">
+    <div class="card-hd">
+      <span>⚙️ 이메일 계정 설정</span>
+      <button class="btn-gold" onclick="saveEmailConfig()">💾 저장</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div class="field-label">발신자 이메일 (보내는 사람)</div>
+        <input class="field" type="email" id="cfg-from-email"
+               placeholder="sender@naver.com">
+      </div>
+      <div>
+        <div class="field-label">앱 비밀번호</div>
+        <input class="field" type="password" id="cfg-smtp-pass"
+               placeholder="네이버 앱 비밀번호">
+      </div>
+    </div>
+    <div id="cfg-save-result" style="margin-top:8px;font-size:12px"></div>
+  </div>
+
+  <!-- ── 수신자 설정 ── -->
+  <div class="card">
+    <div class="card-hd">
+      <span>👥 수신자 설정</span>
+      <button class="btn-gold" onclick="addRecipient()">➕ 추가</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">
+      채널별 수신자를 등록하면 자동 전송 시 해당 통역자에게 발송됩니다.
+    </div>
+    <!-- 수신자 추가 폼 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:12px;align-items:end">
+      <div>
+        <div class="field-label">채널</div>
+        <select class="field" id="rcpt-channel">
+          <option value="english">🇺🇸 영어</option>
+          <option value="japanese">🇯🇵 일본어</option>
+          <option value="chinese">🇨🇳 중국어</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">이름</div>
+        <input class="field" type="text" id="rcpt-name" placeholder="홍길동">
+      </div>
+      <div>
+        <div class="field-label">이메일</div>
+        <input class="field" type="email" id="rcpt-email" placeholder="hong@email.com">
+      </div>
+      <button class="btn-gold" style="padding:10px 14px;white-space:nowrap"
+              onclick="addRecipient()">추가</button>
+    </div>
+    <!-- 수신자 목록 -->
+    <div id="recipient-list"></div>
+  </div>
+
+  <!-- ── 자동 전송 스케줄 ── -->
+  <div class="card">
+    <div class="card-hd">
+      <span>⏰ 자동 전송 스케줄</span>
+      <label class="sw" style="margin:0">
+        <input type="checkbox" id="auto-send-toggle"
+               onchange="toggleAutoSend(this.checked)">
+        <span class="sw-track"></span>
+      </label>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">
+      설정한 시간에 당일 생성된 Word 파일을 채널별 수신자에게 자동 전송합니다.
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div>
+        <div class="field-label">전송 시간</div>
+        <input class="field" type="time" id="auto-send-time"
+               value="19:00" style="width:120px">
+      </div>
+      <div>
+        <div class="field-label">전송 요일</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="auto-days-wrap">
+          <label class="day-btn"><input type="checkbox" value="0" checked> 일</label>
+          <label class="day-btn"><input type="checkbox" value="1"> 월</label>
+          <label class="day-btn"><input type="checkbox" value="2"> 화</label>
+          <label class="day-btn"><input type="checkbox" value="3"> 수</label>
+          <label class="day-btn"><input type="checkbox" value="4"> 목</label>
+          <label class="day-btn"><input type="checkbox" value="5"> 금</label>
+          <label class="day-btn"><input type="checkbox" value="6"> 토</label>
+        </div>
+      </div>
+      <div style="align-self:flex-end">
+        <button class="btn-gold" onclick="saveAutoSend()">저장</button>
+      </div>
+    </div>
+    <div id="auto-send-status" style="margin-top:10px;font-size:12px;color:var(--muted)">
+      자동 전송: 비활성화
+    </div>
+  </div>
+
+  <!-- 테스트 이메일 -->
+  <div class="card">
+    <div class="card-hd">
+      <span>🔧 이메일 연결 테스트</span>
+      <button class="btn-gold" onclick="sendTestEmail()">테스트 전송</button>
+    </div>
+    <div style="font-size:12px;color:var(--muted)" id="test-email-info">
+      발신/수신: <strong style="color:var(--text)" id="test-from-label">설정된 발신자</strong>
+    </div>
+    <div id="email-test-result" style="margin-top:8px;font-size:12px"></div>
+  </div>
+
+  <!-- Word 파일 목록 -->
+  <div class="card">
+    <div class="card-hd">
+      <span>📋 Word 파일 목록</span>
+      <button class="btn-gold" onclick="loadTranscriptFiles()">🔄 새로고침</button>
+    </div>
+    <div id="transcript-list">
+      <div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">
+        로딩 중...
+      </div>
+    </div>
+  </div>
+
+  <!-- 수동 전송 -->
+  <div class="card">
+    <div class="card-hd"><span>✉️ 수동 전송</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div>
+        <div class="field-label">선택된 파일</div>
+        <div id="selected-file-name"
+             style="padding:8px 12px;background:var(--card2);border:1px solid var(--border);
+                    border-radius:8px;font-size:12px;color:var(--muted)">
+          위 목록에서 파일을 선택하세요
+        </div>
+      </div>
+      <div>
+        <div class="field-label">수신자 이메일</div>
+        <input class="field" type="email" id="manual-email"
+               placeholder="interpreter@email.com" value="ndbb2046@naver.com">
+      </div>
+      <div>
+        <div class="field-label">수신자 이름</div>
+        <input class="field" type="text" id="manual-name"
+               placeholder="통역자 이름" value="통역자">
+      </div>
+      <div>
+        <div class="field-label">채널</div>
+        <select class="field" id="manual-channel">
+          <option value="english">🇺🇸 영어</option>
+          <option value="japanese">🇯🇵 일본어</option>
+          <option value="chinese">🇨🇳 중국어</option>
+        </select>
+      </div>
+      <button class="btn-gold" style="width:100%;padding:12px"
+              onclick="sendManualEmail()">📨 이메일 전송</button>
+      <div id="manual-result" style="font-size:12px;text-align:center"></div>
+    </div>
+  </div>
+
+  <!-- 전송 이력 -->
+  <div class="card">
+    <div class="card-hd">
+      <span>📜 전송 이력</span>
+      <button class="btn-gold" onclick="loadEmailHistory()">🔄 새로고침</button>
+    </div>
+    <div id="email-history-list">
+      <div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">
+        로딩 중...
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <!-- ━━━━ 음향 제어 페이지 ━━━━ -->
 <div class="main" id="page-audio">
@@ -1276,8 +1453,24 @@ function goPage(name){
   if(name==='chat')      { loadChat(); unread=0; updateBadge(); }
   if(name==='schedule')  loadSchedule();
   if(name==='audio')     initAudioPage();
+  if(name==='email')     initEmailPage();
   // 모바일 탭 동기화
   setMobTab(name);
+}
+
+// 서버에서 채널 목록 가져와서 동적 채널 복원
+async function restoreDynamicChannels() {
+  try {
+    const res = await fetch(`${API}/api/channels`, {headers: HDR});
+    const d   = await res.json();
+    const STATIC = ['english', 'japanese', 'chinese'];
+    Object.entries(d.channels || {}).forEach(([ch, st]) => {
+      if (!STATIC.includes(ch)) {
+        addDynamicChCard(ch, st);
+        updateCh(ch, st);
+      }
+    });
+  } catch(e) { console.warn('채널 복원 실패:', e); }
 }
 
 function setMobTab(name){
@@ -1339,6 +1532,10 @@ function connectWS(){
           addDynamicChCard(d.channel, d.state);
           updateCh(d.channel, d.state);
           break;
+        case 'channel_removed':
+          document.getElementById('ch-' + d.channel)?.remove();
+          toast(`채널 삭제됨: ${d.channel}`);
+          break;
         case 'listener_update': updateLC(d.channel,d.count);break;
         case 'user_list':
           document.getElementById('navExtra').textContent=`접속자 ${d.users?.length||0}명`;
@@ -1355,6 +1552,7 @@ setInterval(()=>{
   if(ws&&ws.readyState===1) try{ws.send(JSON.stringify({type:'ping'}));}catch{}
 },30000);
 connectWS();
+restoreDynamicChannels();
 
 // ════════════════════════════════════════
 // 채널 상태
@@ -1804,6 +2002,449 @@ function toast(msg,type='ok'){
   document.getElementById('toastWrap').appendChild(el);
   setTimeout(()=>el.remove(),2800);
 }
+// ════════════════════════════════════════
+// 이메일 설정 관리
+// ════════════════════════════════════════
+let _selectedDocxPath = null;
+let _autoSendTimer    = null;
+
+// localStorage 키
+const LS_EMAIL_CFG   = 'ibs_email_cfg';
+const LS_RECIPIENTS  = 'ibs_recipients';
+const LS_AUTO_SEND   = 'ibs_auto_send';
+
+// 기본 설정 로드
+function loadEmailConfig() {
+  const cfg  = JSON.parse(localStorage.getItem(LS_EMAIL_CFG) || '{}');
+  const rcpts = JSON.parse(localStorage.getItem(LS_RECIPIENTS) || JSON.stringify({
+    english:  [{name:'영어 통역자',  email:'ndbb2046@naver.com'}],
+    japanese: [{name:'일본어 통역자',email:'ndbb2046@naver.com'}],
+    chinese:  [{name:'중국어 통역자',email:'ndbb2046@naver.com'}]
+  }));
+  const auto = JSON.parse(localStorage.getItem(LS_AUTO_SEND) || '{"enabled":false,"time":"19:00","days":["0"]}');
+
+  // 발신자 설정
+  if (cfg.fromEmail) {
+    document.getElementById('cfg-from-email').value = cfg.fromEmail;
+    document.getElementById('test-from-label').textContent = cfg.fromEmail;
+  }
+
+  // 수신자 목록 렌더링
+  renderRecipients(rcpts);
+
+  // 자동 전송 설정
+  document.getElementById('auto-send-toggle').checked = auto.enabled;
+  document.getElementById('auto-send-time').value     = auto.time || '19:00';
+  document.querySelectorAll('#auto-days-wrap input').forEach(cb => {
+    cb.checked = (auto.days || ['0']).includes(cb.value);
+  });
+  updateAutoSendStatus(auto);
+
+  // 자동 전송 타이머 재시작
+  if (auto.enabled) startAutoSendTimer(auto);
+}
+
+// 이메일 설정 저장
+async function saveEmailConfig() {
+  const fromEmail = document.getElementById('cfg-from-email').value.trim();
+  const smtpPass  = document.getElementById('cfg-smtp-pass').value.trim();
+  const result    = document.getElementById('cfg-save-result');
+
+  if (!fromEmail) { alert('발신자 이메일을 입력하세요'); return; }
+
+  const cfg = { fromEmail };
+  localStorage.setItem(LS_EMAIL_CFG, JSON.stringify(cfg));
+
+  // 백엔드 SMTP 설정 업데이트
+  if (smtpPass) {
+    try {
+      const r = await fetch(`${API}/api/v1/email/config`, {
+        method: 'POST', headers: HDR,
+        body: JSON.stringify({ from_email: fromEmail, smtp_pass: smtpPass })
+      }).then(r => r.json());
+      if (r.success) {
+        result.textContent = '✅ 이메일 설정 저장 완료!';
+        result.style.color = 'var(--green)';
+        document.getElementById('test-from-label').textContent = fromEmail;
+        toast('✅ 이메일 설정 저장됨');
+      } else {
+        result.textContent = '⚠️ 저장 실패: ' + (r.detail || '오류');
+        result.style.color = 'var(--red)';
+      }
+    } catch(e) {
+      result.textContent = '❌ ' + e.message;
+      result.style.color = 'var(--red)';
+    }
+  } else {
+    result.textContent = '✅ 발신자 이메일 저장 완료 (비밀번호 미변경)';
+    result.style.color = 'var(--green)';
+    document.getElementById('test-from-label').textContent = fromEmail;
+    toast('✅ 설정 저장됨');
+  }
+}
+
+// 수신자 목록 렌더링
+function renderRecipients(rcpts) {
+  const box = document.getElementById('recipient-list');
+  if (!box) return;
+  const CHANNELS = {english:'🇺🇸 영어', japanese:'🇯🇵 일본어', chinese:'🇨🇳 중국어'};
+  let html = '';
+  Object.entries(rcpts).forEach(([ch, list]) => {
+    if (!list?.length) return;
+    html += `<div style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px">
+        ${CHANNELS[ch]||ch}
+      </div>`;
+    list.forEach((r, i) => {
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;
+                            background:var(--card2);border-radius:8px;margin-bottom:4px">
+        <span style="font-size:12px;flex:1">${esc(r.name)} &lt;${esc(r.email)}&gt;</span>
+        <button onclick="removeRecipient('${ch}',${i})"
+          style="padding:2px 8px;border-radius:6px;font-size:10px;cursor:pointer;
+                 background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);
+                 color:var(--red)">삭제</button>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  if (!html) html = '<div style="color:var(--muted);font-size:12px;padding:10px">수신자 없음</div>';
+  box.innerHTML = html;
+}
+
+// 수신자 추가
+function addRecipient() {
+  const ch    = document.getElementById('rcpt-channel').value;
+  const name  = document.getElementById('rcpt-name').value.trim();
+  const email = document.getElementById('rcpt-email').value.trim();
+  if (!name || !email) { alert('이름과 이메일을 입력하세요'); return; }
+  if (!email.includes('@')) { alert('올바른 이메일 주소를 입력하세요'); return; }
+
+  const rcpts = JSON.parse(localStorage.getItem(LS_RECIPIENTS) || '{}');
+  if (!rcpts[ch]) rcpts[ch] = [];
+  rcpts[ch].push({ name, email });
+  localStorage.setItem(LS_RECIPIENTS, JSON.stringify(rcpts));
+
+  document.getElementById('rcpt-name').value  = '';
+  document.getElementById('rcpt-email').value = '';
+  renderRecipients(rcpts);
+  toast(`✅ ${name} 수신자 추가됨`);
+}
+
+// 수신자 삭제
+function removeRecipient(ch, idx) {
+  const rcpts = JSON.parse(localStorage.getItem(LS_RECIPIENTS) || '{}');
+  if (rcpts[ch]) {
+    rcpts[ch].splice(idx, 1);
+    localStorage.setItem(LS_RECIPIENTS, JSON.stringify(rcpts));
+    renderRecipients(rcpts);
+    toast('🗑️ 수신자 삭제됨');
+  }
+}
+
+// 자동 전송 토글
+function toggleAutoSend(enabled) {
+  const auto = JSON.parse(localStorage.getItem(LS_AUTO_SEND) || '{}');
+  auto.enabled = enabled;
+  localStorage.setItem(LS_AUTO_SEND, JSON.stringify(auto));
+  updateAutoSendStatus(auto);
+  if (enabled) startAutoSendTimer(auto);
+  else if (_autoSendTimer) { clearInterval(_autoSendTimer); _autoSendTimer = null; }
+  toast(enabled ? '⏰ 자동 전송 활성화' : '⏸️ 자동 전송 비활성화');
+}
+
+// 자동 전송 설정 저장
+function saveAutoSend() {
+  const time  = document.getElementById('auto-send-time').value;
+  const days  = [...document.querySelectorAll('#auto-days-wrap input:checked')]
+                  .map(cb => cb.value);
+  const enabled = document.getElementById('auto-send-toggle').checked;
+  if (!days.length) { alert('요일을 하나 이상 선택하세요'); return; }
+
+  const auto = { enabled, time, days };
+  localStorage.setItem(LS_AUTO_SEND, JSON.stringify(auto));
+  updateAutoSendStatus(auto);
+  if (enabled) startAutoSendTimer(auto);
+  toast('✅ 자동 전송 스케줄 저장됨');
+}
+
+// 자동 전송 상태 표시
+function updateAutoSendStatus(auto) {
+  const el = document.getElementById('auto-send-status');
+  if (!el) return;
+  if (auto.enabled) {
+    const DAY = {0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토'};
+    const daysStr = (auto.days||[]).map(d=>DAY[d]+'요일').join(', ');
+    el.textContent  = `⏰ 자동 전송 활성화: 매주 ${daysStr} ${auto.time||'19:00'}`;
+    el.style.color  = 'var(--green)';
+  } else {
+    el.textContent = '⏸️ 자동 전송: 비활성화';
+    el.style.color = 'var(--muted)';
+  }
+}
+
+// 자동 전송 타이머 (1분마다 체크)
+function startAutoSendTimer(auto) {
+  if (_autoSendTimer) clearInterval(_autoSendTimer);
+  _autoSendTimer = setInterval(async () => {
+    const now  = new Date();
+    const day  = String(now.getDay());
+    const hhmm = String(now.getHours()).padStart(2,'0') + ':' +
+                 String(now.getMinutes()).padStart(2,'0');
+    if ((auto.days||[]).includes(day) && hhmm === (auto.time||'19:00')) {
+      console.log('[자동전송] 실행:', hhmm);
+      await runAutoSend();
+    }
+  }, 60000);
+}
+
+// 자동 전송 실행
+async function runAutoSend() {
+  try {
+    const rcpts  = JSON.parse(localStorage.getItem(LS_RECIPIENTS) || '{}');
+    const filesR = await fetch(`${API}/api/v1/stt/transcripts`, {headers: HDR});
+    const filesD = await filesR.json();
+    if (!filesD.success || !filesD.files?.length) {
+      console.log('[자동전송] 전송할 파일 없음');
+      return;
+    }
+    // 오늘 날짜 파일만 필터
+    const today = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const todayFiles = filesD.files.filter(f => f.name.startsWith(today));
+    if (!todayFiles.length) {
+      console.log('[자동전송] 오늘 생성된 파일 없음');
+      return;
+    }
+    // 채널별 수신자에게 전송
+    for (const [ch, recipients] of Object.entries(rcpts)) {
+      const chFiles = todayFiles.filter(f => f.name.includes('/'+ch+'/') || f.name.includes('/unknown/'));
+      for (const file of chFiles) {
+        await fetch(`${API}/api/v1/email/send-transcript`, {
+          method: 'POST', headers: HDR,
+          body: JSON.stringify({
+            docx_path:  'transcripts/' + file.name,
+            channel:    ch,
+            title:      ch + ' 통역 방송',
+            recipients: recipients
+          })
+        });
+        console.log('[자동전송] 전송:', file.name, '→', recipients.map(r=>r.email));
+      }
+    }
+    toast('📨 자동 이메일 전송 완료!');
+  } catch(e) {
+    console.error('[자동전송] 오류:', e);
+  }
+}
+
+async function initEmailPage() {
+  loadEmailConfig();
+  await loadTranscriptFiles();
+  await loadEmailHistory();
+}
+
+// Word 파일 목록 로드
+async function loadTranscriptFiles() {
+  const box = document.getElementById('transcript-list');
+  box.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">로딩 중...</div>';
+  try {
+    // 전체 파일 목록
+    const res = await fetch(`${API}/api/v1/stt/transcripts`, {headers: HDR});
+    const d   = await res.json();
+
+    if (!d.success || !d.files?.length) {
+      box.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">' +
+        'Word 파일 없음<br><small>방송 후 STT 변환 시 자동 생성됩니다</small></div>';
+      return;
+    }
+
+    // 날짜별 그룹
+    const groups = {};
+    d.files.forEach(f => {
+      const parts = f.name.split('/');
+      const date  = parts[0] || '기타';
+      if (!groups[date]) groups[date] = [];
+      groups[date].push(f);
+    });
+
+    let html = '';
+    Object.entries(groups).sort((a,b) => b[0].localeCompare(a[0])).forEach(([date, files]) => {
+      const dateLabel = date.length === 8
+        ? `${date.slice(0,4)}년 ${date.slice(4,6)}월 ${date.slice(6,8)}일`
+        : date;
+      html += `<div style="font-size:11px;color:var(--gold);font-weight:700;
+                            padding:8px 0 4px;border-bottom:1px solid var(--border);
+                            margin-bottom:6px">${dateLabel}</div>`;
+      files.forEach(f => {
+        const fname   = f.name.split('/').pop();
+        const path    = 'transcripts/' + f.name;
+        const isSelected = path === _selectedDocxPath;
+        html += `
+          <div class="sch-item ${isSelected ? 'active-item' : ''}"
+               id="file-${btoa(path).slice(0,8)}"
+               style="cursor:pointer;margin-bottom:6px"
+               onclick="selectFile('${path}','${fname}',this)">
+            <div class="sch-main">
+              <div style="font-size:12px;font-weight:600;color:var(--text)">
+                📄 ${esc(fname)}
+              </div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">
+                ${f.size_kb}KB · ${new Date(f.last_modified).toLocaleString('ko-KR',
+                  {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+              ${isSelected
+                ? '<span style="color:var(--gold);font-size:11px;font-weight:700">✅ 선택됨</span>'
+                : '<span style="color:var(--muted);font-size:11px">클릭 선택</span>'}
+              <button class="act-btn go"
+                      onclick="event.stopPropagation();quickSend('${path}','${fname}')"
+                      style="font-size:10px;padding:3px 8px">📨 전송</button>
+            </div>
+          </div>`;
+      });
+    });
+    box.innerHTML = html;
+  } catch(e) {
+    box.innerHTML = `<div style="color:var(--red);font-size:12px;text-align:center;padding:20px">
+      오류: ${e.message}</div>`;
+  }
+}
+
+// 파일 선택
+function selectFile(path, fname, el) {
+  _selectedDocxPath = path;
+  document.getElementById('selected-file-name').textContent = fname;
+  document.getElementById('selected-file-name').style.color = 'var(--gold)';
+  // 선택 표시 갱신
+  loadTranscriptFiles();
+}
+
+// 빠른 전송 (파일 옆 전송 버튼)
+async function quickSend(path, fname) {
+  const channel = document.getElementById('manual-channel').value;
+  const email   = document.getElementById('manual-email').value.trim();
+  const name    = document.getElementById('manual-name').value.trim() || '통역자';
+  if (!email) { alert('수신자 이메일을 입력하세요'); return; }
+  if (!confirm(`"${fname}"
+→ ${email} 로 전송하시겠습니까?`)) return;
+
+  const res = document.getElementById('manual-result');
+  res.textContent = '전송 중...';
+  res.style.color = 'var(--muted)';
+  try {
+    const r = await fetch(`${API}/api/v1/email/send-manual`, {
+      method: 'POST', headers: HDR,
+      body: JSON.stringify({
+        docx_path: path, to_email: email,
+        to_name: name, channel: channel, title: fname
+      })
+    }).then(r => r.json());
+    if (r.success) {
+      res.textContent = `✅ ${email}로 전송 시작!`;
+      res.style.color = 'var(--green)';
+      setTimeout(() => loadEmailHistory(), 3000);
+    } else {
+      res.textContent = '❌ 전송 실패: ' + (r.detail || '오류');
+      res.style.color = 'var(--red)';
+    }
+  } catch(e) {
+    res.textContent = '❌ ' + e.message;
+    res.style.color = 'var(--red)';
+  }
+}
+
+// 수동 전송
+async function sendManualEmail() {
+  if (!_selectedDocxPath) { alert('파일을 먼저 선택하세요'); return; }
+  const email   = document.getElementById('manual-email').value.trim();
+  const name    = document.getElementById('manual-name').value.trim() || '통역자';
+  const channel = document.getElementById('manual-channel').value;
+  if (!email) { alert('수신자 이메일을 입력하세요'); return; }
+
+  const fname = _selectedDocxPath.split('/').pop();
+  if (!confirm(`"${fname}"
+→ ${email} 로 전송하시겠습니까?`)) return;
+
+  const res = document.getElementById('manual-result');
+  res.textContent = '전송 중...';
+  res.style.color = 'var(--muted)';
+  try {
+    const r = await fetch(`${API}/api/v1/email/send-manual`, {
+      method: 'POST', headers: HDR,
+      body: JSON.stringify({
+        docx_path: _selectedDocxPath, to_email: email,
+        to_name: name, channel: channel,
+        title: fname.replace('.docx','')
+      })
+    }).then(r => r.json());
+    if (r.success) {
+      res.textContent = `✅ ${email}로 전송 시작!`;
+      res.style.color = 'var(--green)';
+      toast('📨 이메일 전송 완료!');
+      setTimeout(() => loadEmailHistory(), 3000);
+    } else {
+      res.textContent = '❌ 전송 실패';
+      res.style.color = 'var(--red)';
+    }
+  } catch(e) {
+    res.textContent = '❌ ' + e.message;
+    res.style.color = 'var(--red)';
+  }
+}
+
+// 테스트 이메일
+async function sendTestEmail() {
+  const result = document.getElementById('email-test-result');
+  result.textContent = '전송 중...';
+  result.style.color = 'var(--muted)';
+  try {
+    const r = await fetch(`${API}/api/v1/email/test`, {
+      method: 'POST', headers: HDR
+    }).then(r => r.json());
+    if (r.success) {
+      result.textContent = '✅ 테스트 이메일 전송 완료! 메일함을 확인하세요.';
+      result.style.color = 'var(--green)';
+      toast('✅ 테스트 이메일 전송 완료!');
+    } else {
+      result.textContent = '❌ 전송 실패: ' + (r.detail || '오류');
+      result.style.color = 'var(--red)';
+    }
+  } catch(e) {
+    result.textContent = '❌ ' + e.message;
+    result.style.color = 'var(--red)';
+  }
+}
+
+// 전송 이력
+async function loadEmailHistory() {
+  const box = document.getElementById('email-history-list');
+  try {
+    const d = await fetch(`${API}/api/v1/email/history`, {headers: HDR}).then(r=>r.json());
+    if (!d.success || !d.history?.length) {
+      box.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">전송 이력 없음</div>';
+      return;
+    }
+    box.innerHTML = d.history.map(h => `
+      <div class="sch-item" style="margin-bottom:6px">
+        <div class="sch-main">
+          <div style="font-size:12px;font-weight:600;color:${h.success?'var(--text)':'var(--red)'}">
+            ${h.success ? '✅' : '❌'} ${esc(h.to)}
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">
+            📄 ${esc(h.file)} · ${new Date(h.sent_at).toLocaleString('ko-KR',
+              {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}
+          </div>
+          <div style="font-size:10px;color:var(--muted)">${esc(h.subject||'')}</div>
+        </div>
+        <span class="pill ${h.success?'live':'off'}" style="flex-shrink:0">
+          ${h.success?'성공':'실패'}
+        </span>
+      </div>`).join('');
+  } catch(e) {
+    box.innerHTML = `<div style="color:var(--red);font-size:12px;padding:12px">${e.message}</div>`;
+  }
+}
+
 function logout(){ localStorage.clear(); location.href='login.html'; }
 </script>
   <!-- ── 모바일 하단 탭바 ── -->
@@ -1833,6 +2474,11 @@ function logout(){ localStorage.clear(); location.href='login.html'; }
             onclick="goPage('schedule');setMobTab('schedule')">
       <span class="mob-icon">🕐</span>
       <span>스케줄</span>
+    </button>
+    <button class="mob-tab" id="mtab-email"
+            onclick="goPage('email');setMobTab('email')">
+      <span class="mob-icon">📧</span>
+      <span>메일</span>
     </button>
   </nav>
 

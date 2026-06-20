@@ -181,6 +181,26 @@ async def send_transcript_job(
 # API 엔드포인트
 # ────────────────────────────────────────────────────────────
 
+@router.post("/config")
+async def update_email_config(data: dict):
+    """발신자 이메일/비밀번호 동적 업데이트"""
+    global SMTP_ID, SMTP_PASS, SMTP_FROM
+    from_email = data.get("from_email","").strip()
+    smtp_pass  = data.get("smtp_pass","").strip()
+    if not from_email:
+        raise HTTPException(status_code=400, detail="from_email 필수")
+    # 이메일 형식에서 아이디 추출
+    if "@" in from_email:
+        SMTP_ID   = from_email.split("@")[0]
+        SMTP_FROM = from_email
+    else:
+        SMTP_ID   = from_email
+        SMTP_FROM = f"{from_email}@naver.com"
+    if smtp_pass:
+        SMTP_PASS = smtp_pass
+    logger.info(f"이메일 설정 업데이트: {SMTP_FROM}")
+    return {"success": True, "from_email": SMTP_FROM}
+
 @router.post("/test")
 async def send_test_email():
     """테스트 이메일 전송"""
