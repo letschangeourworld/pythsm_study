@@ -540,7 +540,8 @@ docker compose restart api
 
 ## 🗂️ 프로젝트 구조
 
-```
+````
+
 VIBS/
 ├── backend/
 │    ├── Dockerfile # ffmpeg + Whisper 포함
@@ -577,7 +578,8 @@ VIBS/
 ├── sql/ # DB 스키마
 ├── docker-compose.yml
 └── .env # 환경변수 (gitignore)
-```
+
+````
 
 ## 🔐 보안 주의사항
 
@@ -618,9 +620,7 @@ VIBS/
 
 
 ## 📄 라이선스
-
 MIT License
-
 
 *VIBS - Vitna Interpretation Broadcast System*
 *© 2026 Vitna. All rights reserved.*
