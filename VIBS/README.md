@@ -1,4 +1,4 @@
-# 🎧 IBS - Interpretation Broadcast System
+# 🎧 VIBS - Vitna Interpretation Broadcast System
 ## 다국어 실시간 통역 방송 시스템
 
 > **교회/컨퍼런스/행사**에서 실시간 다국어 동시통역 방송을 위한 오픈소스 시스템
@@ -13,21 +13,24 @@
 4. [설치 및 실행](#설치-및-실행)
 5. [포트 구성](#포트-구성)
 6. [페이지별 사용법](#페이지별-사용법)
-7. [IP 변경 대응](#ip-변경-대응)
-8. [주요 기능](#주요-기능)
-9. [문제 해결](#문제-해결)
+7. [주요 기능](#주요-기능)
+8. [IP 변경 대응](#ip-변경-대응)
+9. [외부 도메인 접속](#외부-도메인-접속)
+10. [네트워크 구성 가이드](#네트워크-구성-가이드)
+11. [문제 해결](#문제-해결)
+12. [개발 이력](#개발-이력)
 
 
 ## 🌐 시스템 개요
 
 ```
-[통역자 (iPhone/PC)] ─── 🎙️ 음성 송출 ───► [LiveKit 미디어 서버]
-   │
-   ▼ WebRTC (UDP)
-[청취자 (핸드폰/PC)] ◄─── 🔊 음성 수신 ───────────────┘
+\[통역자 (iPhone/PC)\] ─── 🎙️ 음성 송출 ───► \[LiveKit 미디어 서버\]
+│
+WebRTC (UDP/TCP)
+│
+\[청취자 (핸드폰/PC)\] ◄─── 🔊 음성 수신 ───────────────┘
 
-[관리자 (PC/핸드폰)] ─── 채널 ON/OFF, 채팅, 신규채널 추가 ──► [FastAPI + WebSocket]
-
+\[관리자 (PC/핸드폰)\] ─── 채널 제어, 채팅, 이메일 전송 ──► \[FastAPI + WebSocket\]
 ```
 
 ### 주요 특징
@@ -35,11 +38,17 @@
 | 기능 | 설명 |
 |------|------|
 | 🎙️ 실시간 음성 방송 | WebRTC 기반 초저지연 음성 전송 |
-| 📱 크로스플랫폼 | iPhone Safari · Android · PC Chrome 모두 지원 |
-| 🌐 다국어 채널 | 영어·일어·중국어 + 신규 언어 동적 추가 |
-| 💬 실시간 채팅 | 카카오톡 스타일 채팅 (관리자 공지 포함) |
+| 📱 크로스플랫폼 | iPhone Safari · Android · PC Chrome 완전 지원 |
+| 🌐 다국어 채널 | 영어·일어·중국어 + 신규 언어 동적 추가/삭제 |
+| 💬 실시간 채팅 | 카카오톡 스타일 채팅 (날짜구분선·말풍선·아바타) |
 | 🎛️ 마이크 선택 | 핸드폰 마이크 / 서버PC 전문마이크 선택 가능 |
-| 📊 모니터링 | Prometheus + Grafana 실시간 모니터링 |
+| 🎙️ 음성 녹음 | 방송 자동 녹음 → MinIO 저장 |
+| 📝 STT 변환 | Whisper AI로 음성→텍스트 자동 변환 (CPU) |
+| 📄 Word 생성 | 타임스탬프 포함 Word 파일 자동 생성 |
+| 📧 이메일 전송 | Word 파일 통역자 이메일 자동/수동 전송 |
+| 🔊 음향 제어 | AEC·NS·AGC 하울링 방지 + 상황별 프리셋 |
+| 📊 방송 이력 | DB 기반 방송 세션 기록 및 통계 |
+| 📅 스케줄 관리 | 방송 스케줄 생성/수정/삭제/활성화 |
 
 
 ## 🏗️ 아키텍처
@@ -47,40 +56,43 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ 클라이언트 │
-│ 📱 iPhone(Safari) 💻 PC(Chrome) 🖥️ 서버PC(전문마이크) │
+│ 📱 iPhone(Safari/Chrome) 💻 PC(Chrome) 🖥️ 서버PC(마이크) │
 └──────────┬──────────────┬───────────────────┬───────────────┘
 │ HTTPS:19443 │ HTTP:19000 │ HTTP:19082
 ▼ ▼ ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ Nginx (Reverse Proxy) │
-│ :19000 메인/청취자 :19443 iOS통역자 :19082 통역자(PC) │
+│ :19000 메인/청취자/관리자 :19443 iOS통역자(wss://) │
 │ /rtc → LiveKit:7880 /api → FastAPI:8000 │
 └──────────┬──────────────────────────┬───────────────────────┘
-           │ │
-           ▼ ▼
+│ │
+▼ ▼
 ┌──────────────────┐ ┌───────────────────────────────────┐
-│ LiveKit Server   │ │ FastAPI Backend │
-│ :7880 신호채널    │ │ /api/v1/livekit/token 토큰발급 │
-│ :7881 TCP미디어   │ │ /api/channels 채널관리 │
-│ :55000-55100 UDP  │ │ /api/broadcast/\* 방송제어 │
-│ WebRTC ICE        │ │ /ws WebSocket │
-└──────────────────┘ └──────────┬────────────────────────┘
+│ LiveKit Server │ │ FastAPI Backend │
+│ :7880 신호채널 │ │ /api/v1/livekit/token 토큰발급 │
+│ :7881 TCP미디어 │ │ /api/channels 채널관리 │
+│ :55000-55100 UDP│ │ /api/broadcast/\* 방송제어 │
+│ WebRTC ICE │ │ /api/v1/recordings/\* 녹음관리 │
+└──────────────────┘ │ /api/v1/stt/\* STT변환 │
+│ /api/v1/email/\* 이메일 │
+│ /ws WebSocket │
+└──────────┬────────────────────────┘
 │
-┌────────────────┼────────────────┐
+┌────────────────┼──────────────┐
 ▼ ▼ ▼
 ┌──────────┐ ┌──────────┐ ┌──────────────┐
 │PostgreSQL│ │ Redis │ │ MinIO │
-│ DB:5432 │ │ :6379 │ │ Storage │
-└──────────┘ └──────────┘ └──────────────┘
-│
+│ :5432 │ │ :6379 │ │ recordings/ │
+└──────────┘ └──────────┘ │ transcripts/│
+│ └──────────────┘
 ┌────────────┼────────────┐
 ▼ ▼ ▼
 ┌──────────┐ ┌──────────┐ ┌──────────┐
 │Prometheus│ │ Grafana │ │ Loki │
-│ :9090 │ │ :3000 │ │ 로그 │
+│ :9090 │ │ :19300 │ │ 로그 │
 └──────────┘ └──────────┘ └──────────┘
 
-````
+```
 
 
 ## 🛠️ 기술 스택
@@ -92,13 +104,15 @@
 | **웹서버** | Nginx | 1.31 | 리버스 프록시 + SSL |
 | **DB** | PostgreSQL | 17 + pgvector | 방송 세션 관리 |
 | **캐시** | Redis | latest | 실시간 상태 관리 |
-| **스토리지** | MinIO | latest | 파일 저장 |
+| **스토리지** | MinIO | latest | 녹음/Word 파일 저장 |
+| **STT** | OpenAI Whisper | small | 음성→텍스트 변환 (CPU) |
+| **문서생성** | python-docx | 1.1.2 | Word 파일 생성 |
+| **이메일** | smtplib (SSL) | 내장 | 네이버 SMTP 이메일 전송 |
+| **스케줄러** | APScheduler | 3.10.4 | 자동 전송 스케줄 |
 | **인증** | Keycloak | latest | SSO 인증 |
-| **모니터링** | Prometheus + Grafana | latest | 시스템 모니터링 |
-| **로그** | Loki | latest | 로그 수집 |
+| **모니터링** | Prometheus+Grafana | latest | 시스템 모니터링 |
 | **컨테이너** | Docker Compose | latest | 전체 스택 관리 |
 
----
 
 ## 🚀 설치 및 실행
 
@@ -106,14 +120,14 @@
 
 - Ubuntu 22.04 / Debian 11 이상
 - Docker + Docker Compose
-- 최소 RAM 4GB, 저장공간 20GB
+- 최소 RAM 4GB (Whisper small 모델), 저장공간 20GB
 - 포트 개방: 19000, 19443, 17880, 17881, 55000-55100 (UDP)
 
 ### 1단계: 저장소 클론
 
 ```bash
 git clone https://github.com/letschangeourworld/pythsm_study.git
-cd pythsm_study/IBS
+cd pythsm_study/VIBS
 ```
 
 ### 2단계: 환경변수 설정
@@ -126,26 +140,37 @@ vi .env
 **.env 주요 설정:**
 
 ```env
-# 서버 IP (현재 서버의 LAN IP 입력)
+# 서버 IP (현재 서버의 LAN IP)
 SERVER_IP=192.168.0.15
 
 # LiveKit 보안키 (32자 이상)
 LIVEKIT_API_KEY=your_api_key
 LIVEKIT_API_SECRET=your_32char_secret_key
 
-# JWT 시크릿 (32자 이상)
+# JWT 시크릿
 JWT_SECRET=your_32char_jwt_secret_key
 
 # 관리자 계정
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=your_password
 
-# DB 비밀번호
+# DB
 POSTGRES_PASSWORD=your_db_password
 REDIS_PASSWORD=your_redis_password
+
+# MinIO
+MINIO_ROOT_USER=minioadmin
+MINIO_ROOT_PASSWORD=your_minio_password
+MINIO_IP=172.31.0.4  # docker inspect ts_minio로 확인
+
+# SMTP (네이버 메일)
+SMTP_HOST=smtp.naver.com
+SMTP_PORT=465
+SMTP_USER=your_naver_id        # 아이디만 (@ 제외)
+SMTP_PASSWORD=your_app_password # 네이버 앱 비밀번호
 ```
 
-### 3단계: SSL 인증서 생성 (로컬망용 자체서명)
+### 3단계: SSL 인증서 생성
 
 ```bash
 mkdir -p configs/ssl/vitna
@@ -155,30 +180,36 @@ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
   -subj "/CN=localhost"
 ```
 
-### 4단계: 실행
+### 4단계: MinIO 버킷 생성
+
+```bash
+docker compose up -d minio
+sleep 5
+docker exec ts_minio mc alias set local http://localhost:9000 minioadmin your_password
+docker exec ts_minio mc mb local/recordings
+docker exec ts_minio mc mb local/transcripts
+```
+
+### 5단계: 실행
 
 ```bash
 docker compose up -d
 ```
 
-### 5단계: 상태 확인
+### 6단계: 상태 확인
 
 ```bash
 docker compose ps
-# 모든 서비스 Up (healthy) 확인
-
-# API 정상 확인
 curl http://localhost:19000/api/health
 ```
 
----
 
 ## 🔌 포트 구성
 
 | 포트 | 프로토콜 | 용도 | 접속 대상 |
 |------|----------|------|-----------|
 | **19000** | HTTP | 메인/청취자/관리자 | 모든 사용자 |
-| **19443** | HTTPS | iOS 통역자 전용 | iPhone 통역자 |
+| **19443** | HTTPS | iOS 통역자 전용 (wss://) | iPhone 통역자 |
 | **19080** | HTTP | 관리자 전용 | 관리자 |
 | **19081** | HTTP | 청취자 전용 | 청취자 |
 | **19082** | HTTP | 통역자(PC) 전용 | PC 통역자 |
@@ -188,20 +219,18 @@ curl http://localhost:19000/api/health
 | 19300 | HTTP | Grafana 모니터링 | 관리자 |
 | 19011 | HTTP | MinIO 스토리지 | 관리자 |
 
-> ⚠️ **UDP 55000-55100 포트 개방 필수** - 방화벽에서 반드시 허용해야 합니다.
+> ⚠️ **UDP 55000-55100 포트 방화벽 개방 필수**
 
----
 
 ## 📱 페이지별 사용법
 
 ### 1. 메인 페이지 (청취자 입장)
 ```
 [http://서버IP:19000](http://xn--ip-v41jw5m:19000/)
-
 ```
-- 언어 채널 선택 (영어/일어/중국어)
-- ON AIR 상태인 채널만 활성화
-- 채널 클릭 → 청취자 페이지로 이동
+- 언어 채널 카드 (영어/일어/중국어 + 동적 추가 채널)
+- ON AIR 채널 3초 이내 실시간 반영
+- 채널 클릭 → 청취자 페이지 이동
 
 
 ### 2. 청취자 페이지
@@ -212,39 +241,37 @@ curl http://localhost:19000/api/health
 ```
 
 **사용 순서:**
-1. 이어폰 연결 (하울링 방지)
-2. 언어 채널 페이지 접속
-3. **[청취 시작]** 버튼 클릭
-4. 통역 음성 청취 시작 🔊
+1. 🎧 이어폰 연결 (하울링 방지 필수)
+2. **[청취 시작]** 버튼 클릭 → 음성 청취
+3. 카카오톡 스타일 채팅 참여
 
 **기능:**
-- 실시간 음성 청취 (WebRTC)
-- 카카오톡 스타일 채팅
+- 실시간 음성 청취 (WebRTC UDP)
+- 카카오톡 스타일 채팅 (말풍선/아바타/날짜구분)
 - 실시간 STT 자막 표시
 - 볼륨 조절
 
 
 ### 3. 통역자 페이지
 
-**PC 환경:**
+**PC:**
 ```
 [http://서버IP:19082/pages/interpreter/index.html](http://xn--ip-v41jw5m:19082/pages/interpreter/index.html)
 ```
 
-**iPhone/iOS 환경:**
+**iPhone/iOS:**
 ```
 [https://서버IP:19443/pages/interpreter/index.html](https://xn--ip-v41jw5m:19443/pages/interpreter/index.html)
 ```
-> ⚠️ iOS는 반드시 HTTPS 접속 필요 (인증서 경고 → '고급' → '방문' 클릭)
+> ⚠️ iOS: 인증서 경고 → '고급' → '방문' 클릭
 
 **사용 순서:**
 1. 상단 **채널 선택** (영어/일어/중국어)
 2. **마이크 소스 선택**
-   - 📱 내 마이크: 현재 기기 마이크 사용
-   - 🖥️ 서버PC 마이크: 전문 마이크 장치 선택
-3. **[▶ 방송 시작]** 클릭
-4. 방송 중 🔴 표시 확인
-5. **[⏹ 방송 종료]** 클릭
+   - 📱 내 마이크: 현재 기기 마이크
+   - 🖥️ 서버PC 마이크: 전문 마이크 장치 목록에서 선택
+3. **[▶ 방송 시작]** 클릭 → 🔴 녹음 자동 시작
+4. **[⏹ 방송 종료]** → 자동 STT 변환 → Word 저장 → 이메일 전송
 
 
 ### 4. 관리자 페이지
@@ -252,132 +279,254 @@ curl http://localhost:19000/api/health
 [http://서버IP:19000/admin.html](http://xn--ip-v41jw5m:19000/admin.html)
 ```
 
-**기본 계정:** admin / admin123
+**기본 계정:** admin / admin123 (반드시 변경!)
 
-**주요 기능:**
-
-| 기능 | 설명 |
+| 메뉴 | 기능 |
 |------|------|
-| 채널 방송 제어 | 토글로 채널 ON/OFF |
-| ➕ 채널 추가 | 신규 언어 채널 동적 생성 |
-| 방송 생성 | 방송 세션 생성 및 관리 |
-| 공지 전송 | 채팅창에 공지 메시지 전송 |
-| 채팅 기록 | 채널별 채팅 히스토리 조회 |
-| 빠른 링크 | 각 페이지 바로가기 |
+| 📊 대시보드 | 채널 ON/OFF, KPI, 빠른 링크 |
+| 📡 방송 관리 | 방송 이력, 통계 |
+| 💬 채팅 | 공지 전송, 채팅 기록 |
+| 🕐 스케줄 | 방송 스케줄 CRUD + 활성화 토글 |
+| 🎛️ 음향 제어 | AEC/NS/AGC + 볼륨 + 상황별 프리셋 |
+| 📧 이메일 전송 | 발신자/수신자 설정, 파일 선택, 자동전송 |
 
-
-## 🔄 IP 변경 대응
-
-다른 네트워크(다른 장소)로 이동 시:
-
-```bash
-# 자동 IP 감지 및 전체 설정 업데이트
-/opt/translation-system/scripts/update-ip.sh
-```
-
-**또는 재부팅:**
-```bash
-sudo reboot
-# 부팅 시 자동으로 IP 감지 및 적용
-```
-
-**수동 변경 시:**
-```bash
-# 1. .env 파일 수정
-vi .env  # SERVER_IP=새IP
-
-# 2. livekit.yaml 수정
-vi configs/livekit/livekit.yaml  # node_ip: 새IP
-
-# 3. 서비스 재시작
-docker compose restart livekit api nginx
-```
 
 ## ⭐ 주요 기능
 
-### 🎙️ 마이크 소스 선택
-통역자 페이지에서 두 가지 마이크 모드 지원:
-
+### 🌐 동적 채널 관리
 ```
-📱 내 마이크 모드
-└── 현재 기기(핸드폰/PC)의 내장 마이크 사용
-└── 간편하지만 하울링 주의
-
-🖥️ 서버PC 마이크 모드
-└── 서버에 연결된 전문 마이크 선택
-└── 고음질 방송 가능
-└── 마이크 장치 목록에서 선택
-```
-
-### 🌐 신규 채널 동적 추가
-관리자 페이지 → [➕ 채널 추가]:
-
-```
+관리자 → 채널 추가:
 채널 키: french
 표시 이름: Français
 국기: 🇫🇷
-LiveKit Room: room\_fr
+Room: room\_fr
+→ 메인/관리자 페이지 즉시 반영
+→ 채널 삭제 가능 (기본 3개 보호)
 ```
-→ 즉시 메인 페이지와 관리자 페이지에 반영
+
+### 🔊 음향 제어 (하울링 방지)
+```
+상황별 프리셋:
+⛪ 교회/예배당 → AEC ON · NS ON · 감도 75%
+🏢 컨퍼런스홀 → AEC ON · NS ON · 감도 85%
+🌳 야외 행사 → AEC ON · NS OFF · 감도 100%
+🎙️ 스튜디오 → AEC OFF · NS OFF · 감도 90%
+
+하울링 발생 시:
+
+1. 에코 제거(AEC) ON 확인
+2. 마이크 감도 낮추기 (100% → 70%)
+3. 청취자 이어폰 사용 필수
+4. 방송 재시작
+```
+
+### 🎙️ 자동화 파이프라인
+```
+\[방송 시작\]
+└→ 자동 녹음 시작 (10초 청크 → MinIO)
+
+\[방송 종료\]
+└→ .webm 파일 MinIO 저장
+└→ Whisper STT 변환 (백그라운드, CPU)
+└→ Word 파일 생성 (타임스탬프 포함)
+└→ MinIO transcripts/ 저장
+└→ 설정 시간에 통역자 이메일 자동 전송
+```
+
+### 📧 이메일 관리
+```
+관리자 → 📧 이메일 전송:
+
+1. 계정 설정:
+    발신자: [your\_id@naver.com](mailto:your_id@naver.com)
+    앱 비밀번호: (네이버 앱 비밀번호)
+
+2. 수신자 설정 (채널별):
+    영어 → [interpreter1@email.com](mailto:interpreter1@email.com)
+    일본어 → [interpreter2@email.com](mailto:interpreter2@email.com)
+    중국어 → [interpreter3@email.com](mailto:interpreter3@email.com)
+
+3. 자동 전송:
+    매주 일요일 오후 7:00 자동 전송
+
+4. 수동 전송:
+    파일 목록에서 선택 → 전송 버튼
+```
 
 ### 💬 카카오톡 스타일 채팅
-
 ```
-관리자/통역자 ← 금색 말풍선 (왼쪽)
+관리자/통역자 ← 금색 말풍선 (왼쪽) + 🎙️ 아바타
 내 메시지 → 노란색 말풍선 (오른쪽, #FEE500)
 시스템 알림 ─ 중앙 회색 알약
 날짜 구분선 ─ "2026년 6월 14일"
 ```
 
+### 📅 스케줄 관리
+```
+관리자 → 🕐 스케줄:
+시간: 07:50
+이름: 주일 1부 예배 (08:00)
+요일: 일요일 선택
+활성화: ON/OFF 토글
+→ 생성 / 수정 / 삭제 / 활성화 모두 가능
+```
+
+### 📊 방송 이력
+```
+관리자 → 📡 방송 관리:
+KPI: 전체 방송수 / 이번주 / 평균 시간
+이력: 날짜 | 채널 | 제목 | 상태 | 방송시간
+
+특징:
+
+- 채널 토글 ON/OFF 시 DB 자동 기록
+- 서버 재시작 시 미종료 LIVE 자동 정리
+- 새 방송 시작 시 이전 LIVE 자동 종료
+```
+
+
+## 🔄 IP 변경 대응
+
+```bash
+# 새 망 연결 후 수동 실행
+/opt/translation-system/scripts/update-ip.sh
+
+# 또는 서버 재부팅 (자동 실행)
+sudo reboot
+```
+
+**동작 순서:**
+1. 192.168.x.x LAN IP 우선 감지
+2. .env + livekit.yaml node_ip 자동 업데이트
+3. LiveKit / API / Nginx 자동 재시작
+
+
+## 🌐 외부 도메인 접속
+
+```bash
+# 1. DNS A레코드 설정
+#    translate.vitna.net → 공인IP
+
+# 2. 공유기 포트포워딩
+#    80  → 서버IP:80
+#    443 → 서버IP:443
+
+# 3. SSL 인증서 자동 발급
+sudo /opt/translation-system/scripts/setup-ssl.sh
+```
+
+## 📡 네트워크 구성 가이드
+
+### 통역실 WiFi 구성 (AP 모드)
+
+```
+\[메인 스위치/공유기 192.168.x.1\]
+│
+─────┴──────────────────
+│ │ │
+랜선 랜선 랜선
+│ │ │
+\[통역실1\] \[통역실2\] \[통역실3\]
+│ │ │
+\[공유기 \[AP모드 \[AP모드
+AP모드\] 공유기\] 공유기\]
+├─ 서버PC 📶WiFi 📶WiFi
+└─ 📶WiFi │ │
+│ 📱통역자2 📱통역자3
+📱통역자1
+
+```
+
+> ⚠️ **공유기는 반드시 AP 모드(브리지 모드) 사용**
+> - 라우터 모드: ❌ IP 대역 분리 → 서버 접속 불가
+> - AP 모드: ✅ 같은 네트워크 → 서버 접속 가능
+
+### 동일 SSID 다른 IP 문제
+
+같은 WiFi 이름에 연결했지만 서로 다른 IP 대역을 받는 경우:
+
+| 장치 | IP 대역 | 원인 |
+|------|---------|------|
+| 서버PC | 192.168.3.x | 메인 공유기 |
+| 핸드폰 | 192.168.3.x | 메인 공유기 ✅ |
+| 노트북 | 192.168.0.x | 보조 공유기 ❌ |
+
+**해결 방법:**
+```
+보조 공유기 관리자 페이지 (192.168.0.1)
+→ DHCP 서버: OFF
+→ 운영 모드: AP 모드
+→ LAN 포트에 메인 랜선 연결
+→ 모든 장치가 192.168.3.x 통일
+```
+
 
 ## 🔧 문제 해결
 
-### iOS에서 "server was not reachable" 오류
+### iOS "server was not reachable"
 ```bash
-# Nginx 19443 → LiveKit 7880 프록시 확인
 curl -sk -H "Upgrade: websocket" \
   -H "Connection: Upgrade" \
-  https://서버IP:19443/rtc
-# 401 응답이면 정상
+  https://서버IP:19443/rtc | head -3
+# 401이면 정상
 ```
 
-### 청취자 연결 실패 (ICE connection failed)
+### 청취자 연결 실패 (ICE failed)
 ```bash
-# LiveKit node_ip 확인
-docker logs ts_livekit 2>&1 | grep nodeIP
-# "nodeIP": "192.168.0.15" ← 실제 LAN IP여야 함
+# LiveKit nodeIP 확인 (LAN IP여야 함)
+docker logs ts_livekit 2>&1 | grep nodeIP | tail -1
+# "nodeIP": "192.168.x.x" 확인
 
-# Docker 내부 IP(172.x.x.x)가 나오면:
+# Docker IP(172.x.x.x)면:
 /opt/translation-system/scripts/update-ip.sh
 ```
 
-### UDP 포트 방화벽 오류
+### 음성 안 들림
 ```bash
-# Ubuntu UFW 설정
+# 통역자 방송 중인지 확인
+docker logs ts_livekit --tail=5 | grep "mediaTrack published"
+# 브라우저 강력 새로고침: Ctrl+Shift+R (PC), 주소창 새로고침 길게 누르기 (모바일)
+```
+
+### STT 변환 실패
+```bash
+docker exec ts_api python3 -c "import whisper; print('OK')"
+docker exec ts_api ffmpeg -version | head -1
+```
+
+### 이메일 전송 실패
+```bash
+# 네이버 SMTP 직접 테스트
+docker exec ts_api python3 -c "
+import smtplib, ssl
+s = smtplib.SMTP_SSL('smtp.naver.com', 465,
+    context=ssl.create_default_context())
+s.login('your_id@naver.com', 'app_password')
+print('✅ 로그인 성공')
+s.quit()
+"
+# 네이버 메일 → 환경설정 → POP3/IMAP → IMAP/SMTP 사용함 확인
+```
+
+### UDP 포트 방화벽
+```bash
 sudo ufw allow 55000:55100/udp
 sudo ufw allow 17880/tcp
-sudo ufw allow 17881/tcp
 sudo ufw allow 19000/tcp
 sudo ufw allow 19443/tcp
 ```
 
-### 청취 버튼 클릭 후 소리 안 남
+### MinIO 연결 실패
 ```bash
-# 통역자가 방송 중인지 확인
-docker logs ts_livekit --tail=5
-# "mediaTrack published" 로그 확인
+# MinIO IP 재확인
+MINIO_IP=$(docker inspect ts_minio --format \
+  '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}' \
+  | tr ' ' '\n' | grep "172\." | head -1)
+echo "MinIO IP: $MINIO_IP"
 
-# 브라우저 강력 새로고침
-# Windows: Ctrl+Shift+R
-# Mac: Cmd+Shift+R
-```
-
-### API 서비스 재시작
-```bash
-cd /opt/translation-system
+# .env 업데이트
+sed -i "s/MINIO_IP=.*/MINIO_IP=${MINIO_IP}/" .env
 docker compose restart api
-docker compose restart nginx
-docker compose restart livekit
 ```
 
 
@@ -387,42 +536,49 @@ docker compose restart livekit
 |--------|-----|------|
 | Grafana | http://서버IP:19300 | admin / 설정값 |
 | MinIO | http://서버IP:19011 | minioadmin / 설정값 |
-| Prometheus | http://서버IP:9090 | - |
 
 
 ## 🗂️ 프로젝트 구조
 
-```
-IBS/
+````
+VIBS/
 ├── backend/
-│ └── app/
-│ ├── main.py # FastAPI 앱 진입점
-│ ├── config.py # 환경변수 설정
-│ └── routers/
-│ ├── websocket\_router.py # WebSocket + 채널 관리
-│ ├── livekit\_router.py # LiveKit 토큰 발급
-│ ├── broadcasts.py # 방송 세션 관리
-│ └── auth.py # JWT 인증
+│    ├── Dockerfile # ffmpeg + Whisper 포함
+│    ├── requirements.txt # 의존성 패키지
+│    └── app/
+│    ├── main.py # FastAPI + lifespan (LIVE세션 자동정리)
+│    ├── config.py # 환경변수
+│    ├── database.py # AsyncSessionLocal
+│    └── routers/
+│    ├── websocket\_router.py # WebSocket + 채널관리 API
+│    ├── livekit\_router.py # LiveKit 토큰 발급
+│    ├── broadcasts.py # 방송 세션 (DB)
+│    ├── recordings.py # 음성 녹음 + MinIO
+│    ├── stt\_router.py # Whisper STT + Word 생성
+│    └── email\_router.py # 이메일 전송 (Naver SMTP)
 ├── frontend/
-│ ├── index.html # 메인 (언어 선택)
-│ ├── listen.html # 청취자 페이지
-│ ├── admin.html # 관리자 페이지
-│ ├── login.html # 로그인
-│ └── pages/
-│ └── interpreter/
-│ └── index.html # 통역자 페이지
+│    ├── index.html # 메인 (동적 채널 카드)
+│    ├── listen.html # 청취자 (카카오톡 채팅)
+│    ├── admin.html # 관리자 (풀기능 + 모바일 탭바)
+│    ├── login.html # 로그인
+│    └── pages/
+│         └── interpreter/
+│         └── index.html # 통역자 (녹음+STT+마이크선택)
 ├── configs/
-│ ├── nginx/conf.d/
-│ │ ├── 00-main.conf # 메인 HTTP 설정
-│ │ └── 19443-https.conf # iOS HTTPS + /rtc 프록시
-│ ├── livekit/
-│ │ └── livekit.yaml # LiveKit 서버 설정
-│ └── ssl/vitna/ # SSL 인증서
+│    ├── nginx/conf.d/
+│    │    ├── 00-main.conf # HTTP :19000
+│    │    └── 19443-https.conf # HTTPS + /rtc LiveKit 프록시
+│    ├── livekit/
+│    │    └── livekit.yaml # node\_ip: LAN IP 설정
+│    └── ssl/vitna/ # SSL 인증서
 ├── scripts/
-│ └── update-ip.sh # IP 자동 감지 스크립트
-├── docker-compose.yml # 전체 스택 정의
+│    ├── update-ip.sh # IP 자동 감지/적용
+│    └── setup-ssl.sh # Let's Encrypt SSL 발급
+├── sql/ # DB 스키마
+├── docker-compose.yml
 └── .env # 환경변수 (gitignore)
 ```
+
 
 ## 🔐 보안 주의사항
 
@@ -430,15 +586,11 @@ IBS/
 2. 프로덕션 환경에서는 Let's Encrypt SSL 인증서 사용
 3. 관리자 기본 비밀번호(`admin123`) 반드시 변경
 4. LiveKit API Secret은 32자 이상 랜덤 문자열 사용
-5. 방화벽에서 필요한 포트만 개방
+5. 네이버 앱 비밀번호는 정기적으로 갱신
+6. MinIO는 외부 포트 노출 최소화
 
 
-## 📝 라이선스
-
-MIT License
-
-
-## 👨‍💻 개발 히스토리
+## 📝 개발 이력
 
 | 날짜 | 주요 변경사항 |
 |------|--------------|
@@ -446,8 +598,30 @@ MIT License
 | 2026.06.13 | iOS 통역자 wss:// 연결 문제 해결 |
 | 2026.06.13 | 청취자 버튼 클릭 시에만 오디오 재생 |
 | 2026.06.13 | 채널 선택 / 신규 채널 추가 / 마이크 소스 선택 |
-| 2026.06.14 | 청취자 연결 실패 (ICE/포트) 해결 |
+| 2026.06.13 | 관리자 페이지 반응형 레이아웃 (모바일 탭바) |
+| 2026.06.14 | 청취자 ICE 연결 실패 해결 (node_ip/포트 수정) |
 | 2026.06.14 | 카카오톡 스타일 채팅 UI |
 | 2026.06.14 | iOS Safari 청취자 페이지 404 해결 |
-| 2026.06.14 | IP 자동 감지 스크립트 |
+| 2026.06.14 | IP 자동 감지 스크립트 (update-ip.sh) |
+| 2026.06.14 | 음성 녹음 → MinIO 저장 |
+| 2026.06.14 | Whisper STT + Word 파일 자동 생성 |
+| 2026.06.14 | 방송 이력 DB 연동 + 통계 |
+| 2026.06.20 | iPhone to iPhone 테스트 성공 |
+| 2026.06.20 | LiveKit nodeIP Docker IP → LAN IP 수정 |
+| 2026.06.20 | 음향 제어 패널 (AEC/NS/AGC + 프리셋) |
+| 2026.06.20 | 스케줄 관리 CRUD |
+| 2026.06.20 | 이메일 전송 UI (발신자/수신자 설정, 자동전송) |
+| 2026.06.20 | 채널 삭제 기능 |
+| 2026.06.20 | 방송 이력 LIVE 세션 자동 정리 |
+| 2026.06.20 | 동적 채널 복원 (페이지 새로고침 시) |
+| 2026.06.21 | VIBS로 프로젝트명 변경 (Vitna IBS → VIBS) |
+| 2026.06.21 | 네트워크 구성 가이드 추가 (AP모드/IP충돌 해결) |
 
+
+## 📄 라이선스
+
+MIT License
+
+
+*VIBS - Vitna Interpretation Broadcast System*
+*© 2026 Vitna. All rights reserved.*
