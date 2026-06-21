@@ -69,7 +69,7 @@ def send_email_with_attachment(
         _host, _port, _sid, _pw, _from = get_smtp_config()
 
         msg = MIMEMultipart()
-        msg['From']    = f"VIBS-Broadcast <{_from}>"
+        msg['From']    = f"IBS-Broadcast <{_from}>"
         msg['To']      = f"{to_name} <{to_email}>"
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'html', 'utf-8'))
@@ -115,7 +115,7 @@ async def send_transcript_job(
 
         now     = datetime.now()
         date_kr = now.strftime("%Y년 %m월 %d일")
-        subject = f"[VIBS 통역방송] {date_kr} {title} 스크립트"
+        subject = f"[IBS 통역방송] {date_kr} {title} 스크립트"
 
         body = f"""
         <html><body style="font-family:Arial,sans-serif;color:#333">
@@ -140,7 +140,7 @@ async def send_transcript_job(
         <p>첨부된 Word 파일을 확인해 주세요.</p>
         <hr>
         <p style="color:#6b7280;font-size:12px">
-          본 메일은 VIBS 통역방송 시스템에서 자동 발송되었습니다.
+          본 메일은 IBS 통역방송 시스템에서 자동 발송되었습니다.
         </p>
         </body></html>
         """
@@ -205,13 +205,13 @@ async def update_email_config(data: dict):
 async def send_test_email():
     """테스트 이메일 전송"""
     try:
-        subject = "[VIBS] 이메일 연결 테스트"
+        subject = "[IBS] 이메일 연결 테스트"
         body = """
         <html><body style="font-family:Arial,sans-serif">
-        <h2 style="color:#2563EB">✅ VIBS 통역방송 이메일 연결 성공!</h2>
+        <h2 style="color:#2563EB">✅ IBS 통역방송 이메일 연결 성공!</h2>
         <p>이메일 설정이 정상적으로 완료되었습니다.</p>
         <hr>
-        <p style="color:#6b7280;font-size:12px">VIBS 통역방송 시스템 자동 발송</p>
+        <p style="color:#6b7280;font-size:12px">IBS 통역방송 시스템 자동 발송</p>
         </body></html>
         """
         success = send_email_with_attachment(

@@ -1312,7 +1312,7 @@ document.getElementById('quickLinks').innerHTML = [
 // ════════════════════════════════════════
 
 // localStorage에서 설정 로드
-var audioSettings = JSON.parse(localStorage.getItem('vibs_audio') || JSON.stringify({
+var audioSettings = JSON.parse(localStorage.getItem('ibs_audio') || JSON.stringify({
   aec: true, ns: true, agc: true,
   micVol: 80, listenerVol: 80,
   codec: 'opus_red', sampleRate: '48000',
@@ -1393,7 +1393,7 @@ function applyAudioSettings(){
   audioSettings.sampleRate  = document.getElementById('opt-samplerate').value;
 
   // localStorage 저장
-  localStorage.setItem('vibs_audio', JSON.stringify(audioSettings));
+  localStorage.setItem('ibs_audio', JSON.stringify(audioSettings));
 
   // WebSocket으로 통역자/청취자에게 설정 브로드캐스트
   if(ws && ws.readyState === 1){
@@ -1418,7 +1418,7 @@ function applyAudioSettings(){
 
 function resetAudioSettings(){
   if(!confirm('음향 설정을 초기화하시겠습니까?')) return;
-  localStorage.removeItem('vibs_audio');
+  localStorage.removeItem('ibs_audio');
   audioSettings = { aec:true, ns:true, agc:true,
                     micVol:80, listenerVol:80,
                     codec:'opus_red', sampleRate:'48000', preset:'' };
@@ -2009,9 +2009,9 @@ let _selectedDocxPath = null;
 let _autoSendTimer    = null;
 
 // localStorage 키
-const LS_EMAIL_CFG   = 'vibs_email_cfg';
-const LS_RECIPIENTS  = 'vibs_recipients';
-const LS_AUTO_SEND   = 'vibs_auto_send';
+const LS_EMAIL_CFG   = 'ibs_email_cfg';
+const LS_RECIPIENTS  = 'ibs_recipients';
+const LS_AUTO_SEND   = 'ibs_auto_send';
 
 // 기본 설정 로드
 function loadEmailConfig() {

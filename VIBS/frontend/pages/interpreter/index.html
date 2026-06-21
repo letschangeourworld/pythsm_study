@@ -571,7 +571,7 @@ async function startBC() {
     await room.connect(lkUrl, td.data.token);
 
     // 4. localStorage에서 음향 설정 로드
-    var audioOpt = JSON.parse(localStorage.getItem('vibs_audio') || '{}');
+    var audioOpt = JSON.parse(localStorage.getItem('ibs_audio') || '{}');
     var useAEC  = audioOpt.aec  !== undefined ? audioOpt.aec  : true;
     var useNS   = audioOpt.ns   !== undefined ? audioOpt.ns   : true;
     var useAGC  = audioOpt.agc  !== undefined ? audioOpt.agc  : true;
