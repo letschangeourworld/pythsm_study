@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>통역자 방송 화면</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+    body{background:var(--color-bg-dark);color:var(--color-text-primary);min-height:100vh;display:flex;flex-direction:column}
+    .top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;
+         background:var(--color-bg-card);border-bottom:1px solid var(--color-border)}
+    .ri{display:flex;align-items:center;gap:10px}
+    .rl{font-size:15px;font-weight:700}
+    .rs{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--color-text-secondary)}
+    .mic-sec{background:var(--color-bg-card);border-bottom:1px solid var(--color-border);padding:16px 20px}
+    .mic-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .meter{display:flex;align-items:flex-end;gap:2px;height:36px;background:var(--color-bg-input);padding:6px;border-radius:var(--radius-md)}
+    .bar{width:7px;border-radius:2px;transition:height 0.1s;background:var(--color-success)}
+    .bar.w{background:var(--color-warning)}.bar.c{background:var(--color-error)}
+    .stats{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+    .sc{display:flex;align-items:center;gap:5px;background:var(--color-bg-input);padding:5px 10px;border-radius:var(--radius-md);font-size:12px}
+    .ctrl{display:flex;align-items:center;justify-content:center;gap:14px;padding:20px;background:#1a2744}
+    .btn-st{background:var(--color-success);font-size:16px;padding:14px 36px;border-radius:var(--radius-lg)}
+    .btn-sp{background:var(--color-error);font-size:16px;padding:14px 36px;border-radius:var(--radius-lg);display:none}
+    .btn-mu{background:var(--color-bg-input);font-size:14px;padding:12px 20px;border-radius:var(--radius-lg);border:2px solid var(--color-border)}
+    .btn-mu.muted{background:#7f1d1d;border-color:var(--color-error);color:var(--color-error)}
+    .rec{background:var(--color-error);color:white;padding:7px 14px;border-radius:var(--radius-md);
+         font-family:monospace;font-size:13px;font-weight:700;display:none;align-items:center;gap:6px}
+    .rdot{width:7px;height:7px;border-radius:50%;background:white;animation:pulse 1s infinite}
+    .ai-sec{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:16px 20px;gap:12px}
+    .ai-panels{display:flex;gap:12px;flex:1;overflow:hidden}
+    .ai-panel{background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:14px;flex:1;overflow-y:auto}
+    .ai-lbl{font-size:10px;font-weight:700;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+    .ai-txt{font-size:14px;line-height:1.7}
+    .ai-orig{color:var(--color-text-primary)}.ai-trans{color:#93c5fd;font-style:italic}
+    .vol-ctrl{display:flex;gap:14px;background:var(--color-bg-card);border-top:1px solid var(--color-border);padding:14px 20px}
+    .vi{display:flex;align-items:center;gap:8px;flex:1}
+    .vl{font-size:11px;color:var(--color-text-secondary);min-width:72px}
+    .vs{flex:1;-webkit-appearance:none;height:3px;background:var(--color-border);border-radius:2px}
+    .vs::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--color-primary);cursor:pointer}
+    .alert-bar{position:fixed;top:65px;left:50%;transform:translateX(-50%);max-width:560px;width:90%;
+               z-index:100;padding:10px 18px;border-radius:var(--radius-md);font-weight:600;font-size:13px;
+               display:none;box-shadow:var(--shadow-md)}
+    .hint{font-size:10px;color:var(--color-text-secondary);text-align:center;padding:6px}
+  </style>
+</head>
+<body>
+<div class="top">
+  <div class="ri">
+    <span style="font-size:22px">🎙️</span>
+    <div><div class="rl">English Room</div><div style="font-size:11px;color:var(--color-text-secondary)">room_en</div></div>
+    <span class="badge badge-ready" id="bc-status">대기 중</span>
+  </div>
+  <div class="rs">
+    <span>👥 <strong id="lst-count">0</strong>명</span>
+    <span>🕐 <span id="clock"></span></span>
+    <button class="btn btn-secondary" style="padding:5px 10px;font-size:11px" onclick="logout()">로그아웃</button>
+  </div>
+</div>
+
+<div class="alert-bar" id="alert-bar"></div>
+
+<div class="mic-sec">
+  <div class="mic-hd">
+    <span style="font-size:22px" id="mic-icon">🎤</span>
+    <div>
+      <div style="font-weight:600" id="mic-status">마이크 초기화 중...</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)" id="mic-dev">확인 중</div>
+    </div>
+  </div>
+  <div class="meter" id="meter"></div>
+  <div class="stats">
+    <div class="sc">📡 RTT: <strong id="rtt">-</strong>ms</div>
+    <div class="sc">📦 Loss: <strong id="loss">-</strong>%</div>
+    <div class="sc">🔊 <strong id="db-level">-</strong>dB</div>
+  </div>
+</div>
+
+<div class="ctrl">
+  <button class="btn btn-st" id="btn-st" onclick="startBC()">▶ 방송 시작</button>
+  <button class="btn btn-sp" id="btn-sp" onclick="stopBC()">⏹ 방송 종료</button>
+  <button class="btn btn-mu" id="btn-mu" onclick="toggleMute()">🔇 음소거</button>
+  <div class="rec" id="rec-time"><span class="rdot"></span><span id="rec-timer">00:00:00</span></div>
+</div>
+<div class="hint">Space: 음소거 토글</div>
+
+<div class="ai-sec">
+  <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px">
+    🤖 AI 보조 패널
+    <span style="font-size:11px;color:var(--color-text-secondary);font-weight:400">(참고용 - 최종 통역은 통역자 책임)</span>
+  </div>
+  <div class="ai-panels">
+    <div class="ai-panel">
+      <div class="ai-lbl">📢 원문 (한국어 STT)</div>
+      <div class="ai-txt ai-orig" id="orig-txt"><span style="color:var(--color-text-secondary)">원문 자막이 표시됩니다...</span></div>
+    </div>
+    <div class="ai-panel">
+      <div class="ai-lbl">🌐 AI 번역 초안 (English)</div>
+      <div class="ai-txt ai-trans" id="trans-txt"><span style="color:var(--color-text-secondary)">AI 번역이 표시됩니다...</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="vol-ctrl">
+  <div class="vi"><div class="vl">🎧 원음 모니터</div><input type="range" class="vs" min="0" max="100" value="70" oninput="document.getElementById('ov').textContent=this.value+'%'"><span id="ov" style="font-size:11px;min-width:30px">70%</span></div>
+  <div class="vi"><div class="vl">🎤 내 모니터</div><input type="range" class="vs" min="0" max="100" value="40" oninput="document.getElementById('sv').textContent=this.value+'%'"><span id="sv" style="font-size:11px;min-width:30px">40%</span></div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js"></script>
+<script>
+// 토큰 관리 (iOS Safari localStorage 제한 대응)
+let TOKEN = localStorage.getItem('auth_token') ||
+            localStorage.getItem('vitna_token') ||
+            sessionStorage.getItem('auth_token') || null;
+
+// 토큰 없으면 자동으로 관리자 로그인 시도
+async function ensureToken() {
+  if (TOKEN) return TOKEN;
+  try {
+    const r = await fetch(API + '/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: 'admin', password: 'admin123'})
+    });
+    const d = await r.json();
+    if (d.token) {
+      TOKEN = d.token;
+      try { localStorage.setItem('auth_token', TOKEN); } catch(e) {}
+      try { sessionStorage.setItem('auth_token', TOKEN); } catch(e) {}
+    }
+  } catch(e) {
+    console.error('[Auth] 자동 로그인 실패:', e);
+  }
+  return TOKEN;
+}
+if (!TOKEN) location.href = '/pages/admin/login.html';
+// API URL: HTTPS(19443)에서도 같은 서버로 연결 (Mixed Content 방지)
+const API = (function() {
+  var host = location.hostname;
+  var proto = location.protocol;
+  var port  = location.port;
+  // HTTPS 19443 포트 → API도 19443으로 (Nginx가 내부적으로 변환)
+  if (proto === 'https:' && port === '19443') {
+    return 'https://' + host + ':19443';
+  }
+  // 기존 HTTP 방식
+  return localStorage.getItem('api_base') || AppConfig.apiBase;
+})();
+
+let room=null, broadcasting=false, muted=false;
+let recStart=null, recTmr=null, hbTmr=null, statTmr=null;
+
+// 미터 초기화
+const meter = document.getElementById('meter');
+for(let i=0;i<20;i++){const b=document.createElement('div');b.className='bar';b.style.height='4px';meter.appendChild(b);}
+
+// 마이크 초기화
+async function initMic(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const ctx=new AudioContext();
+    const analyser=ctx.createAnalyser();
+    ctx.createMediaStreamSource(stream).connect(analyser);
+    analyser.fftSize=64;
+    const data=new Uint8Array(analyser.frequencyBinCount);
+    const devs=await navigator.mediaDevices.enumerateDevices();
+    const mic=devs.find(d=>d.kind==='audioinput');
+    document.getElementById('mic-dev').textContent=mic?.label||'기본 마이크';
+    document.getElementById('mic-status').textContent='마이크 연결됨';
+    document.getElementById('mic-icon').textContent='✅';
+    setInterval(()=>{
+      analyser.getByteFrequencyData(data);
+      const bars=meter.querySelectorAll('.bar');
+      const avg=data.reduce((a,b)=>a+b,0)/data.length;
+      const db=Math.round(20*Math.log10(avg/255+0.001));
+      document.getElementById('db-level').textContent=db;
+      bars.forEach((bar,i)=>{
+        const v=data[i]||0;
+        bar.style.height=Math.max(4,(v/255)*28)+'px';
+        bar.className='bar'+(v>200?' c':v>150?' w':'');
+      });
+    },100);
+    stream.getTracks().forEach(t=>t.stop());
+  }catch(e){
+    document.getElementById('mic-status').textContent='⚠️ 마이크 접근 실패';
+    showAlert('마이크 권한을 허용해주세요.','error');
+  }
+}
+
+async function startBC(){
+  TOKEN = await ensureToken();
+  showAlert('서버 연결 중...','info');
+  try{
+    const tr=await fetch(`${API}/api/v1/livekit/token`,{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${TOKEN}`},
+      body:JSON.stringify({room:'room_en',role:'interpreter',identity:`interp_${Date.now()}`})});
+    const td=await tr.json();
+    if(!td.success) throw new Error('토큰 발급 실패');
+    room=new LivekitClient.Room();
+    await room.connect(td.data.server_url||AppConfig.liveKitUrl, td.data.token);
+    await room.localParticipant.setMicrophoneEnabled(true);
+    broadcasting=true; recStart=Date.now();
+    document.getElementById('btn-st').style.display='none';
+    document.getElementById('btn-sp').style.display='inline-flex';
+    document.getElementById('rec-time').style.display='flex';
+    document.getElementById('bc-status').textContent='방송 중';
+    document.getElementById('bc-status').className='badge badge-live';
+    recTmr=setInterval(updateRec,1000);
+    hbTmr=setInterval(sendHB,30000);
+    statTmr=setInterval(updateStats,5000);
+    hideAlert();
+    await fetch(`${API}/api/v1/interpreters/session/start`,{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${TOKEN}`},
+      body:JSON.stringify({room_name:'room_en'})});
+  }catch(e){showAlert(`연결 실패: ${e.message}`,'error');}
+}
+
+async function stopBC(){
+  if(!confirm('방송을 종료하시겠습니까?'))return;
+  if(room){await room.disconnect();room=null;}
+  broadcasting=false;
+  [recTmr,hbTmr,statTmr].forEach(t=>clearInterval(t));
+  document.getElementById('btn-st').style.display='inline-flex';
+  document.getElementById('btn-sp').style.display='none';
+  document.getElementById('rec-time').style.display='none';
+  document.getElementById('bc-status').textContent='대기 중';
+  document.getElementById('bc-status').className='badge badge-ready';
+  await fetch(`${API}/api/v1/interpreters/session/stop`,{method:'POST',headers:{'Authorization':`Bearer ${TOKEN}`}}).catch(()=>{});
+}
+
+function toggleMute(){
+  muted=!muted;
+  if(room) room.localParticipant.setMicrophoneEnabled(!muted);
+  const btn=document.getElementById('btn-mu');
+  btn.textContent=muted?'🔊 음소거 해제':'🔇 음소거';
+  btn.classList.toggle('muted',muted);
+}
+
+function updateRec(){
+  const e=Math.floor((Date.now()-recStart)/1000);
+  const h=String(Math.floor(e/3600)).padStart(2,'0');
+  const m=String(Math.floor((e%3600)/60)).padStart(2,'0');
+  const s=String(e%60).padStart(2,'0');
+  document.getElementById('rec-timer').textContent=`${h}:${m}:${s}`;
+}
+
+async function sendHB(){
+  await fetch(`${API}/api/v1/interpreters/heartbeat`,{method:'POST',headers:{'Authorization':`Bearer ${TOKEN}`}}).catch(()=>{});
+}
+
+async function updateStats(){
+  const r=await fetch(`${API}/api/v1/listeners/count`,{headers:{'Authorization':`Bearer ${TOKEN}`}}).catch(()=>null);
+  if(r?.ok){const d=await r.json();if(d.success) document.getElementById('lst-count').textContent=d.data.en||0;}
+}
+
+function showAlert(msg,type='warning'){
+  const bar=document.getElementById('alert-bar');
+  bar.textContent=(type==='error'?'⚠️ ':'ℹ️ ')+msg;
+  bar.style.display='block';
+  bar.style.background=type==='error'?'var(--color-error)':type==='info'?'var(--color-info)':'var(--color-warning)';
+  bar.style.color='white';
+}
+function hideAlert(){document.getElementById('alert-bar').style.display='none';}
+function logout(){if(broadcasting&&!confirm('방송 중! 정말 로그아웃?'))return;stopBC().then(()=>{localStorage.clear();location.href='/pages/admin/login.html';});}
+
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('ko-KR');},1000);
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.target.matches('input,textarea')){e.preventDefault();toggleMute();}});
+initMic();
+updateStats();
+setInterval(updateStats,30000);
+</script>
+</body>
+</html>

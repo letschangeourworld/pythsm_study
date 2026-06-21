@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>안산빛나교회 동시통역방송</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:#C9A84C; --gold-lt:#E8D5A3; --dark:#0D1117; --bg:#111827;
+      --panel:#1A2235; --border:#2A3A52; --text:#E8F0FE; --muted:#7A8FA6;
+      --green:#4ADE80; --red:#F87171;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;
+         min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 48px;}
+    header{width:100%;max-width:480px;text-align:center;padding:36px 0 20px;}
+    .logo-img{width:88px;height:auto;margin-bottom:12px;}
+    .logo-cross{font-size:32px;margin-bottom:10px;opacity:.7;display:block;}
+    h1{font-family:'Noto Serif KR',serif;font-size:22px;color:var(--gold);letter-spacing:1px;line-height:1.5;}
+    .subtitle{font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:2.5px;text-transform:uppercase;}
+    .live-badge{display:inline-flex;align-items:center;gap:7px;border-radius:24px;padding:5px 14px;
+      font-size:11px;margin-top:14px;letter-spacing:.5px;
+      background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);color:var(--green);}
+    .live-badge.offline{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.25);color:var(--red);}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.5s infinite;}
+    .live-badge.offline .live-dot{animation:none;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+    .next-service{width:100%;max-width:480px;background:rgba(201,168,76,.06);
+      border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:12px 18px;
+      margin-bottom:16px;display:none;align-items:center;gap:12px;font-size:13px;color:var(--gold-lt);}
+    .ntime{font-size:20px;font-weight:700;color:var(--gold);}
+
+    .channels{width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+    .ch-card{background:var(--panel);border:1.5px solid var(--border);border-radius:16px;padding:18px 20px;
+      display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+      transition:all .22s;text-decoration:none;color:var(--text);position:relative;overflow:hidden;}
+    .ch-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+      background:var(--gold);opacity:0;transition:.2s;}
+    .ch-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+    .ch-card:hover::before{opacity:1;}
+    .ch-card.active{border-color:rgba(74,222,128,.4);box-shadow:0 4px 16px rgba(74,222,128,.1);}
+    .ch-card.active::before{background:var(--green);opacity:1;}
+    .ch-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
+    .ch-left{display:flex;align-items:center;gap:16px;}
+    .ch-flag{font-size:32px;}
+    .ch-name{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;}
+    .ch-sub-ko{font-size:11px;color:var(--muted);margin-top:2px;}
+    .ch-sub-en{font-size:10px;color:var(--muted);opacity:.7;margin-top:1px;}
+    .ch-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+    .ch-badge{font-size:10px;padding:4px 10px;border-radius:12px;font-weight:700;white-space:nowrap;}
+    .ch-badge.on-air{background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.3);}
+    .ch-badge.offline{background:rgba(122,143,166,.1);color:var(--muted);border:1px solid var(--border);}
+    .ch-badge.soon{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.3);}
+    .ch-lc{font-size:11px;color:var(--muted);}
+
+    .divider{width:100%;max-width:480px;border:none;border-top:1px solid var(--border);margin-bottom:20px;}
+    .steps{width:100%;max-width:480px;background:var(--panel);border:1px solid var(--border);
+      border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+    .steps-title{font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+    .step-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+    .step-row:last-child{margin-bottom:0;}
+    .step-num{width:22px;height:22px;border-radius:50%;background:rgba(201,168,76,.15);
+      border:1px solid rgba(201,168,76,.3);color:var(--gold);font-size:11px;font-weight:700;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+    .step-text .ko{font-size:12px;color:var(--text);}
+    .step-text .en{font-size:10px;color:var(--muted);margin-top:1px;}
+    .notice{width:100%;max-width:480px;background:rgba(201,168,76,.05);
+      border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:14px 18px;
+      margin-bottom:16px;line-height:1.9;}
+    .notice .row{font-size:12px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;}
+    .notice .row+.row{margin-top:4px;}
+    footer{margin-top:28px;text-align:center;font-size:11px;color:var(--muted);line-height:2;}
+    .admin-link{color:var(--muted);text-decoration:none;font-size:11px;
+      display:inline-block;margin-top:16px;opacity:.35;transition:opacity .2s;}
+    .admin-link:hover{opacity:1;}
+
+    /* 이모지 폰트 - 국기 등 특수문자 정상 표시 */
+    .ch-flag, .logo-cross, .step-num,
+    .live-dot, .notice .row span:first-child {
+      font-family: 'Segoe UI Emoji','Apple Color Emoji',
+                   'Noto Color Emoji','Twemoji Mozilla',
+                   sans-serif !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/img/vitna.png" class="logo-img" alt="안산빛나교회"
+         onerror="this.style.display='none';document.getElementById('fallback').style.display='block'">
+    <span class="logo-cross" id="fallback" style="display:none">✝</span>
+    <h1>안산빛나교회<br>동시통역방송</h1>
+    <p class="subtitle">Live Interpretation Service</p>
+    <div class="live-badge offline" id="liveBadge">
+      <div class="live-dot"></div>
+      <span id="liveText">연결 중... / Connecting...</span>
+    </div>
+  </header>
+
+  <div class="next-service" id="nextService">
+    <span style="font-size:24px">🕐</span>
+    <div>
+      <div class="ntime" id="nextTime">—</div>
+      <div style="font-size:11px;color:var(--muted)" id="nextLabel">다음 방송 · Next Service</div>
+    </div>
+  </div>
+
+  <div class="channels">
+    <a class="ch-card disabled" id="card-english" href="/listen.html?ch=english">
+      <div class="ch-left">
+        <div class="ch-flag">🇺🇸</div>
+        <div>
+          <div class="ch-name">English</div>
+          <div class="ch-sub-ko">영어 동시통역</div>
+          <div class="ch-sub-en">Live English Interpretation</div>
+        </div>
+      </div>
+      <div class="ch-right">
+        <span class="ch-badge offline" id="badge-english">방송 전</span>
+        <span class="ch-lc" id="lc-english"></span>
+      </div>
+    </a>
+    <a class="ch-card disabled" id="card-japanese" href="/listen.html?ch=japanese">
+      <div class="ch-left">
+        <div class="ch-flag">🇯🇵</div>
+        <div>
+          <div class="ch-name">日本語</div>
+          <div class="ch-sub-ko">일본어 동시통역</div>
+          <div class="ch-sub-en">Live Japanese Interpretation</div>
+        </div>
+      </div>
+      <div class="ch-right">
+        <span class="ch-badge soon" id="badge-japanese">준비 중</span>
+        <span class="ch-lc" id="lc-japanese"></span>
+      </div>
+    </a>
+    <a class="ch-card disabled" id="card-chinese" href="/listen.html?ch=chinese">
+      <div class="ch-left">
+        <div class="ch-flag">🇨🇳</div>
+        <div>
+          <div class="ch-name">中文</div>
+          <div class="ch-sub-ko">중국어 동시통역</div>
+          <div class="ch-sub-en">Live Chinese Interpretation</div>
+        </div>
+      </div>
+      <div class="ch-right">
+        <span class="ch-badge soon" id="badge-chinese">준비 중</span>
+        <span class="ch-lc" id="lc-chinese"></span>
+      </div>
+    </a>
+  </div>
+
+  <hr class="divider">
+
+  <div class="steps">
+    <div class="steps-title">이용 방법 · How to Use</div>
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <div class="ko">🎧 이어폰을 먼저 연결하세요</div>
+        <div class="en">Connect your earphones first</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <div class="ko">위에서 언어 채널을 선택하세요</div>
+        <div class="en">Select your language channel above</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <div class="ko">🔊 청취 시작 버튼을 누르세요</div>
+        <div class="en">Tap the "Listen" button to start</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice">
+    <div class="row"><span>🇰🇷</span><span>ON AIR 채널을 선택하면 실시간 통역을 청취할 수 있습니다</span></div>
+    <div class="row"><span>🇺🇸</span><span>Select an ON AIR channel to listen to live interpretation</span></div>
+    <div class="row"><span>🇯🇵</span><span>ON AIR チャンネルを選択してリアルタイム通訳を聴けます</span></div>
+    <div class="row"><span>🇨🇳</span><span>选择 ON AIR 频道即可收听实时口译服务</span></div>
+  </div>
+
+  <footer>
+    <p>Vitna Church In Ansan · 안산빛나교회</p>
+    <p style="margin-top:4px;font-size:10px">
+      통역 방송은 예배 시간에만 운영됩니다<br>
+      <span style="opacity:.7">Interpretation service is available during worship services only</span>
+    </p>
+        <button onclick="showQR()" style="background:none;border:1px solid rgba(201,168,76,.3);
+      color:#C9A84C;border-radius:20px;padding:6px 16px;font-size:11px;
+      cursor:pointer;font-family:inherit;margin-top:12px;display:inline-flex;
+      align-items:center;gap:6px;transition:all .2s;"
+      onmouseover="this.style.background='rgba(201,168,76,.1)'"
+      onmouseout="this.style.background='none'">
+      📱 QR코드로 공유
+    </button>
+    <br>
+<a href="login.html" class="admin-link">관리자</a>
+  </footer>
+
+  <script>
+    // API 서버 자동 감지
+    const API_BASE = `http://${location.hostname}:19000`;
+    const WS_URL   = `ws://${location.hostname}:19000/ws`;
+
+    let ws = null, wsDelay = 2000;
+
+    function connectWS() {
+      ws = new WebSocket(WS_URL);
+      ws.onopen = () => {
+        wsDelay = 2000;
+        document.getElementById('liveBadge').className = 'live-badge';
+        fetchChannels(); // WS 연결 즉시 채널 상태 갱신
+        document.getElementById('liveText').textContent = '서버 연결됨 · Connected';
+      };
+      ws.onclose = () => {
+        document.getElementById('liveBadge').className = 'live-badge offline';
+        document.getElementById('liveText').textContent = '재연결 중... / Reconnecting...';
+        setTimeout(connectWS, wsDelay);
+        wsDelay = Math.min(wsDelay * 2, 30000);
+      };
+      ws.onerror  = () => ws.close();
+      ws.onmessage = e => {
+        try {
+          const d = JSON.parse(e.data);
+          if      (d.type === 'state')           updateAll(d.channels);
+          else if (d.type === 'channel_update')  { ensureChCard(d.channel, d.state); updateCh(d.channel, d.state); }
+          else if (d.type === 'channel_added')   { ensureChCard(d.channel, d.state); updateCh(d.channel, d.state); }
+          else if (d.type === 'channel_removed') {
+            const card = document.getElementById('card-' + d.channel);
+            if (card) card.remove();
+          }
+          else if (d.type === 'listener_update') updateLC(d.channel, d.count);
+        } catch {}
+      };
+    }
+    connectWS();
+
+    function updateAll(channels) {
+      Object.entries(channels).forEach(([ch, st]) => {
+        ensureChCard(ch, st);
+        updateCh(ch, st);
+      });
+    }
+
+    // 동적 채널 카드 생성 (없을 때만)
+    function ensureChCard(ch, st) {
+      if (document.getElementById('card-' + ch)) return;
+      const STATIC = ['english', 'japanese', 'chinese'];
+      if (STATIC.includes(ch)) return;
+
+      // 동적 채널 카드 생성
+      const div = document.createElement('a');
+      div.className  = 'ch-card disabled';
+      div.id         = 'card-' + ch;
+      div.href       = '/listen.html?ch=' + ch;
+      div.innerHTML  =
+        '<div class="ch-left">' +
+          '<div class="ch-flag">' + (st.flag || '🌐') + '</div>' +
+          '<div>' +
+            '<div class="ch-name">' + (st.label || ch) + '</div>' +
+            '<div class="ch-sub-ko">실시간 통역</div>' +
+            '<div class="ch-sub-en">Live Interpretation</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ch-right">' +
+          '<span class="ch-badge offline" id="badge-' + ch + '">방송 전</span>' +
+          '<span class="ch-lc" id="lc-' + ch + '"></span>' +
+        '</div>';
+
+      // 채널 목록에 추가
+      const channelsWrap = document.querySelector('.channels');
+      if (channelsWrap) channelsWrap.appendChild(div);
+      console.log('[채널 추가]', ch, st.label);
+    }
+    function updateCh(ch, st) {
+      const card  = document.getElementById('card-' + ch);
+      const badge = document.getElementById('badge-' + ch);
+      if (!card || !badge) return;
+
+      const wasActive = card.classList.contains('active');
+
+      if (st.active) {
+        card.classList.remove('disabled');
+        card.classList.add('active');
+        badge.className   = 'ch-badge on-air';
+        badge.textContent = '● ON AIR';
+        // 새로 활성화된 경우 깜빡임 효과
+        if (!wasActive) {
+          card.style.transition = 'all 0.3s ease';
+          card.style.transform  = 'scale(1.02)';
+          setTimeout(() => { card.style.transform = 'scale(1)'; }, 300);
+        }
+      } else {
+        card.classList.add('disabled');
+        card.classList.remove('active');
+        badge.className   = 'ch-badge offline';
+        badge.textContent = '방송 전';
+      }
+      // 청취자 수 업데이트
+      const lc = document.getElementById('lc-' + ch);
+      if (lc) {
+        lc.textContent = (st.listeners > 0) ? '👥 ' + st.listeners : '';
+      }
+    }
+    function updateLC(ch, count) {
+      const el = document.getElementById(`lc-${ch}`);
+      if (el) el.textContent = count > 0 ? `👥 ${count}` : '';
+    }
+
+    // 채널 상태 폴링 (WS 연결 전/후 보완)
+    function fetchChannels() {
+      fetch(`${API_BASE}/api/channels`)
+        .then(r => r.json())
+        .then(d => updateAll(d.channels))
+        .catch(() => {});
+    }
+    fetchChannels();
+    setInterval(fetchChannels, 3000);  // 3초마다 채널 상태 갱신
+
+    // 예배 시간 카운트다운
+    const SERVICE_TIMES = [
+      {h:8,  m:0,  label:'오전 1부 예배 · 1st Morning Service'},
+      {h:9,  m:30, label:'오전 2부 예배 · 2nd Morning Service'},
+      {h:11, m:30, label:'오전 3부 예배 · 3rd Morning Service'},
+      {h:14, m:0,  label:'오후 예배 · Afternoon Service'},
+    ];
+    function updateCountdown() {
+      const now = new Date();
+      if (now.getDay() !== 0) { document.getElementById('nextService').style.display='none'; return; }
+      for (const t of SERVICE_TIMES) {
+        const target = new Date(now); target.setHours(t.h, t.m, 0, 0);
+        const diff = (target - now) / 60_000;
+        if (diff > 0 && diff <= 30) {
+          document.getElementById('nextService').style.display = 'flex';
+          document.getElementById('nextTime').textContent = `${t.h}:${String(t.m).padStart(2,'0')} · ${Math.ceil(diff)}분 후`;
+          document.getElementById('nextLabel').textContent = t.label;
+          return;
+        }
+      }
+      document.getElementById('nextService').style.display = 'none';
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 30000);
+  
+  function showQR() {
+    var modal = document.getElementById('qrModal');
+    var canvas = document.getElementById('qrCanvas');
+    var urlEl  = document.getElementById('qrUrl');
+    var url    = location.href.split('?')[0].replace('/connect.html','').replace(/\/+$/, '') + '/';
+    urlEl.textContent = url;
+    modal.style.display = 'flex';
+    if (typeof qrcode !== 'undefined') {
+      try {
+        var qr = qrcode(0, 'M');
+        qr.addData(url);
+        qr.make();
+        var n  = qr.getModuleCount();
+        var sz = 200;
+        canvas.width = sz; canvas.height = sz;
+        var ctx = canvas.getContext('2d');
+        var cell = sz / (n + 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, sz, sz);
+        ctx.fillStyle = '#000000';
+        for (var r = 0; r < n; r++) {
+          for (var c = 0; c < n; c++) {
+            if (qr.isDark(r, c)) {
+              ctx.fillRect(
+                Math.floor((c+1)*cell), Math.floor((r+1)*cell),
+                Math.ceil(cell), Math.ceil(cell)
+              );
+            }
+          }
+        }
+      } catch(e) {
+        canvas.width = 200; canvas.height = 200;
+        var ctx2 = canvas.getContext('2d');
+        ctx2.fillStyle = '#1A2235';
+        ctx2.fillRect(0,0,200,200);
+        ctx2.fillStyle = '#C9A84C';
+        ctx2.font = 'bold 13px sans-serif';
+        ctx2.textAlign = 'center';
+        ctx2.fillText('QR 생성 실패', 100, 95);
+        ctx2.fillText('URL을 직접 공유하세요', 100, 115);
+      }
+    }
+  }
+  function closeQR() {
+    document.getElementById('qrModal').style.display = 'none';
+  }
+
+</script>
+
+  <!-- QR 모달 -->
+  <div id="qrModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+       z-index:100;align-items:center;justify-content:center;padding:20px;"
+       onclick="if(event.target===this)closeQR()">
+    <div style="background:#1A2235;border:1px solid rgba(201,168,76,.3);border-radius:24px;
+         padding:32px 24px;text-align:center;max-width:320px;width:100%;
+         box-shadow:0 32px 80px rgba(0,0,0,.7);">
+      <div style="font-size:14px;color:#C9A84C;font-weight:700;margin-bottom:6px;">
+        📱 QR코드로 접속
+      </div>
+      <div style="font-size:11px;color:#7A8FA6;margin-bottom:16px;">
+        카메라로 스캔하면 이 페이지에 접속됩니다
+      </div>
+      <div style="background:white;border-radius:14px;padding:12px;display:inline-block;margin-bottom:14px;">
+        <canvas id="qrCanvas"></canvas>
+      </div>
+      <div style="font-size:11px;color:#7A8FA6;margin-bottom:16px;word-break:break-all;
+           background:rgba(255,255,255,.05);border-radius:8px;padding:8px 12px;" id="qrUrl"></div>
+      <button onclick="closeQR()" style="background:linear-gradient(135deg,#C9A84C,#E8C86A);
+              color:#0D1117;border:none;border-radius:10px;padding:11px 28px;
+              font-size:14px;font-weight:700;cursor:pointer;width:100%;">닫기</button>
+    </div>
+  </div>
+
+
+<!-- QR 라이브러리 -->
+<script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
+</body>
+</html>

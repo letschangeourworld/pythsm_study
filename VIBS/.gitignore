@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# 환경변수/시크릿
+.env
+*.env
+*.key
+*.pem
+
+# 로그
+logs/
+*.log
+
+# 백업
+backups/
+
+# SSL 인증서
+configs/ssl/
+

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>통역방송 청취</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/common.css">
+  <style>
+    body{background:var(--color-bg-light);color:var(--color-text-dark);min-height:100vh;display:flex;flex-direction:column}
+    .hdr{background:white;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+         border-bottom:1px solid var(--color-border-light);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .hdr-logo{font-size:16px;font-weight:700;color:var(--color-primary)}
+    .live-badge{display:flex;align-items:center;gap:6px;background:#ef444422;color:var(--color-error);
+                padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+    .lang-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px}
+    .lang-title{font-size:22px;font-weight:700;margin-bottom:6px;text-align:center}
+    .lang-sub{color:#64748b;margin-bottom:32px;text-align:center;font-size:14px}
+    .lang-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px}
+    .lang-btn{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:var(--radius-lg);
+              border:2px solid var(--color-border-light);background:white;cursor:pointer;
+              font-size:15px;font-weight:600;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .lang-btn:hover{border-color:var(--color-primary);transform:translateY(-2px)}
+    .lang-btn .flag{font-size:26px}
+    .lang-btn .sub{font-size:11px;color:#64748b;font-weight:400}
+    .listen-screen{flex:1;display:none;flex-direction:column}
+    .listen-info{background:white;padding:14px 18px;border-bottom:1px solid var(--color-border-light)}
+    .listen-lang{font-size:18px;font-weight:700}
+    .listen-meta{font-size:12px;color:#64748b;margin-top:3px;display:flex;align-items:center;gap:10px}
+    .player{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+            padding:32px 16px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe)}
+    .play-btn{width:110px;height:110px;border-radius:50%;background:var(--color-primary);color:white;
+              border:none;font-size:42px;cursor:pointer;box-shadow:0 8px 28px rgba(37,99,235,.4);
+              transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+    .play-btn:hover{transform:scale(1.05)}
+    .play-btn.playing{background:var(--color-error)}
+    .play-status{margin-top:14px;font-size:15px;font-weight:600;color:#475569}
+    .vol-bar{padding:16px 18px;background:white;border-top:1px solid var(--color-border-light);
+             display:flex;align-items:center;gap:10px}
+    .vol-slider{flex:1;-webkit-appearance:none;height:4px;background:#e2e8f0;border-radius:2px}
+    .vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--color-primary);cursor:pointer}
+    .sub-area{padding:14px 18px;background:#0f172a;min-height:140px;max-height:220px;
+              overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+    .sub-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+    .sub-txt{color:white;font-size:15px;line-height:1.6;padding:7px 10px;background:#1e293b;border-radius:8px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .sub-txt.new{animation:fadeUp 0.3s ease}
+    .lang-sw{padding:10px 18px;background:white;border-top:1px solid var(--color-border-light);text-align:center}
+    .lang-sw button{background:none;border:none;color:var(--color-primary);cursor:pointer;font-size:13px;font-weight:600}
+    .overlay{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;z-index:100}
+    .ov-box{background:white;border-radius:var(--radius-lg);padding:28px;text-align:center;box-shadow:var(--shadow-lg)}
+    .spin{width:36px;height:36px;border:4px solid #e2e8f0;border-top-color:var(--color-primary);
+          border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-logo">🎙️ 통역방송</div>
+  <div class="live-badge" id="live-badge" style="display:none">
+    <span style="width:7px;height:7px;background:currentColor;border-radius:50%;animation:pulse 2s infinite"></span>LIVE
+  </div>
+</div>
+
+<!-- 언어 선택 -->
+<div class="lang-screen" id="lang-screen">
+  <div class="lang-title">🌏 언어를 선택하세요</div>
+  <div class="lang-sub">Select / 言語選択 / 选择语言</div>
+  <div class="lang-list">
+    <button class="lang-btn" onclick="pick('EN','room_en')">
+      <span class="flag">🇺🇸</span><div><div>English</div><div class="sub">영어 통역</div></div>
+    </button>
+    <button class="lang-btn" onclick="pick('JA','room_ja')">
+      <span class="flag">🇯🇵</span><div><div>日本語</div><div class="sub">일본어 통역</div></div>
+    </button>
+    <button class="lang-btn" onclick="pick('ZH','room_zh')">
+      <span class="flag">🇨🇳</span><div><div>中文</div><div class="sub">중국어 통역</div></div>
+    </button>
+    <button class="lang-btn" onclick="pick('KO','room_ko')">
+      <span class="flag">🇰🇷</span><div><div>한국어</div><div class="sub">원음 청취</div></div>
+    </button>
+  </div>
+</div>
+
+<!-- 청취 화면 -->
+<div class="listen-screen" id="listen-screen">
+  <div class="listen-info">
+    <div class="listen-lang" id="lang-name"></div>
+    <div class="listen-meta">
+      <span class="status-dot green"></span>
+      <span id="lst-count">청취자 확인 중...</span>
+    </div>
+  </div>
+  <div class="player">
+    <button class="play-btn" id="play-btn" onclick="togglePlay()">▶</button>
+    <div class="play-status" id="play-status">탭하여 청취 시작</div>
+  </div>
+  <div class="vol-bar">
+    <span style="font-size:18px">🔊</span>
+    <input type="range" class="vol-slider" id="vol" min="0" max="100" value="80" oninput="setVol(this.value)">
+    <span style="font-size:12px;color:#64748b;min-width:32px" id="vol-val">80%</span>
+  </div>
+  <div class="sub-area" id="sub-area">
+    <div class="sub-lbl">실시간 자막 · Live Subtitles</div>
+    <div class="sub-txt" id="waiting" style="color:#64748b;background:transparent">방송을 기다리는 중...</div>
+  </div>
+  <div class="lang-sw"><button onclick="goBack()">← 언어 변경</button></div>
+</div>
+
+<div class="overlay" id="overlay" style="display:none">
+  <div class="ov-box">
+    <div class="spin"></div>
+    <div style="font-weight:600" id="ov-msg">연결 중...</div>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js"></script>
+<script>
+const NAMES = {EN:'English Translation 🇺🇸',JA:'日本語通訳 🇯🇵',ZH:'中文翻译 🇨🇳',KO:'한국어 원음 🇰🇷'};
+let selLang=localStorage.getItem('lang'),selRoom=localStorage.getItem('room');
+let lkRoom=null, playing=false, retry=0;
+const DELAYS=[1000,2000,5000,10000,30000];
+
+if(selLang&&selRoom) pick(selLang,selRoom,true);
+
+function pick(lang,room,auto=false){
+  selLang=lang; selRoom=room;
+  localStorage.setItem('lang',lang); localStorage.setItem('room',room);
+  document.getElementById('lang-screen').style.display='none';
+  document.getElementById('listen-screen').style.display='flex';
+  document.getElementById('lang-name').textContent=NAMES[lang]||lang;
+  document.getElementById('live-badge').style.display='flex';
+  loadCount();
+  setInterval(loadCount,30000);
+}
+
+function goBack(){
+  if(lkRoom){lkRoom.disconnect();lkRoom=null;}
+  playing=false;
+  document.getElementById('lang-screen').style.display='flex';
+  document.getElementById('listen-screen').style.display='none';
+  document.getElementById('live-badge').style.display='none';
+  document.getElementById('play-btn').textContent='▶';
+  document.getElementById('play-btn').classList.remove('playing');
+  document.getElementById('play-status').textContent='탭하여 청취 시작';
+}
+
+async function togglePlay(){playing?stop():await start();}
+
+async function start(){
+  showOv('서버 연결 중...');
+  try{
+    const tr = await fetch(`${AppConfig.apiBase}/api/v1/livekit/token`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({room:selRoom,identity:`lst_${Date.now()}`,role:'listener'})});
+    if(!tr.ok) throw new Error('토큰 발급 실패');
+    const td = await tr.json();
+    lkRoom = new LivekitClient.Room({adaptiveStream:true,dynacast:true});
+    lkRoom.on(LivekitClient.RoomEvent.TrackSubscribed,(track)=>{
+      if(track.kind===LivekitClient.Track.Kind.Audio){
+        const a=track.attach(); a.volume=document.getElementById('vol').value/100;
+        document.body.appendChild(a);
+      }
+    });
+    lkRoom.on(LivekitClient.RoomEvent.DataReceived,(data)=>{
+      try{
+        const m=JSON.parse(new TextDecoder().decode(data));
+        if(m.type==='subtitle') addSub(m.text);
+        if(m.type==='listener_count') document.getElementById('lst-count').textContent=`청취자: ${m.count}명`;
+      }catch(e){}
+    });
+    lkRoom.on(LivekitClient.RoomEvent.Disconnected,()=>{
+      if(playing){document.getElementById('play-status').textContent='재연결 중...';scheduleRetry();}
+    });
+    lkRoom.on(LivekitClient.RoomEvent.Connected,()=>{
+      hideOv(); playing=true; retry=0;
+      document.getElementById('play-btn').textContent='⏹';
+      document.getElementById('play-btn').classList.add('playing');
+      document.getElementById('play-status').textContent='청취 중 ●';
+    });
+    await lkRoom.connect(td.data.server_url||AppConfig.liveKitUrl, td.data.token);
+  }catch(e){
+    hideOv();
+    document.getElementById('play-status').textContent='연결 실패 - 재시도 중...';
+    scheduleRetry();
+  }
+}
+
+function stop(){
+  if(lkRoom){lkRoom.disconnect();lkRoom=null;}
+  playing=false;
+  document.getElementById('play-btn').textContent='▶';
+  document.getElementById('play-btn').classList.remove('playing');
+  document.getElementById('play-status').textContent='탭하여 청취 시작';
+  document.querySelectorAll('audio').forEach(a=>a.remove());
+}
+
+function scheduleRetry(){
+  if(retry>=DELAYS.length){document.getElementById('play-status').textContent='연결 실패. 새로고침 하세요.';return;}
+  const d=DELAYS[retry]||30000;
+  document.getElementById('play-status').textContent=`재연결 ${retry+1}/5 (${d/1000}초 후)`;
+  retry++;
+  setTimeout(start,d);
+}
+
+function addSub(text){
+  const area=document.getElementById('sub-area');
+  const w=document.getElementById('waiting');
+  if(w)w.remove();
+  const el=document.createElement('div');
+  el.className='sub-txt new'; el.textContent=text;
+  area.appendChild(el);
+  const items=area.querySelectorAll('.sub-txt');
+  if(items.length>20)items[0].remove();
+  area.scrollTop=area.scrollHeight;
+}
+
+function setVol(v){
+  document.getElementById('vol-val').textContent=v+'%';
+  document.querySelectorAll('audio').forEach(a=>a.volume=v/100);
+}
+
+function showOv(msg){document.getElementById('ov-msg').textContent=msg;document.getElementById('overlay').style.display='flex';}
+function hideOv(){document.getElementById('overlay').style.display='none';}
+
+async function loadCount(){
+  try{
+    const r=await fetch(`${AppConfig.apiBase}/api/v1/listeners/count`);
+    const d=await r.json();
+    if(d.success){
+      const c=d.data[selLang?.toLowerCase()]||d.data.total||0;
+      document.getElementById('lst-count').textContent=`청취자: ${c}명`;
+    }
+  }catch(e){}
+}
+</script>
+</body>
+</html>
