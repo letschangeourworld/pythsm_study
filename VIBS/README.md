@@ -23,17 +23,7 @@
 
 ## 🌐 시스템 개요
 
-````
-
-\[통역자 (iPhone/PC)\] ─── 🎙️ 음성 송출 ───► \[LiveKit 미디어 서버\]
-│
-WebRTC (UDP/TCP)
-│
-\[청취자 (핸드폰/PC)\] ◄─── 🔊 음성 수신 ───────────────┘
-
-\[관리자 (PC/핸드폰)\] ─── 채널 제어, 채팅, 이메일 전송 ──► \[FastAPI + WebSocket\]
-
-````
+![VIBS System Overview](docs/images/system-overview.png)
 
 ### 주요 특징
 
@@ -55,46 +45,7 @@ WebRTC (UDP/TCP)
 
 ## 🏗️ 아키텍처
 
-````
-┌─────────────────────────────────────────────────────────────┐
-│ 클라이언트 │
-│ 📱 iPhone(Safari/Chrome) 💻 PC(Chrome) 🖥️ 서버PC(마이크) │
-└──────────┬──────────────┬───────────────────┬───────────────┘
-│ HTTPS:19443 │ HTTP:19000 │ HTTP:19082
-▼ ▼ ▼
-┌─────────────────────────────────────────────────────────────┐
-│ Nginx (Reverse Proxy) │
-│ :19000 메인/청취자/관리자 :19443 iOS통역자(wss://) │
-│ /rtc → LiveKit:7880 /api → FastAPI:8000 │
-└──────────┬──────────────────────────┬───────────────────────┘
-│ │
-▼ ▼
-┌──────────────────┐ ┌───────────────────────────────────┐
-│ LiveKit Server │ │ FastAPI Backend │
-│ :7880 신호채널 │ │ /api/v1/livekit/token 토큰발급 │
-│ :7881 TCP미디어 │ │ /api/channels 채널관리 │
-│ :55000-55100 UDP│ │ /api/broadcast/\* 방송제어 │
-│ WebRTC ICE │ │ /api/v1/recordings/\* 녹음관리 │
-└──────────────────┘ │ /api/v1/stt/\* STT변환 │
-│ /api/v1/email/\* 이메일 │
-│ /ws WebSocket │
-└──────────┬────────────────────────┘
-│
-┌────────────────┼──────────────┐
-▼ ▼ ▼
-┌──────────┐ ┌──────────┐ ┌──────────────┐
-│PostgreSQL│ │ Redis │ │ MinIO │
-│ :5432 │ │ :6379 │ │ recordings/ │
-└──────────┘ └──────────┘ │ transcripts/│
-│ └──────────────┘
-┌────────────┼────────────┐
-▼ ▼ ▼
-┌──────────┐ ┌──────────┐ ┌──────────┐
-│Prometheus│ │ Grafana │ │ Loki │
-│ :9090 │ │ :19300 │ │ 로그 │
-└──────────┘ └──────────┘ └──────────┘
-
-````
+![VIBS Architecture](docs/images/architecture.png)
 
 
 ## 🛠️ 기술 스택
@@ -421,23 +372,7 @@ sudo /opt/translation-system/scripts/setup-ssl.sh
 
 ### 통역실 WiFi 구성 (AP 모드)
 
-````
-\[메인 스위치/공유기 192.168.x.1\]
-│
-─────┴──────────────────
-│ │ │
-랜선 랜선 랜선
-│ │ │
-\[통역실1\] \[통역실2\] \[통역실3\]
-│ │ │
-\[공유기 \[AP모드 \[AP모드
-AP모드\] 공유기\] 공유기\]
-├─ 서버PC 📶WiFi 📶WiFi
-└─ 📶WiFi │ │
-│ 📱통역자2 📱통역자3
-📱통역자1
-
-````
+![VIBS Network AP Mode](docs/images/network-ap-mode.png)
 
 > ⚠️ **공유기는 반드시 AP 모드(브리지 모드) 사용**
 > - 라우터 모드: ❌ IP 대역 분리 → 서버 접속 불가
@@ -543,7 +478,6 @@ docker compose restart api
 ## 🗂️ 프로젝트 구조
 
 ````
-
 VIBS/
 ├── backend/
 │    ├── Dockerfile # ffmpeg + Whisper 포함
@@ -580,8 +514,8 @@ VIBS/
 ├── sql/ # DB 스키마
 ├── docker-compose.yml
 └── .env # 환경변수 (gitignore)
+```
 
-````
 
 ## 🔐 보안 주의사항
 
@@ -622,7 +556,9 @@ VIBS/
 
 
 ## 📄 라이선스
+
 MIT License
+
 
 *VIBS - Vitna Interpretation Broadcast System*
 *© 2026 Vitna. All rights reserved.*
