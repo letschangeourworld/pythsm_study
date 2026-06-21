@@ -540,7 +540,7 @@ docker compose restart api
 
 ## 🗂️ 프로젝트 구조
 
-````
+```
 VIBS/
 ├── backend/
 │    ├── Dockerfile # ffmpeg + Whisper 포함
@@ -578,7 +578,6 @@ VIBS/
 ├── docker-compose.yml
 └── .env # 환경변수 (gitignore)
 ```
-
 
 ## 🔐 보안 주의사항
 
